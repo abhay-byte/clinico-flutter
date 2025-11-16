@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:clinico/screens/home_screen.dart';
+import 'package:clinico/screens/login_screen.dart';
 
 class Onboarding3Screen extends StatelessWidget {
   const Onboarding3Screen({Key? key}) : super(key: key);
@@ -166,7 +166,7 @@ class Onboarding3Screen extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
+                        builder: (context) => const LoginScreen(),
                       ),
                     );
                   },

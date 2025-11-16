@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clinico/screens/login_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -32,9 +33,13 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // Placeholder for home screen actions
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => const LoginScreen(),
+                  ),
+                );
               },
-              child: const Text('Explore App'),
+              child: const Text('Go to Login'),
             ),
           ],
         ),
