@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../components/location_selection_modal.dart';
+import '../components/search_filter_modal.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -34,6 +35,29 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  void _showSearchFilterModal() async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => SearchFilterModal(
+        onApply: () {
+          // Handle apply filter
+          print('Filters applied');
+        },
+        onClearAll: () {
+          // Handle clear all filters
+          print('All filters cleared');
+        },
+        onDismiss: () {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+        },
+      ),
+    );
+ }
 
   @override
   Widget build(BuildContext context) {
@@ -156,13 +180,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.ge2,
                   ),
                 ),
-                suffixIcon: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Image.asset(
-                    'assets/home/filter.png',
-                    width: 20,
-                    height: 20,
-                    color: AppColors.ge2,
+                suffixIcon: GestureDetector(
+                  onTap: _showSearchFilterModal,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Image.asset(
+                      'assets/home/filter.png',
+                      width: 20,
+                      height: 20,
+                      color: AppColors.ge2,
+                    ),
                   ),
                 ),
                 hintText: 'Search Psychiatrist Doctor',
