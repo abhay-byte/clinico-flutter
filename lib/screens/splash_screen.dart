@@ -1,7 +1,30 @@
-import 'package:flutter/material.dart';
 
-class SplashScreen extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:clinico/screens/language_screen.dart';
+
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _navigateToLanguageScreen();
+  }
+
+  void _navigateToLanguageScreen() {
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LanguageScreen()),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
