@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../components/location_selection_modal.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,6 +11,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentBottomNavIndex = 0;
+  String currentLocation = 'New Delhi, India';
+
+  void _showLocationSelectionModal() async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => LocationSelectionModal(
+        onLocationSelected: () {
+          // Handle location selection
+          setState(() {
+            // Here you would update the current location
+            // For demo, keeping the same location
+          });
+        },
+        onDismiss: () {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,25 +107,28 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const SizedBox(height: 4),
-          Row(
-            children: [
-              const SizedBox(width: 28),
-              const Expanded(
-                child: Text(
-                  'New Delhi, India',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.ge1,
-                    fontFamily: 'Roboto',
+          GestureDetector(
+            onTap: _showLocationSelectionModal,
+            child: Row(
+              children: [
+                const SizedBox(width: 28),
+                Expanded(
+                  child: Text(
+                    currentLocation,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.ge1,
+                      fontFamily: 'Roboto',
+                    ),
                   ),
                 ),
-              ),
-              const Icon(
-                Icons.keyboard_arrow_down,
-                color: AppColors.ge2,
-              ),
-            ],
+                const Icon(
+                  Icons.keyboard_arrow_down,
+                  color: AppColors.ge2,
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 16),
 
