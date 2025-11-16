@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clinico/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -349,7 +350,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle login
+                          // Navigate to HomeScreen
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF4A85DD),
