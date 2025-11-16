@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clinico/screens/onboarding1_screen.dart';
+import '../constants/colors.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({Key? key}) : super(key: key);
@@ -40,12 +41,12 @@ class _LanguageScreenState extends State<LanguageScreen> {
             .toList();
       }
     });
-  }
+ }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: AppColors.bg1,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -59,7 +60,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w800,
-                  color: Color(0xFF2C3E50),
+                  color: AppColors.ge1,
                   fontFamily: 'Roboto',
                 ),
               ),
@@ -69,7 +70,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFF95A5A6),
+                  color: AppColors.ge2,
                   fontFamily: 'Roboto',
                   height: 1.5,
                 ),
@@ -79,9 +80,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   border: Border.all(
-                    color: const Color(0xFF3498DB),
+                    color: AppColors.b4,
                     width: 1.5,
                   ),
                   borderRadius: BorderRadius.circular(25),
@@ -94,7 +95,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF95A5A6),
+                        color: AppColors.ge2,
                         fontFamily: 'Roboto',
                       ),
                     ),
@@ -105,7 +106,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF2C3E50),
+                            color: AppColors.ge1,
                             fontFamily: 'Roboto',
                           ),
                         ),
@@ -114,13 +115,13 @@ class _LanguageScreenState extends State<LanguageScreen> {
                           width: 24,
                           height: 24,
                           decoration: const BoxDecoration(
-                            color: Color(0xFF3498DB),
+                            color: AppColors.b4,
                             shape: BoxShape.circle,
                           ),
                           child: const Center(
                             child: Icon(
                               Icons.check,
-                              color: Colors.white,
+                              color: AppColors.white,
                               size: 16,
                             ),
                           ),
@@ -135,7 +136,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
@@ -157,7 +158,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w700,
-                              color: const Color(0xFF2C3E50),
+                              color: AppColors.ge1,
                               fontFamily: 'Roboto',
                             ),
                           ),
@@ -168,7 +169,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: const Color(0xFFF5F7FA),
+                            color: AppColors.bg1,
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: TextField(
@@ -186,7 +187,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                   'assets/language/search.png',
                                   width: 20,
                                   height: 20,
-                                  color: const Color(0xFF95A5A6),
+                                  color: AppColors.ge2,
                                 ),
                               ),
                               border: InputBorder.none,
@@ -217,7 +218,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   color: isSelected
-                                      ? const Color(0xFFE3F2FD)
+                                      ? AppColors.b3
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -237,8 +238,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                             ? FontWeight.w600
                                             : FontWeight.w500,
                                         color: isSelected
-                                            ? const Color(0xFF3498DB)
-                                            : const Color(0xFF2C3E50),
+                                            ? AppColors.b4
+                                            : AppColors.ge1,
                                         fontFamily: 'Roboto',
                                       ),
                                     ),
@@ -247,13 +248,13 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                         width: 24,
                                         height: 24,
                                         decoration: const BoxDecoration(
-                                          color: Color(0xFF3498DB),
+                                          color: AppColors.b4,
                                           shape: BoxShape.circle,
                                         ),
                                         child: const Center(
                                           child: Icon(
                                             Icons.check,
-                                            color: Colors.white,
+                                            color: AppColors.white,
                                             size: 16,
                                           ),
                                         ),
@@ -264,7 +265,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                         height: 24,
                                         decoration: BoxDecoration(
                                           border: Border.all(
-                                            color: const Color(0xFFC0C0C0),
+                                            color: AppColors.ge3,
                                             width: 2,
                                           ),
                                           shape: BoxShape.circle,
@@ -296,7 +297,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF3498DB),
+                    backgroundColor: AppColors.b4,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -308,7 +309,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontFamily: 'Roboto',
                     ),
                   ),

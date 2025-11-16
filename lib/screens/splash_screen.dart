@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:clinico/screens/language_screen.dart';
+import '../constants/colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateToLanguageScreen();
   }
 
-  void _navigateToLanguageScreen() {
+ void _navigateToLanguageScreen() {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
@@ -36,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF4A85DD), Color(0xFF003261)],
+            colors: [AppColors.b1, AppColors.b5],
           ),
         ),
         child: Stack(
@@ -83,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Text(
                   'CLINICO',
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AppColors.white,
                     fontSize: 32,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w800,
@@ -103,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: 180,
                   height: 180,
                   decoration: ShapeDecoration(
-                    color: Colors.white.withOpacity(0.1),
+                    color: AppColors.white.withOpacity(0.1),
                     shape: const OvalBorder(),
                   ),
                 ),
@@ -139,7 +140,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     'The Healing Hand Initiative',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: 26,
                       fontStyle: FontStyle.italic,
                       fontFamily: 'Roboto',
@@ -153,10 +154,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     width: 200,
                     height: 25,
                     decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage("assets/splash_screen/green_strip.png"),
-                        fit: BoxFit.contain,
-                      ),
+                      color: AppColors.g1, // Changed to use the official color
                     ),
                   ),
                 ],
@@ -172,7 +170,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   '© 2025 Clinico. All rights reserved.',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: Color(0xFFE2E8F0),
+                    color: AppColors.white,
                     fontSize: 12,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w500,

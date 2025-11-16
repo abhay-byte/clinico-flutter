@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clinico/screens/home_screen.dart';
+import '../constants/colors.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color(0xFFE8F4FD), Color(0xFFF5F7FA)],
+                  colors: [AppColors.bg1, AppColors.bg2],
                 ),
               ),
               padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
@@ -69,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w800,
-                      color: Color(0xFF333333),
+                      color: AppColors.ge1,
                       height: 1.0,
                     ),
                   ),
@@ -78,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Log in to access your secure health hub.',
                     style: TextStyle(
                       fontSize: 13,
-                      color: Color(0xFF666666),
+                      color: AppColors.ge2,
                       height: 1.3,
                     ),
                   ),
@@ -91,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
               margin: const EdgeInsets.only(top: 0),
               decoration: const BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
@@ -105,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     // Tab Toggle (Log In / Sign Up)
                     Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF5F7FA),
+                        color: AppColors.bg1,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: const EdgeInsets.symmetric(vertical: 14),
                                 decoration: BoxDecoration(
                                   color: isLoginTab
-                                      ? Colors.white
+                                      ? AppColors.white
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -135,8 +136,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ? FontWeight.w700
                                           : FontWeight.w500,
                                       color: isLoginTab
-                                          ? const Color(0xFF003261)
-                                          : const Color(0xFF999999),
+                                          ? AppColors.b1
+                                          : AppColors.ge2,
                                     ),
                                   ),
                                 ),
@@ -155,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: const EdgeInsets.symmetric(vertical: 14),
                                 decoration: BoxDecoration(
                                   color: !isLoginTab
-                                      ? Colors.white
+                                      ? AppColors.white
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -168,8 +169,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ? FontWeight.w700
                                           : FontWeight.w500,
                                       color: !isLoginTab
-                                          ? const Color(0xFF003261)
-                                          : const Color(0xFF999999),
+                                          ? AppColors.b1
+                                          : AppColors.ge2,
                                     ),
                                   ),
                                 ),
@@ -188,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF333333),
+                        color: AppColors.ge1,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -197,33 +198,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         hintText: 'Enter Email',
                         hintStyle: const TextStyle(
-                          color: Color(0xFFCCCCCC),
+                          color: AppColors.ge2,
                           fontSize: 14,
                         ),
                         prefixIcon: const Icon(
                           Icons.person_outline,
-                          color: Color(0xFFCCCCCC),
+                          color: AppColors.ge2,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFFE0E0E0),
+                            color: AppColors.ge3,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFFE0E0E0),
+                            color: AppColors.ge3,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF4A85DD),
+                            color: AppColors.b4,
                           ),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: AppColors.white,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 14,
@@ -239,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xFF333333),
+                        color: AppColors.ge1,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -249,29 +250,29 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         hintText: 'Enter Password',
                         hintStyle: const TextStyle(
-                          color: Color(0xFFCCCCCC),
+                          color: AppColors.ge2,
                           fontSize: 14,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFFE0E0E0),
+                            color: AppColors.ge3,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFFE0E0E0),
+                            color: AppColors.ge3,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
-                            color: Color(0xFF4A85DD),
+                            color: AppColors.b4,
                           ),
                         ),
                         filled: true,
-                        fillColor: Colors.white,
+                        fillColor: AppColors.white,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 12,
                           vertical: 14,
@@ -286,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             showPassword
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
-                            color: const Color(0xFFCCCCCC),
+                            color: AppColors.ge2,
                           ),
                         ),
                       ),
@@ -310,7 +311,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     rememberMe = value ?? false;
                                   });
                                 },
-                                activeColor: const Color(0xFF4A85DD),
+                                activeColor: AppColors.b4,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
                                 ),
@@ -321,7 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               'Remember me',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: Color(0xFF666666),
+                                color: AppColors.ge2,
                               ),
                             ),
                           ],
@@ -334,7 +335,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             'Forgot Password?',
                             style: TextStyle(
                               fontSize: 13,
-                              color: Color(0xFF4A85DD),
+                              color: AppColors.b4,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -358,7 +359,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4A85DD),
+                          backgroundColor: AppColors.b4,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -369,7 +370,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ),
@@ -383,7 +384,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Expanded(
                           child: Container(
                             height: 1,
-                            color: const Color(0xFFE0E0E0),
+                            color: AppColors.ge3,
                           ),
                         ),
                         const Padding(
@@ -392,14 +393,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             'Or',
                             style: TextStyle(
                               fontSize: 13,
-                              color: Color(0xFF999999),
+                              color: AppColors.ge2,
                             ),
                           ),
                         ),
                         Expanded(
                           child: Container(
                             height: 1,
-                            color: const Color(0xFFE0E0E0),
+                            color: AppColors.ge3,
                           ),
                         ),
                       ],
@@ -417,7 +418,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(
-                            color: Color(0xFFE0E0E0),
+                            color: AppColors.ge3,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -438,7 +439,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xFF333333),
+                                color: AppColors.ge1,
                               ),
                             ),
                           ],
@@ -458,7 +459,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(
-                            color: Color(0xFFE0E0E0),
+                            color: AppColors.ge3,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -479,7 +480,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xFF333333),
+                                color: AppColors.ge1,
                               ),
                             ),
                           ],

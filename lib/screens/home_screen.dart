@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FA),
+      backgroundColor: AppColors.bg1,
       body: _buildBody(),
       bottomNavigationBar: _buildBottomNavBar(),
     );
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Location & Search Bar Section
   Widget _buildLocationSearchSection() {
     return Container(
-      color: const Color(0xFFF5F7FA),
+      color: AppColors.bg1,
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Location',
                 style: TextStyle(
                   fontSize: 12,
-                  color: Color(0xFF999999),
+                  color: AppColors.ge2,
                   fontFamily: 'Roboto',
                 ),
               ),
@@ -91,14 +92,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF1A1A1A),
+                    color: AppColors.ge1,
                     fontFamily: 'Roboto',
                   ),
                 ),
               ),
               const Icon(
                 Icons.keyboard_arrow_down,
-                color: Color(0xFF999999),
+                color: AppColors.ge2,
               ),
             ],
           ),
@@ -107,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Search Bar
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
@@ -125,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     'assets/home/search.png',
                     width: 20,
                     height: 20,
+                    color: AppColors.ge2,
                   ),
                 ),
                 suffixIcon: Padding(
@@ -133,12 +135,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     'assets/home/filter.png',
                     width: 20,
                     height: 20,
+                    color: AppColors.ge2,
                   ),
                 ),
                 hintText: 'Search Psychiatrist Doctor',
                 hintStyle: const TextStyle(
                   fontSize: 14,
-                  color: Color(0xFFCCCCCC),
+                  color: AppColors.ge2,
                   fontFamily: 'Roboto',
                 ),
                 border: InputBorder.none,
@@ -154,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Upcoming Appointments Section
   Widget _buildUpcomingAppointmentsSection() {
     return Container(
-      color: const Color(0xFFF5F7FA),
+      color: AppColors.bg1,
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF003261),
+              color: AppColors.b1,
               fontFamily: 'Roboto',
             ),
           ),
@@ -178,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
@@ -195,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'No Upcoming Appointments',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF666666),
+                    color: AppColors.ge2,
                     fontFamily: 'Roboto',
                   ),
                 ),
@@ -212,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        color: const Color(0xFFE8F4FD),
+        color: AppColors.b3,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -228,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFF003261),
+                      color: AppColors.b1,
                       fontFamily: 'Roboto',
                       height: 1.3,
                     ),
@@ -238,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     'Tell us what problem you are facing and we will do the Rest!',
                     style: TextStyle(
                       fontSize: 12,
-                      color: Color(0xFF666666),
+                      color: AppColors.ge2,
                       fontFamily: 'Roboto',
                     ),
                   ),
@@ -246,7 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF4A85DD),
+                      backgroundColor: AppColors.b4,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 10,
@@ -259,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       'View All Doctors',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.w500,
                       ),
@@ -288,7 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -321,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1A1A1A),
+                          color: AppColors.ge1,
                           fontFamily: 'Roboto',
                           height: 1.3,
                         ),
@@ -331,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         'Navigate your wellness journey with confidence. Ask Elphie for support, answers, or to book an appointment.',
                         style: TextStyle(
                           fontSize: 12,
-                          color: Color(0xFF666666),
+                          color: AppColors.ge2,
                           fontFamily: 'Roboto',
                           height: 1.4,
                         ),
@@ -348,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF4A85DD),
+                backgroundColor: AppColors.b4,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -358,7 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 'Chat with Elphie',
                 style: TextStyle(
                   fontSize: 14,
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontFamily: 'Roboto',
                   fontWeight: FontWeight.w600,
                 ),
@@ -393,7 +396,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF003261),
+              color: AppColors.b1,
               fontFamily: 'Roboto',
             ),
           ),
@@ -410,7 +413,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 100,
                 margin: const EdgeInsets.only(right: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -437,7 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 11,
-                          color: Color(0xFF666666),
+                          color: AppColors.ge1,
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.w500,
                         ),
@@ -470,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
-                  color: Color(0xFF003261),
+                  color: AppColors.b1,
                   fontFamily: 'Roboto',
                 ),
               ),
@@ -480,7 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'See All',
                   style: TextStyle(
                     fontSize: 13,
-                    color: Color(0xFF4A85DD),
+                    color: AppColors.b4,
                     fontFamily: 'Roboto',
                     fontWeight: FontWeight.w500,
                   ),
@@ -500,7 +503,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 200,
                 margin: const EdgeInsets.only(right: 12),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -521,7 +524,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                              color: const Color(0xFFE8F4FD),
+                              color: AppColors.b3,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Center(
@@ -543,7 +546,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.w600,
-                                    color: Color(0xFF1A1A1A),
+                                    color: AppColors.ge1,
                                     fontFamily: 'Roboto',
                                   ),
                                 ),
@@ -552,7 +555,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   'Physician | MBBS, MD',
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: Color(0xFF666666),
+                                    color: AppColors.ge2,
                                     fontFamily: 'Roboto',
                                   ),
                                 ),
@@ -561,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   'ABC Hospital',
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: Color(0xFF999999),
+                                    color: AppColors.ge2,
                                     fontFamily: 'Roboto',
                                   ),
                                 ),
@@ -591,7 +594,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   '1.6 Km',
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: Color(0xFF666666),
+                                    color: AppColors.ge2,
                                     fontFamily: 'Roboto',
                                   ),
                                   overflow: TextOverflow.ellipsis,
@@ -608,7 +611,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   '4.7',
                                   style: TextStyle(
                                     fontSize: 10,
-                                    color: Color(0xFF666666),
+                                    color: AppColors.ge2,
                                     fontFamily: 'Roboto',
                                   ),
                                 ),
@@ -619,7 +622,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ElevatedButton(
                             onPressed: () {},
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4A85DD),
+                              backgroundColor: AppColors.b4,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 5,
@@ -633,7 +636,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               'View',
                               style: TextStyle(
                                 fontSize: 9,
-                                color: Colors.white,
+                                color: AppColors.white,
                                 fontFamily: 'Roboto',
                                 fontWeight: FontWeight.w500,
                               ),
@@ -671,7 +674,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Color(0xFF003261),
+              color: AppColors.b1,
               fontFamily: 'Roboto',
             ),
           ),
@@ -692,7 +695,7 @@ class _HomeScreenState extends State<HomeScreen> {
               final (icon, label) = services[index];
               return Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
@@ -719,7 +722,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontSize: 10,
-                          color: Color(0xFF666666),
+                          color: AppColors.ge1,
                           fontFamily: 'Roboto',
                           fontWeight: FontWeight.w500,
                         ),
@@ -741,7 +744,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBottomNavBar() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.bg2,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -758,9 +761,9 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        selectedItemColor: const Color(0xFF4A85DD),
-        unselectedItemColor: const Color(0xFFCCCCCC),
+        backgroundColor: AppColors.bg2,
+        selectedItemColor: AppColors.ge1,
+        unselectedItemColor: AppColors.ge2,
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: [
@@ -770,8 +773,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 24,
               height: 24,
               color: _currentBottomNavIndex == 0
-                  ? const Color(0xFF4A85DD)
-                  : const Color(0xFFCCCCCC),
+                  ? AppColors.ge1
+                  : AppColors.ge2,
             ),
             label: 'Home',
           ),
@@ -781,8 +784,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 24,
               height: 24,
               color: _currentBottomNavIndex == 1
-                  ? const Color(0xFF4A85DD)
-                  : const Color(0xFFCCCCCC),
+                  ? AppColors.ge1
+                  : AppColors.ge2,
             ),
             label: 'Messages',
           ),
@@ -792,8 +795,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 24,
               height: 24,
               color: _currentBottomNavIndex == 2
-                  ? const Color(0xFF4A85DD)
-                  : const Color(0xFFCCCCCC),
+                  ? AppColors.ge1
+                  : AppColors.ge2,
             ),
             label: 'Appointments',
           ),
@@ -803,8 +806,8 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 24,
               height: 24,
               color: _currentBottomNavIndex == 3
-                  ? const Color(0xFF4A85DD)
-                  : const Color(0xFFCCCCCC),
+                  ? AppColors.ge1
+                  : AppColors.ge2,
             ),
             label: 'Profile',
           ),

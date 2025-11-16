@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clinico/screens/onboarding3_screen.dart';
+import '../constants/colors.dart';
 
 class Onboarding2Screen extends StatelessWidget {
   const Onboarding2Screen({Key? key}) : super(key: key);
@@ -10,19 +11,25 @@ class Onboarding2Screen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: const Color(0xFFF5F7FA),
+        color: AppColors.bg1,
         child: Column(
           children: [
             // Top padding
             const SizedBox(height: 40),
             
-            // Feature Illustration - Large image without background card
+            // Feature Illustration - Large image with background
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Image.asset(
-                'assets/onboarding/feature2.png',
-                height: 380,
-                fit: BoxFit.contain,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.g2,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Image.asset(
+                  'assets/onboarding/feature2.png',
+                  height: 380,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             
@@ -42,7 +49,7 @@ class Onboarding2Screen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w800,
-                          color: Color(0xFF333333),
+                          color: AppColors.ge1,
                           height: 1.3,
                         ),
                       ),
@@ -54,7 +61,7 @@ class Onboarding2Screen extends StatelessWidget {
                           width: 140,
                           height: 6,
                           decoration: BoxDecoration(
-                            color: const Color(0xFF7CB342),
+                            color: AppColors.g1,
                             borderRadius: BorderRadius.circular(3),
                           ),
                         ),
@@ -69,7 +76,7 @@ class Onboarding2Screen extends StatelessWidget {
                     'Hyperlocal search helps you connect with trusted specialists and clinics in your community.',
                     style: TextStyle(
                       fontSize: 14,
-                      color: Color(0xFF666666),
+                      color: AppColors.ge2,
                       height: 1.5,
                     ),
                   ),
@@ -90,13 +97,13 @@ class Onboarding2Screen extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: const BoxDecoration(
-                      color: Color(0xFF7CB342),
+                      color: AppColors.g1,
                       shape: BoxShape.circle,
                     ),
                     child: const Center(
                       child: Icon(
                         Icons.check,
-                        color: Colors.white,
+                        color: AppColors.white,
                         size: 24,
                       ),
                     ),
@@ -105,7 +112,7 @@ class Onboarding2Screen extends StatelessWidget {
                   Container(
                     width: 30,
                     height: 2,
-                    color: const Color(0xFF4A85DD),
+                    color: AppColors.b4,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                   ),
                   // Step 2 - Active
@@ -113,14 +120,14 @@ class Onboarding2Screen extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: const BoxDecoration(
-                      color: Color(0xFF003261),
+                      color: AppColors.b1,
                       shape: BoxShape.circle,
                     ),
                     child: const Center(
                       child: Text(
                         '2',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: AppColors.white,
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                         ),
@@ -131,7 +138,7 @@ class Onboarding2Screen extends StatelessWidget {
                   Container(
                     width: 30,
                     height: 2,
-                    color: const Color(0xFFB0D4FF),
+                    color: AppColors.b3,
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                   ),
                   // Step 3 - Inactive
@@ -139,7 +146,7 @@ class Onboarding2Screen extends StatelessWidget {
                     width: 40,
                     height: 40,
                     decoration: const BoxDecoration(
-                      color: Color(0xFFB0D4FF),
+                      color: AppColors.b3,
                       shape: BoxShape.circle,
                     ),
                     child: const Center(
@@ -174,7 +181,7 @@ class Onboarding2Screen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF4A85DD),
+                    backgroundColor: AppColors.b4,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -184,7 +191,7 @@ class Onboarding2Screen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
