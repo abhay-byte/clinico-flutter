@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:clinico/screens/onboarding1_screen.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({Key? key}) : super(key: key);
@@ -287,10 +288,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle continue action
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Selected language: $selectedLanguage'),
+                    // Navigate to first onboarding screen
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => const Onboarding1Screen(),
                       ),
                     );
                   },
