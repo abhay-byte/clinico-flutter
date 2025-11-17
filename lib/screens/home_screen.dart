@@ -3,6 +3,7 @@ import '../constants/colors.dart';
 import '../components/location_selection_modal.dart';
 import '../components/search_filter_modal.dart';
 import '../screens/search_screen.dart';
+import '../screens/ai_chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -403,7 +404,12 @@ class _HomeScreenState extends State<HomeScreen> {
             width: double.infinity,
             margin: const EdgeInsets.all(20),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AiChatScreen()),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.b4,
                 padding: const EdgeInsets.symmetric(vertical: 12),
