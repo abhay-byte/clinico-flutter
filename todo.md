@@ -25,6 +25,16 @@
 - "Chat with Elphie" button navigation from home screen
 - **Commit:** feat(ai-chat): implement AI chat screen with Elphie interface
 
+### 3. AI Chat Upload Menu (COMPLETED)
+- Pop-up menu triggered by plus icon on AI chat screen
+- "Upload Document" and "Upload Image" menu options
+- Proper menu positioning above input bar
+- Vertical separator divider between menu items
+- Icon-text alignment with proper centering
+- Menu dismissal on background tap or option selection
+- Proper state management for menu visibility
+- **Commit:** fix(ai-chat): align upload menu icons vertically with text labels
+
 ## 📋 Previous Implementation
 
 ### Search Filter Modal Implementation
