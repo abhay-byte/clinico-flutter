@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import '../components/ai_chat_upload_menu.dart';
 
 class AiChatScreen extends StatefulWidget {
   const AiChatScreen({Key? key}) : super(key: key);
@@ -12,6 +13,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
   late TextEditingController _messageController;
   final FocusNode _messageFocusNode = FocusNode();
   bool _isInputEmpty = true;
+  bool _showUploadMenu = false;
 
   // Placeholder user name - will be fetched from database in future
   final String _userName = 'Lorem Ipsum';
@@ -45,73 +47,119 @@ class _AiChatScreenState extends State<AiChatScreen> {
     }
   }
 
+  void _handleUploadDocument() {
+    print('Upload Document tapped');
+    // File picker functionality will be added here
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Document upload - Coming soon'),
+        duration: Duration(milliseconds: 1500),
+      ),
+    );
+  }
+
+  void _handleUploadImage() {
+    print('Upload Image tapped');
+    // Image picker functionality will be added here
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Image upload - Coming soon'),
+        duration: Duration(milliseconds: 1500),
+      ),
+    );
+  }
+
+  void _toggleUploadMenu() {
+    setState(() {
+      _showUploadMenu = !_showUploadMenu;
+    });
+  }
+
+  void _closeUploadMenu() {
+    setState(() {
+      _showUploadMenu = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bg1,
-      body: Column(
+      body: Stack(
         children: [
-          // Top Navigation Bar
-          _buildNavigationBar(),
+          Column(
+            children: [
+              // Top Navigation Bar
+              _buildNavigationBar(),
 
-          // Main Content Area - Welcome Section
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 40),
+              // Main Content Area - Welcome Section
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 40),
 
-                  // Elphie Mascot
-                  Image.asset(
-                    'assets/home/mascot.png',
-                    width: 120,
-                    height: 120,
-                    fit: BoxFit.contain,
-                  ),
-
-                  const SizedBox(height: 24),
-
-                  // Greeting Text
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      'Hello there\n$_userName',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.ge1,
-                        fontFamily: 'Roboto',
-                        height: 1.3,
+                      // Elphie Mascot
+                      Image.asset(
+                        'assets/home/mascot.png',
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.contain,
                       ),
-                    ),
-                  ),
 
-                  const SizedBox(height: 16),
+                      const SizedBox(height: 24),
 
-                  // Instructional Text
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      'Navigate your wellness journey with confidence. Ask Elphie for support, answers, or to book an appointment.',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.ge2,
-                        fontFamily: 'Roboto',
-                        height: 1.4,
+                      // Greeting Text
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          'Hello there\n$_userName',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.ge1,
+                            fontFamily: 'Roboto',
+                            height: 1.3,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
 
-                  const SizedBox(height: 60),
-                ],
+                      const SizedBox(height: 16),
+
+                      // Instructional Text
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          'Navigate your wellness journey with confidence. Ask Elphie for support, answers, or to book an appointment.',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppColors.ge2,
+                            fontFamily: 'Roboto',
+                            height: 1.4,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 60),
+                    ],
+                  ),
+                ),
               ),
-            ),
+
+              // Query Input Bar
+              _buildQueryInputBar(),
+            ],
           ),
 
-          // Query Input Bar
-          _buildQueryInputBar(),
+          // Upload Menu Overlay
+          if (_showUploadMenu)
+            AiChatUploadMenu(
+              onUploadDocument: _handleUploadDocument,
+              onUploadImage: _handleUploadImage,
+              onDismiss: _closeUploadMenu,
+            ),
         ],
       ),
     );
@@ -174,15 +222,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
             Padding(
               padding: const EdgeInsets.all(12),
               child: GestureDetector(
-                onTap: () {
-                  // Handle file attachment
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('File attachment coming soon'),
-                      duration: Duration(milliseconds: 1500),
-                    ),
-                  );
-                },
+                onTap: _toggleUploadMenu,
                 child: Image.asset(
                   'assets/ai_chat/plus.png',
                   width: 20,
