@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../components/location_selection_modal.dart';
 import '../components/search_filter_modal.dart';
+import '../screens/search_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
- }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,11 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Location Selector
           Row(
             children: [
-              Image.asset(
-                'assets/home/location.png',
-                width: 20,
-                height: 20,
-              ),
+              Image.asset('assets/home/location.png', width: 20, height: 20),
               const SizedBox(width: 8),
               const Text(
                 'Location',
@@ -147,10 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                const Icon(
-                  Icons.keyboard_arrow_down,
-                  color: AppColors.ge2,
-                ),
+                const Icon(Icons.keyboard_arrow_down, color: AppColors.ge2),
               ],
             ),
           ),
@@ -170,6 +164,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             child: TextField(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const SearchScreen()),
+                );
+              },
               decoration: InputDecoration(
                 prefixIcon: Padding(
                   padding: const EdgeInsets.all(12),
