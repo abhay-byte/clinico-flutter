@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../components/ai_chat_upload_menu.dart';
+import '../components/ai_chat_drawer.dart';
 import '../components/message_bubble.dart';
 import '../models/chat_message.dart';
 import '../services/media_picker_service.dart';
@@ -18,6 +19,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
   final FocusNode _messageFocusNode = FocusNode();
   bool _isInputEmpty = true;
   bool _showUploadMenu = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   // Multiple attachments state
   final List<Attachment> _attachments = [];
@@ -212,7 +214,15 @@ class _AiChatScreenState extends State<AiChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: AppColors.bg1,
+      drawer: AiChatDrawer(
+        recentConversations: [
+          'What are this rash on my...',
+          'I am having Suicidal tho...',
+          'I am having sever chest...',
+        ],
+      ),
       body: Stack(
         children: [
           Column(
@@ -315,12 +325,17 @@ class _AiChatScreenState extends State<AiChatScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Row(
           children: [
-            // Chat Icon (Decorative)
-            Image.asset(
-              'assets/home/messages.png',
-              width: 24,
-              height: 24,
-              color: AppColors.ge2,
+            // Chat Icon (Drawer trigger)
+            GestureDetector(
+              onTap: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+              child: Image.asset(
+                'assets/ai_chat/message_outline.png',
+                width: 24,
+                height: 24,
+                color: AppColors.ge2,
+              ),
             ),
 
             const Spacer(),

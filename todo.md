@@ -47,5 +47,65 @@
 - Availability toggle group
 - All filter options with proper state management
 
+---
+
+## 🚧 NEXT TASK: AI Chat Screen Drawer
+
+### Task Overview
+Create the Drawer for the AI Chat page in the Clinico Flutter app. This drawer appears when the user taps the `message_outline` icon on the AI Chat page. The drawer serves as the main navigation and quick-access panel for the user, integrating both general navigation and AI-specific tools.
+
+### Requirements
+- Strictly follow SRS, SDD, and feature documentation.
+- Match Figma design exactly (use Figma MCP for reference).
+- Use only assets from `/assets/ai_chat/` and other specified folders.
+- Follow Clean Architecture and use proper state management (BLoC/Provider).
+- Wait for user review and green light before commit.
+
+### Drawer Structure
+1. **Header & Identity**
+   - User name and role (Patient/Professional)
+   - Profile/settings link (authentication integration)
+   - Use relevant asset (e.g., `login.png`)
+
+2. **Primary Navigation Links**
+   - Home/Dashboard (`home_outline.png`): Go to main overview
+   - AI Chat History (`message_outline.png`, `ai_message.png`): Access chat logs
+
+3. **AI Companion Tools**
+   - AI Agent Selection/Drawer (`ai_drawer.png`): Manage/select AI agents
+   - Secure File Upload (`ai_upload.png`): Upload documents/images for EHR-Lite
+
+4. **Utility & Settings**
+   - Language Selection (`language.png`): Change app language
+   - Location Management (`location.png`): Manage user location
+   - Other modules: Appointment Management, Health Records, Notifications (as per SRS/SDD)
+
+### Acceptance Criteria
+- Drawer opens from AI Chat page on tapping `message_outline` icon
+- All navigation links and tools present as per description
+- Uses correct icons/assets from `/assets/ai_chat/` and related folders
+- UI matches Figma design exactly
+- Follows Clean Architecture and state management best practices
+- No hardcoded values; all data/models as per documentation
+- Wait for user review and green light before commit
+
+### References
+- SRS: `/documentation/SRS.md`
+- SDD: `/documentation/SDD/SDD.md`
+- Features: `/documentation/features/features.md`
+- Database Schema: `/documentation/database/readme.md`
+- Figma: Use provided link via MCP
+- Assets: `/assets/ai_chat/`, `/assets/app/`, `/assets/authentication/`, etc.
+
+---
+
+**Next Steps:**
+1. Review Figma and documentation for drawer UI/UX
+2. Plan widget/component structure
+3. Implement drawer UI and logic
+4. Integrate with navigation and state management
+5. Test and review with user
+6. Commit only after green light
+
 ## Status: READY FOR NEXT TASK
 All current features are implemented and deployed to main branch.
