@@ -30,6 +30,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
   // Placeholder user name - will be fetched from database in future
   final String _userName = 'Lorem Ipsum';
 
+  // Processing state for AI response
+  bool _isProcessing = false;
+
   @override
   void initState() {
     super.initState();
@@ -73,20 +76,19 @@ class _AiChatScreenState extends State<AiChatScreen> {
       _isInputEmpty = true;
     });
 
-    print('Message sent: $text with ${_attachments.length} attachments');
+    print('Message sent: $text with \\${_attachments.length} attachments');
+
+    // Show loading indicator as AI is processing
+    setState(() {
+      _isProcessing = true;
+    });
 
     // Simulate AI response after a delay
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
-        final aiResponse = ChatMessage(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          text: 'Thank you for your question. I\'m analyzing this for you.',
-          sender: MessageSender.ai,
-          timestamp: DateTime.now(),
-        );
-
         setState(() {
-          _messages.add(aiResponse);
+          _isProcessing = false;
+          // Optionally, add the AI's real response here
         });
       }
     });
@@ -234,15 +236,44 @@ class _AiChatScreenState extends State<AiChatScreen> {
               Expanded(
                 child: _messages.isEmpty
                     ? _buildWelcomeSection()
-                    : ListView.builder(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 20,
-                        ),
-                        itemCount: _messages.length,
-                        itemBuilder: (context, index) {
-                          return MessageBubble(message: _messages[index]);
-                        },
+                    : Stack(
+                        children: [
+                          ListView.builder(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 20,
+                            ),
+                            itemCount: _messages.length,
+                            itemBuilder: (context, index) {
+                              return MessageBubble(message: _messages[index]);
+                            },
+                          ),
+                          if (_isProcessing)
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: Image.asset(
+                                      'assets/ai_chat/loading.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  const Text(
+                                    'Generating response...',
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.grey,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
                       ),
               ),
 

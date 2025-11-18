@@ -51,7 +51,7 @@ class MessageBubble extends StatelessWidget {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: isUserMessage ? AppColors.b4 : AppColors.bg1,
+                  color: isUserMessage ? Colors.white : AppColors.bg1,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(
@@ -59,7 +59,7 @@ class MessageBubble extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: isUserMessage ? AppColors.white : AppColors.ge1,
+                    color: isUserMessage ? Colors.black : AppColors.ge1,
                     fontFamily: 'Roboto',
                   ),
                 ),
