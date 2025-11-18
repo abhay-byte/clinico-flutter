@@ -9,43 +9,51 @@ All current features are implemented and deployed to main branch.
 
 ---
 
-# AI First Chat Screen - TODO
+# AI Response Screen - TODO
 
 ## Task Overview
-Implement the AI First Chat Screen for the Clinico Flutter app. This screen is focused on the user's initial medical query, supporting multimedia attachments and a clear AI response loading state.
+Implement the AI Response Screen for the Clinico Flutter app. This screen appears after sending a message in the AI chat page and displays the AI's detailed response, actionable next steps, and persistent input composer.
 
 ## Requirements
 - Strictly follow SRS, SDD, and feature documentation.
 - Match Figma design exactly (use Figma MCP for reference).
-- Use only assets from `/assets/ai_chat/` (e.g., `upload_image.png`, `upload_document.png`, `loading.png`, `plus.png`, `send.png`).
+- Use only assets from `/assets/ai_chat/` and `/assets/` (e.g., `aichat_mascot.png`, `upload_image.png`, `upload_document.png`, `plus.png`, `send.png`).
 - Follow Clean Architecture and use proper state management (BLoC/Provider).
 - Wait for user review and green light before commit.
 
 ## Screen Structure
-1. **Conversation Area**
-   - User message bubble: Rounded white bubble with the latest query (e.g., "What are this rash on my hand?")
-   - Media attachments:
-     - Image thumbnail (e.g., hands with rash) above/right of the message bubble
-     - PDF/document icon (e.g., "Rash_something..."), next to the image
-   - Asset usage: Use actual uploaded image/document for preview; use asset icons for upload triggers only
+1. **Header and Context**
+   - Status bar (time, signal, battery)
+   - Back button (chevron) in top-left
+   - User message bubble (white, dark text) with attachments (image thumbnail, PDF icon)
 
-2. **Loading State (AI Processing)**
-   - Centered blue gradient spinner (`loading.png` from `/assets/ai_chat/`)
-   - Below spinner: Text "Generating response..." in gray
-   - Spinner and text appear after user sends a message, until AI response is ready
+2. **AI Response and Analysis**
+   - AI mascot avatar (aichat_mascot.png) left of AI message
+   - AI message bubble with:
+     - Copy and Share icons to the right
+     - Summary and numbered list of possible conditions
+   - Medical disclaimer block below the message
 
-3. **Input Bar (Composer)**
+3. **Call-to-Action Block**
+   - Distinct, rounded white-on-blue area
+   - Text: "Would you like me to help you find a dermatologist or book an appointment?"
+   - Two full-width buttons:
+     - Book Appointment →
+     - More Information →
+
+4. **Input Composer**
    - Persistent at the bottom
-   - Rounded, light gray bar with placeholder: "Ask any medical query..."
-   - Left: Plus icon (`plus.png`) to open upload menu
-   - Right: Send icon (`send.png`) to submit message
-   - Handles text input, file/image upload, and send action
+   - Rounded input bar with placeholder: "Ask any medical query..."
+   - Left: Plus icon for attachments
+   - Right: Send icon for submitting text
 
 ## Acceptance Criteria
-- User can type and send a message; message appears in the conversation area
-- User can attach image and document; thumbnails/previews shown above message bubble
-- On send, loading spinner and "Generating response..." text are shown until AI responds
-- All icons and spinner use correct assets from `/assets/ai_chat/`
+- User message and attachments are displayed at the top
+- AI response includes mascot, copy/share icons, summary, and numbered list
+- Medical disclaimer and call-to-action block are present and styled as per design
+- Action buttons are functional (navigation or callback)
+- Input composer is always visible and functional
+- All icons and images use correct assets
 - UI matches Figma design exactly
 - Follows Clean Architecture and state management best practices
 - No hardcoded values; all data/models as per documentation
@@ -56,7 +64,7 @@ Implement the AI First Chat Screen for the Clinico Flutter app. This screen is f
 - SDD: `/documentation/SDD/SDD.md`
 - Features: `/documentation/features/features.md`
 - Figma: Use provided link via MCP
-- Assets: `/assets/ai_chat/`
+- Assets: `/assets/ai_chat/`, `/assets/`
 
 ---
 
