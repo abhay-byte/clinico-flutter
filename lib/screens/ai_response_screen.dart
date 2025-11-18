@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'appointment_search_page.dart';
 
 class AiResponseScreen extends StatefulWidget {
   const AiResponseScreen({super.key});
@@ -13,7 +14,9 @@ class _AiResponseScreenState extends State<AiResponseScreen> {
       true; // Set to true to show response and action block
 
   void _navigateToAppointmentSearch() {
-    Navigator.of(context).pushNamed('/appointment_search');
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const AppointmentSearchPage()),
+    );
   }
 
   void _showMoreInfo() {

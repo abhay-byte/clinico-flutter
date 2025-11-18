@@ -211,7 +211,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
   }
 
   void _navigateToAppointmentSearch() {
-    Navigator.of(context).pushNamed('/appointment_search/location');
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const AppointmentSearchPage()),
+    );
   }
 
   void _showMoreInfo() {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../components/doctor_card.dart';
 import '../components/search_filter_modal.dart';
+import '../screens/search_location_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   final String? initialQuery;
@@ -200,14 +201,49 @@ class _SearchScreenState extends State<SearchScreen> {
             controller: _searchController,
             focusNode: _searchFocusNode,
             decoration: InputDecoration(
-              prefixIcon: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Image.asset(
-                  'assets/home/search.png',
-                  width: 20,
-                  height: 20,
-                  color: AppColors.ge2,
-                ),
+              prefixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Location icon
+                  GestureDetector(
+                    onTap: () async {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => SearchLocationScreen(
+                            onLocationSelected: (locationName, latitude, longitude) {
+                              // You can update the location context here if needed
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Location selected: $locationName'),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                      child: Image.asset(
+                        'assets/home/location.png',
+                        width: 20,
+                        height: 20,
+                        color: AppColors.g1,
+                      ),
+                    ),
+                  ),
+                  // Search icon
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Image.asset(
+                      'assets/home/search.png',
+                      width: 20,
+                      height: 20,
+                      color: AppColors.ge2,
+                    ),
+                  ),
+                ],
               ),
               suffixIcon: GestureDetector(
                 onTap: _showSearchFilterModal,

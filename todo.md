@@ -1,43 +1,52 @@
-# Clinico Flutter - Development Progress
+# Doctor List Screen Development Task
 
-## ✅ Completed Features
+## Overview
+Create a doctor list screen that appears as a popup on the "doc_near_me" screen. This screen should provide an immediate, location-based view of requested medical services.
 
-### 1. AI Chat Response Page
-- ✅ Implemented with medical disclaimer and professional advice
-- ✅ Action block with "Book Appointment" and "More Information" buttons
-- ✅ Persistent input composer with keyboard interface
-- ✅ All assets correctly placed from `/assets/ai_chat/`
-- ✅ Clean Architecture and state management implemented
-- ✅ Committed and pushed
+## Requirements
 
-### 2. Appointment Booking Search Page
-- ✅ Implemented with map view and location markers
-- ✅ Search bar with filter icon and active badge
-- ✅ User location marker using `your_location.png` with pulse animation
-- ✅ Three doctor location pins using `doctor_location.png`
-- ✅ Interactive doctor info bottom sheet modals
-- ✅ Street names on map
-- ✅ Bottom navigation handle
-- ✅ Committed and pushed
+### 1. Header and Search Component
+- Create a search bar at the top
+- Search query should show "Dermatologist Near me" (or relevant specialty)
+- Include search icon on the left
+- Add filter/sort icon on the right with red notification badge showing '1'
+- Badge indicates one active filter/sorting criterion
 
-### 3. Doctor Near Me Screen
-- ✅ Location-based doctor search with OpenStreetMap integration
-- ✅ Interactive map with user location and doctor markers
-- ✅ Floating doctor detail card with appointment options
-- ✅ Location services and permission handling
-- ✅ Mock doctor data with real distance calculations
-- ✅ Drawer home icon navigation fixed
-- ✅ Named routes configured in main.dart
-- ✅ Committed and pushed
+### 2. Map Visualization
+- Implement interactive map as central content
+- Display street names and location markers
+- Show user's current location with blue pulsating circle
+- Add directional indicator showing device orientation
+- Place green teardrop-shaped pins for doctor locations
+- Pins should have white silhouette of person with stethoscope
 
-### 4. Navigation & Routing
-- ✅ Fixed drawer home icon to navigate to home screen
-- ✅ Integrated named routes for all screens
-- ✅ Connected appointment search to map-based doctor finder
-- ✅ Committed and pushed
+### 3. Interactive Doctor Detail Card
+- Create floating card at bottom of screen
+- Display when doctor pin is selected
+- Include doctor image/icon
+- Show doctor name ("Dr. Lorem Ipsum")
+- Display specialty ("Physician") and qualifications ("MBBS, MD")
+- Show hospital affiliation ("ABC Hospital")
+- Include location pin icon with distance ("1.6 Km Away")
+- Add star rating ("4.7")
+- Create blue "View" action button
 
----
+### 4. Technical Implementation
+- Implement location permission request
+- Integrate OpenStreetMap API for map functionality
+- Create geolocation/reverse geocoding for distance calculation
+- Handle map tile fetching and rendering
+- Implement interactive markers management
+- Design responsive layout for all screen sizes
 
-## 📋 Next Steps
+### 5. Assets Required
+- Location icons for user position
+- Doctor pin icons
+- Map-related assets
+- Rating star icons
+- Search/filter icons
 
-Await further instructions for next features or screens.
+### 6. Navigation
+- Connect "View" button to detailed doctor profile page
+- Enable appointment booking functionality
+- Ensure smooth transitions between screens

@@ -4,6 +4,8 @@ import '../components/location_selection_modal.dart';
 import '../components/search_filter_modal.dart';
 import '../screens/search_screen.dart';
 import '../screens/ai_chat_screen.dart';
+import '../screens/doctor_list_screen.dart';
+import '../screens/search_location_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,12 +24,30 @@ class _HomeScreenState extends State<HomeScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => LocationSelectionModal(
-        onLocationSelected: () {
-          // Handle location selection
-          setState(() {
-            // Here you would update the current location
-            // For demo, keeping the same location
-          });
+        onLocationSelected: () async {
+          // Handle location selection by navigating to search location screen
+          Navigator.of(context).pop(); // Close the modal first
+          
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchLocationScreen(
+                onLocationSelected: (locationName, latitude, longitude) {
+                  // Update the current location in the home screen
+                  setState(() {
+                    currentLocation = locationName;
+                  });
+                  
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Location updated to: $locationName'),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
         },
         onDismiss: () {
           if (Navigator.of(context).canPop()) {
@@ -302,7 +322,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   const SizedBox(height: 12),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const DoctorListScreen()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.b4,
                       padding: const EdgeInsets.symmetric(
@@ -538,7 +563,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const DoctorListScreen()),
+                  );
+                },
                 child: const Text(
                   'See All',
                   style: TextStyle(
