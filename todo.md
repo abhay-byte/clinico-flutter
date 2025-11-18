@@ -20,18 +20,24 @@
 - ✅ Bottom navigation handle
 - ✅ Committed and pushed
 
----
+### 3. Doctor Near Me Screen
+- ✅ Location-based doctor search with OpenStreetMap integration
+- ✅ Interactive map with user location and doctor markers
+- ✅ Floating doctor detail card with appointment options
+- ✅ Location services and permission handling
+- ✅ Mock doctor data with real distance calculations
+- ✅ Drawer home icon navigation fixed
+- ✅ Named routes configured in main.dart
+- ✅ Committed and pushed
 
-## 📋 Current Tasks
-
-### 3. Doctor Near Me Screen (In Progress)
-- Location-based doctor search with OpenStreetMap integration
-- Interactive map with user location and doctor markers
-- Floating doctor detail card with appointment options
-- See detailed requirements in `todo_doctor_near_me.md`
+### 4. Navigation & Routing
+- ✅ Fixed drawer home icon to navigate to home screen
+- ✅ Integrated named routes for all screens
+- ✅ Connected appointment search to map-based doctor finder
+- ✅ Committed and pushed
 
 ---
 
 ## 📋 Next Steps
 
-Await further instructions or proceed with Doctor Near Me Screen implementation.
+Await further instructions for next features or screens.

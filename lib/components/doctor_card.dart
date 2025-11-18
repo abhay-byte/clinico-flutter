@@ -38,6 +38,7 @@ class DoctorCard extends StatelessWidget {
         ],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Column A: Doctor Avatar (Left)
           Container(
@@ -64,6 +65,7 @@ class DoctorCard extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Doctor Name
                 Text(
@@ -97,6 +99,7 @@ class DoctorCard extends StatelessWidget {
           // Column C: Quick Metrics (Right)
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Rating with star icon
               Row(

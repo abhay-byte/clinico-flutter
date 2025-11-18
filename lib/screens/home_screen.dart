@@ -553,14 +553,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         SizedBox(
-          height: 200,
+          height: 140,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: 4,
             itemBuilder: (context, index) {
               return Container(
-                width: 200,
+                width: 280,
                 margin: const EdgeInsets.only(right: 12),
                 decoration: BoxDecoration(
                   color: AppColors.white,
@@ -573,138 +573,141 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Row(
+                    // Doctor Avatar (Left)
+                    Container(
+                      width: 60,
+                      height: 60,
+                      margin: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.b3,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Center(
+                        child: Image.asset(
+                          'assets/home/serach/doctor_male.png',
+                          width: 40,
+                          height: 40,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    
+                    // Doctor Information (Center)
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: AppColors.b3,
-                              borderRadius: BorderRadius.circular(8),
+                          // Doctor Name
+                          Text(
+                            'Dr. Lorem Ipsum',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.ge1,
+                              fontFamily: 'Roboto',
                             ),
-                            child: Center(
-                              child: Image.asset(
-                                'assets/home/doctor_icon.png',
-                                width: 30,
-                                height: 30,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Dr. Lorem Ipsum',
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColors.ge1,
-                                    fontFamily: 'Roboto',
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                const Text(
-                                  'Physician | MBBS, MD',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: AppColors.ge2,
-                                    fontFamily: 'Roboto',
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                const Text(
-                                  'ABC Hospital',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: AppColors.ge2,
-                                    fontFamily: 'Roboto',
-                                  ),
-                                ),
-                              ],
+                          const SizedBox(height: 4),
+                          // Professional Details (Specialty | Credentials | Hospital)
+                          Text(
+                            'Physician | MBBS, MD | ABC Hospital',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: AppColors.ge2,
+                              fontFamily: 'Roboto',
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  'assets/home/location.png',
-                                  width: 14,
-                                  height: 14,
-                                  fit: BoxFit.contain,
-                                ),
-                                const SizedBox(width: 4),
-                                const Text(
-                                  '1.6 Km',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: AppColors.ge2,
-                                    fontFamily: 'Roboto',
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(width: 6),
-                                Image.asset(
-                                  'assets/home/star.png',
-                                  width: 14,
-                                  height: 14,
-                                  fit: BoxFit.contain,
-                                ),
-                                const SizedBox(width: 4),
-                                const Text(
-                                  '4.7',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: AppColors.ge2,
-                                    fontFamily: 'Roboto',
-                                  ),
-                                ),
-                              ],
+                    const SizedBox(width: 12),
+                    
+                    // Quick Metrics (Right)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Rating with star icon
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              'assets/home/star.png',
+                              width: 14,
+                              height: 14,
+                              fit: BoxFit.contain,
                             ),
-                          ),
-                          const SizedBox(width: 8),
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.b4,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 5,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              minimumSize: const Size(50, 28),
-                            ),
-                            child: const Text(
-                              'View',
-                              style: TextStyle(
-                                fontSize: 9,
-                                color: AppColors.white,
-                                fontFamily: 'Roboto',
+                            const SizedBox(width: 4),
+                            Text(
+                              '4.7',
+                              style: const TextStyle(
+                                fontSize: 12,
                                 fontWeight: FontWeight.w500,
+                                color: AppColors.ge1,
+                                fontFamily: 'Roboto',
                               ),
                             ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        // Distance with location icon
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              'assets/home/location.png',
+                              width: 12,
+                              height: 12,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '1.6 km',
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: AppColors.ge2,
+                                fontFamily: 'Roboto',
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        // View Button
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.b4,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 6,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            minimumSize: const Size(50, 24),
                           ),
-                        ],
-                      ),
+                          child: const Text(
+                            'View',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.white,
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    const SizedBox(width: 12),
                   ],
                 ),
               );
