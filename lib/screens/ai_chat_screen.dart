@@ -1,6 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../components/ai_chat_upload_menu.dart';
+import '../components/message_bubble.dart';
+import '../models/chat_message.dart';
+import '../services/media_picker_service.dart';
 
 class AiChatScreen extends StatefulWidget {
   const AiChatScreen({Key? key}) : super(key: key);
@@ -14,6 +18,12 @@ class _AiChatScreenState extends State<AiChatScreen> {
   final FocusNode _messageFocusNode = FocusNode();
   bool _isInputEmpty = true;
   bool _showUploadMenu = false;
+
+  // Multiple attachments state
+  final List<Attachment> _attachments = [];
+
+  // Chat messages list
+  final List<ChatMessage> _messages = [];
 
   // Placeholder user name - will be fetched from database in future
   final String _userName = 'Lorem Ipsum';
@@ -34,39 +44,157 @@ class _AiChatScreenState extends State<AiChatScreen> {
 
   void _updateSendButtonState() {
     setState(() {
-      _isInputEmpty = _messageController.text.trim().isEmpty;
+      _isInputEmpty =
+          _messageController.text.trim().isEmpty && _attachments.isEmpty;
     });
   }
 
   void _sendMessage() {
-    if (_messageController.text.trim().isNotEmpty) {
-      // Handle message sending
-      print('Message sent: ${_messageController.text}');
-      // Clear input field after sending
+    final text = _messageController.text.trim();
+
+    // Allow sending if there's text OR attachments
+    if (text.isEmpty && _attachments.isEmpty) return;
+
+    // Create and add message
+    final message = ChatMessage(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      text: text,
+      sender: MessageSender.user,
+      timestamp: DateTime.now(),
+      attachments: List.from(_attachments),
+    );
+
+    setState(() {
+      _messages.add(message);
       _messageController.clear();
+      _attachments.clear();
+      _isInputEmpty = true;
+    });
+
+    print('Message sent: $text with ${_attachments.length} attachments');
+
+    // Simulate AI response after a delay
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        final aiResponse = ChatMessage(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          text: 'Thank you for your question. I\'m analyzing this for you.',
+          sender: MessageSender.ai,
+          timestamp: DateTime.now(),
+        );
+
+        setState(() {
+          _messages.add(aiResponse);
+        });
+      }
+    });
+  }
+
+  Future<void> _handleUploadDocument() async {
+    print('Upload Document tapped');
+    _closeUploadMenu();
+
+    final pickedDocument = await MediaPickerService.pickDocument();
+    if (pickedDocument != null) {
+      setState(() {
+        _attachments.add(
+          Attachment(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            fileName: pickedDocument.fileName,
+            filePath: pickedDocument.filePath,
+            type: AttachmentType.document,
+            fileBytes: pickedDocument.fileBytes,
+            fileSize: pickedDocument.fileSize,
+          ),
+        );
+        _updateSendButtonState();
+      });
     }
   }
 
-  void _handleUploadDocument() {
-    print('Upload Document tapped');
-    // File picker functionality will be added here
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Document upload - Coming soon'),
-        duration: Duration(milliseconds: 1500),
+  Future<void> _handleUploadImage() async {
+    print('Upload Image tapped');
+
+    // Show options: Camera or Gallery
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Camera option
+                ListTile(
+                  leading: const Icon(Icons.camera_alt, color: AppColors.b4),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImageFromCamera();
+                  },
+                ),
+
+                // Gallery option
+                ListTile(
+                  leading: const Icon(Icons.photo_library, color: AppColors.b4),
+                  title: const Text('Gallery'),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _pickImageFromGallery();
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
-  void _handleUploadImage() {
-    print('Upload Image tapped');
-    // Image picker functionality will be added here
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Image upload - Coming soon'),
-        duration: Duration(milliseconds: 1500),
-      ),
-    );
+  Future<void> _pickImageFromCamera() async {
+    final pickedImage = await MediaPickerService.pickImageFromCamera();
+    if (pickedImage != null) {
+      setState(() {
+        _attachments.add(
+          Attachment(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            fileName: pickedImage.fileName,
+            filePath: pickedImage.filePath,
+            type: AttachmentType.image,
+          ),
+        );
+        _updateSendButtonState();
+      });
+    }
+  }
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedImage = await MediaPickerService.pickImageFromGallery();
+    if (pickedImage != null) {
+      setState(() {
+        _attachments.add(
+          Attachment(
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+            fileName: pickedImage.fileName,
+            filePath: pickedImage.filePath,
+            type: AttachmentType.image,
+          ),
+        );
+        _updateSendButtonState();
+      });
+    }
+  }
+
+  void _removeAttachment(String attachmentId) {
+    setState(() {
+      _attachments.removeWhere((a) => a.id == attachmentId);
+      _updateSendButtonState();
+    });
   }
 
   void _toggleUploadMenu() {
@@ -92,64 +220,24 @@ class _AiChatScreenState extends State<AiChatScreen> {
               // Top Navigation Bar
               _buildNavigationBar(),
 
-              // Main Content Area - Welcome Section
+              // Messages List
               Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 40),
-
-                      // Elphie Mascot
-                      Image.asset(
-                        'assets/home/mascot.png',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.contain,
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Greeting Text
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'Hello there\n$_userName',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.ge1,
-                            fontFamily: 'Roboto',
-                            height: 1.3,
-                          ),
+                child: _messages.isEmpty
+                    ? _buildWelcomeSection()
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 20,
                         ),
+                        itemCount: _messages.length,
+                        itemBuilder: (context, index) {
+                          return MessageBubble(message: _messages[index]);
+                        },
                       ),
-
-                      const SizedBox(height: 16),
-
-                      // Instructional Text
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          'Navigate your wellness journey with confidence. Ask Elphie for support, answers, or to book an appointment.',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: AppColors.ge2,
-                            fontFamily: 'Roboto',
-                            height: 1.4,
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 60),
-                    ],
-                  ),
-                ),
               ),
 
-              // Query Input Bar
-              _buildQueryInputBar(),
+              // Input Area with Image Preview
+              _buildInputArea(),
             ],
           ),
 
@@ -160,6 +248,61 @@ class _AiChatScreenState extends State<AiChatScreen> {
               onUploadImage: _handleUploadImage,
               onDismiss: _closeUploadMenu,
             ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWelcomeSection() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(height: 40),
+
+          // Elphie Mascot
+          Image.asset(
+            'assets/home/mascot.png',
+            width: 120,
+            height: 120,
+            fit: BoxFit.contain,
+          ),
+
+          const SizedBox(height: 24),
+
+          // Greeting Text
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              'Hello there\n$_userName',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+                color: AppColors.ge1,
+                fontFamily: 'Roboto',
+                height: 1.3,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Instructional Text
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              'Navigate your wellness journey with confidence. Ask Elphie for support, answers, or to book an appointment.',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.ge2,
+                fontFamily: 'Roboto',
+                height: 1.4,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 60),
         ],
       ),
     );
@@ -200,83 +343,181 @@ class _AiChatScreenState extends State<AiChatScreen> {
     );
   }
 
-  Widget _buildQueryInputBar() {
+  Widget _buildInputArea() {
     return Container(
       color: AppColors.bg1,
       padding: const EdgeInsets.all(20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            // Attach Icon (Plus)
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: GestureDetector(
-                onTap: _toggleUploadMenu,
-                child: Image.asset(
-                  'assets/ai_chat/plus.png',
-                  width: 20,
-                  height: 20,
-                  color: AppColors.ge2,
-                ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Attachments preview (horizontal scrollable list)
+          if (_attachments.isNotEmpty)
+            Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              height: 90,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: _attachments.length,
+                itemBuilder: (context, index) {
+                  final attachment = _attachments[index];
+                  return _buildAttachmentThumbnail(attachment);
+                },
               ),
             ),
 
-            // Text Input Field
-            Expanded(
-              child: TextField(
-                controller: _messageController,
-                focusNode: _messageFocusNode,
-                maxLines: null,
-                textInputAction: TextInputAction.send,
-                onSubmitted: (_) => _isInputEmpty ? null : _sendMessage(),
-                decoration: InputDecoration(
-                  hintText: 'Ask any medical query...',
-                  hintStyle: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.ge2,
-                    fontFamily: 'Roboto',
-                  ),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 12,
-                  ),
+          // Input bar
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
                 ),
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.ge1,
-                  fontFamily: 'Roboto',
-                ),
-              ),
+              ],
             ),
+            child: Row(
+              children: [
+                // Attach Icon (Plus)
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: GestureDetector(
+                    onTap: _toggleUploadMenu,
+                    child: Image.asset(
+                      'assets/ai_chat/plus.png',
+                      width: 20,
+                      height: 20,
+                      color: AppColors.ge2,
+                    ),
+                  ),
+                ),
 
-            // Send Icon
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: GestureDetector(
-                onTap: _isInputEmpty ? null : _sendMessage,
-                child: Image.asset(
-                  'assets/ai_chat/send.png',
-                  width: 20,
-                  height: 20,
-                  color: _isInputEmpty ? AppColors.ge3 : AppColors.b4,
+                // Text Input Field
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    focusNode: _messageFocusNode,
+                    maxLines: null,
+                    textInputAction: TextInputAction.send,
+                    onSubmitted: (_) => _isInputEmpty ? null : _sendMessage(),
+                    decoration: InputDecoration(
+                      hintText: 'Ask any medical query...',
+                      hintStyle: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.ge2,
+                        fontFamily: 'Roboto',
+                      ),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 12,
+                      ),
+                    ),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: AppColors.ge1,
+                      fontFamily: 'Roboto',
+                    ),
+                  ),
                 ),
-              ),
+
+                // Send Icon
+                Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: GestureDetector(
+                    onTap: _isInputEmpty ? null : _sendMessage,
+                    child: Image.asset(
+                      'assets/ai_chat/send.png',
+                      width: 20,
+                      height: 20,
+                      color: _isInputEmpty ? AppColors.ge3 : AppColors.b4,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+  }
+
+  Widget _buildAttachmentThumbnail(Attachment attachment) {
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      child: Stack(
+        children: [
+          // Thumbnail
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              width: 80,
+              height: 80,
+              color: AppColors.ge3,
+              child: attachment.type == AttachmentType.image
+                  ? Image.file(File(attachment.filePath), fit: BoxFit.cover)
+                  : Container(
+                      color: AppColors.b1,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.description,
+                              color: AppColors.white,
+                              size: 32,
+                            ),
+                            const SizedBox(height: 4),
+                            Expanded(
+                              child: Text(
+                                _getFileExtension(
+                                  attachment.fileName,
+                                ).toUpperCase(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+            ),
+          ),
+
+          // Remove button
+          Positioned(
+            top: 4,
+            right: 4,
+            child: GestureDetector(
+              onTap: () => _removeAttachment(attachment.id),
+              child: Container(
+                width: 24,
+                height: 24,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE74C3C),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: AppColors.white,
+                  size: 14,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getFileExtension(String fileName) {
+    final parts = fileName.split('.');
+    return parts.isNotEmpty ? parts.last : 'file';
   }
 }
