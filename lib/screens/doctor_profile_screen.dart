@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
+import 'book_appointment_screen.dart';
 
 class DoctorProfileScreen extends StatelessWidget {
   final String doctorName;
@@ -517,20 +518,17 @@ class DoctorProfileScreen extends StatelessWidget {
         margin: const EdgeInsets.all(20),
         child: ElevatedButton(
           onPressed: () {
-            // TODO: Implement booking API integration
-            // This would typically navigate to a booking screen or initiate the booking flow
-            // For now, showing a simple dialog to indicate the functionality
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Book Appointment'),
-                content: const Text('Booking functionality would be implemented here'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('OK'),
-                  ),
-                ],
+            // Navigate to the Book Appointment screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BookAppointmentScreen(
+                  doctorName: doctorName,
+                  doctorSpecialization: specialty,
+                  doctorImage: isMale
+                      ? 'assets/doctor_profile/doctor_male.png'
+                      : 'assets/doctor_profile/doctor_female.png',
+                ),
               ),
             );
           },

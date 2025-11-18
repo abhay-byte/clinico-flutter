@@ -1,42 +1,37 @@
-# Doctor Profile Screen Todo List
+# Book Appointment Screen Todo
 
 ## Description
-Create a comprehensive doctor profile screen that displays all relevant professional, logistical, and patient review data to encourage users to book consultations.
+Implement the complete functionality and UI for the Appointment Booking Confirmation Screen, using the provided image assets from the 'assets/book_appointment/' folder.
 
 ## Requirements
 
-### Header and Profile Summary
-- [ ] Implement back button with navigation functionality
-- [ ] Add large circular profile picture display
-- [ ] Display doctor's name ("Dr. Lorem Ipsum") prominently
-- [ ] Show doctor's specialty ("Dermatologist")
+### 1. UI Structure and Asset Integration:
+- [ ] Use the image 'assets/book_appointment/back.png' for the back navigation icon
+- [ ] Use 'assets/book_appointment/doctor_logo.png' for the circular profile image in the summary header
+- [ ] Implement the Time Slot and Date chips as shown in the image, ensuring the selected chips use blue styling
 
-### Verification and Status Badges
-- [ ] Create "Verified" green button to confirm credentials validation
-- [ ] Create "Volunteer" blue button to indicate pro-bono services
+### 2. Time Slot Selection Logic (State Management):
+- [ ] Define a state variable (e.g., `selectedTime`) to hold the user's selected time slot
+- [ ] Create the Time Slot chip widgets (e.g., "10:00 AM", "4:30 PM")
+- [ ] When a chip is tapped, update the state and apply the blue selected style
 
-### Performance Metrics Cards
-- [ ] Create ratings card with average rating (4.7) and star icon
-- [ ] Create patients treated card with number (100+) and heart icon
-- [ ] Create experience card with years of experience and badge icon
+### 3. Date Selection Logic (State Management):
+- [ ] Define a state variable (e.g., `selectedDate`) to hold the user's selected appointment date
+- [ ] Create the Date chip widgets (e.g., "Tomorrow", "17th Nov", "18th Nov")
+- [ ] When a chip is tapped, update the state and apply the blue selected style
 
-### Detailed Information Sections
-- [ ] Implement "About Doctor" section with biography text
-- [ ] Implement "Working Hours" section with availability slots
-- [ ] Implement "Languages Spoken" section (e.g., English, Hindi)
-- [ ] Implement "Reviews" section with header and horizontal scrollable preview
+### 4. Note Text Block:
+- [ ] Include the informational note exactly as shown: "Note:- You will get a call from the doctor in app, on your appointment date and specified time."
 
-### Reviews Section
-- [ ] Add "View all" link to navigate to dedicated reviews screen
-- [ ] Show horizontal scrollable preview of recent reviews
-- [ ] Include patient's name, feedback snippet, and rating in preview
+### 5. Confirm Appointment Button Logic:
+- [ ] The button should be a large, full-width blue button
+- [ ] Implement the `onPressed` handler:
+  - [ ] Check if both a `selectedTime` and a `selectedDate` have been chosen
+  - [ ] If data is missing, show a user-friendly error (e.g., Snackbar)
+  - [ ] If both are selected, simulate a booking API call and then navigate the user to the "Appointment Confirmed" screen (e.g., a simple push to a new screen named 'AppointmentConfirmationScreen')
 
-### Call-to-Action
-- [ ] Implement prominent "Book Appointment" blue button at bottom
-- [ ] Connect button to booking flow with date/time selection and payment
-
-### Integration
-- [ ] Ensure proper navigation from doctor list screen
-- [ ] Integrate with booking API for real-time availability
-- [ ] Use assets from designated folder for icons and images
-- [ ] Match Figma design precisely
+### 6. Additional Implementation:
+- [ ] Create the complete, self-contained Flutter code for this StatefulWidget
+- [ ] Include all required imports, state variables, chip selection logic, and the final button action
+- [ ] Use the specified asset paths
+- [ ] Ensure the screen is accessible from the doctor profile screen when "Book Appointment" is clicked
