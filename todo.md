@@ -1,4 +1,4 @@
-# Clinico Flutter - Completed Tasks
+# Clinico Flutter - Development Progress
 
 ## ✅ Completed Features
 
@@ -8,20 +8,20 @@
 - ✅ Persistent input composer with keyboard interface
 - ✅ All assets correctly placed from `/assets/ai_chat/`
 - ✅ Clean Architecture and state management implemented
-- ✅ Committed: `feat(ai-response): implement AI response page with action block`
+- ✅ Committed and pushed
 
 ### 2. Appointment Booking Search Page
 - ✅ Implemented with map view and location markers
-- ✅ Search bar with filter icon and active badge (showing '1')
+- ✅ Search bar with filter icon and active badge
 - ✅ User location marker using `your_location.png` with pulse animation
 - ✅ Three doctor location pins using `doctor_location.png`
 - ✅ Interactive doctor info bottom sheet modals
-- ✅ Street names on map (Budella, Guru Virjanand Marg, Durga Vatika)
+- ✅ Street names on map
 - ✅ Bottom navigation handle
-- ✅ All assets correctly placed and used
-- ✅ Committed: `feat(appointment-search): implement appointment search page with map markers and doctor locations`
+- ✅ Committed and pushed
 
 ---
 
-## Next Steps
-- Await new instructions for further features or screens.
+## 📋 Next Steps
+
+Await new instructions for further features or screens.
