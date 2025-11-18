@@ -398,8 +398,6 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                     builder: (context) => DoctorProfileScreen(
                       doctorName: 'Dr. Lorem Ipsum',
                       specialty: 'Physician',
-                      qualifications: 'MBBS, MD',
-                      hospital: 'ABC Hospital',
                       rating: 4.7,
                       distance: 1.6,
                       isMale: true,

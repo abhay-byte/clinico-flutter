@@ -78,6 +78,8 @@ flutter:
     - assets/home/location/
     - assets/home/serach/
     - assets/ai_chat/
+    - assets/book_appointment/
+    - assets/doctor_profile/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -5,6 +5,7 @@ import '../components/search_filter_modal.dart';
 import '../screens/search_screen.dart';
 import '../screens/ai_chat_screen.dart';
 import '../screens/doctor_list_screen.dart';
+import '../screens/doctor_profile_screen.dart';
 import '../screens/search_location_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -713,7 +714,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         const SizedBox(height: 8),
                         // View Button
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DoctorProfileScreen(
+                                  doctorName: 'Dr. Lorem Ipsum',
+                                  specialty: 'Physician',
+                                  rating: 4.7,
+                                  distance: 1.6,
+                                  isMale: true,
+                                ),
+                              ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.b4,
                             padding: const EdgeInsets.symmetric(
