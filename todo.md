@@ -9,50 +9,43 @@ All current features are implemented and deployed to main branch.
 
 ---
 
-# AI Response Screen - TODO
+# AI Chat Response Page - TODO
 
 ## Task Overview
-Implement the AI Response Screen for the Clinico Flutter app. This screen appears after sending a message in the AI chat page and displays the AI's detailed response, actionable next steps, and persistent input composer.
+Implement the AI Chat Response Page for the Clinico Flutter app. This page appears after sending a query to the AI chat bot and displays the AI's analysis, medical disclaimer, actionable next steps, and persistent input composer with keyboard.
 
 ## Requirements
 - Strictly follow SRS, SDD, and feature documentation.
 - Match Figma design exactly (use Figma MCP for reference).
-- Use only assets from `/assets/ai_chat/` and `/assets/` (e.g., `aichat_mascot.png`, `upload_image.png`, `upload_document.png`, `plus.png`, `send.png`).
+- Use only assets from `/assets/ai_chat/` and `/assets/` (e.g., plus.png, send.png).
 - Follow Clean Architecture and use proper state management (BLoC/Provider).
 - Wait for user review and green light before commit.
 
 ## Screen Structure
-1. **Header and Context**
-   - Status bar (time, signal, battery)
-   - Back button (chevron) in top-left
-   - User message bubble (white, dark text) with attachments (image thumbnail, PDF icon)
+1. **Medical Disclaimer and Professional Advice**
+   - Bold header: "Important Disclaimer: This is not a diagnosis."
+   - Body text: Explains rashes are complex and require professional evaluation.
+   - Recommendation: Strongly recommends consulting a dermatologist for accurate diagnosis and treatment plan.
 
-2. **AI Response and Analysis**
-   - AI mascot avatar (aichat_mascot.png) left of AI message
-   - AI message bubble with:
-     - Copy and Share icons to the right
-     - Summary and numbered list of possible conditions
-   - Medical disclaimer block below the message
+2. **Action Block (Call-to-Action)**
+   - Visually distinct, rounded rectangle with light blue background
+   - Prompt: "Would you like me to help you find a dermatologist or book an appointment?"
+   - Two blue, rectangular buttons:
+     - Book Appointment → (primary action)
+     - More Information → (secondary action)
+   - Both buttons: solid blue background, white text, right arrow
 
-3. **Call-to-Action Block**
-   - Distinct, rounded white-on-blue area
-   - Text: "Would you like me to help you find a dermatologist or book an appointment?"
-   - Two full-width buttons:
-     - Book Appointment →
-     - More Information →
-
-4. **Input Composer**
+3. **Input Composer and Keyboard Interface**
    - Persistent at the bottom
-   - Rounded input bar with placeholder: "Ask any medical query..."
+   - Rounded, light-colored input field with placeholder: "Ask any medical query..."
    - Left: Plus icon for attachments
-   - Right: Send icon for submitting text
+   - Right: Send (paper airplane) icon for submitting text
+   - On-screen keyboard: QWERTY, emoji, and microphone icons
 
 ## Acceptance Criteria
-- User message and attachments are displayed at the top
-- AI response includes mascot, copy/share icons, summary, and numbered list
-- Medical disclaimer and call-to-action block are present and styled as per design
-- Action buttons are functional (navigation or callback)
-- Input composer is always visible and functional
+- Medical disclaimer and advice are clearly displayed after diagnoses
+- Action block is visually distinct and contains both action buttons
+- Input composer and keyboard are always visible and functional
 - All icons and images use correct assets
 - UI matches Figma design exactly
 - Follows Clean Architecture and state management best practices
