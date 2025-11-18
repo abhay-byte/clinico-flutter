@@ -10,11 +10,11 @@ class ImagePreviewBox extends StatelessWidget {
   final VoidCallback onRemove;
 
   const ImagePreviewBox({
-    Key? key,
+    super.key,
     required this.filePath,
     required this.fileName,
     required this.onRemove,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

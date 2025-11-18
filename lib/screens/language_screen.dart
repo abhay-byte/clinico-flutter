@@ -3,7 +3,7 @@ import 'package:clinico/screens/onboarding1_screen.dart';
 import '../constants/colors.dart';
 
 class LanguageScreen extends StatefulWidget {
-  const LanguageScreen({Key? key}) : super(key: key);
+  const LanguageScreen({super.key});
 
   @override
   State<LanguageScreen> createState() => _LanguageScreenState();

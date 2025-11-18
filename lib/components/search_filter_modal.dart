@@ -8,11 +8,11 @@ class SearchFilterModal extends StatefulWidget {
   final VoidCallback? onDismiss;
 
   const SearchFilterModal({
-    Key? key,
+    super.key,
     this.onApply,
     this.onClearAll,
     this.onDismiss,
-  }) : super(key: key);
+  });
 
   @override
   State<SearchFilterModal> createState() => _SearchFilterModalState();
@@ -448,7 +448,7 @@ class _SearchFilterModalState extends State<SearchFilterModal> {
               _showVolunteers = value;
             });
           },
-          activeColor: AppColors.b4,
+          activeThumbColor: AppColors.b4,
           activeTrackColor: AppColors.ge3,
         ),
       ],

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AiResponseScreen extends StatefulWidget {
-  const AiResponseScreen({Key? key}) : super(key: key);
+  const AiResponseScreen({super.key});
 
   @override
   State<AiResponseScreen> createState() => _AiResponseScreenState();
 }
 
 class _AiResponseScreenState extends State<AiResponseScreen> {
-  bool _isLoading = false; // Simulate loading state
-  bool _responseLoaded = true; // Set to true to show response and action block
+  final bool _isLoading = false; // Simulate loading state
+  final bool _responseLoaded =
+      true; // Set to true to show response and action block
 
   void _navigateToAppointmentSearch() {
     Navigator.of(context).pushNamed('/appointment_search');
@@ -166,7 +167,7 @@ class _UserQueryWithAttachments extends StatelessWidget {
 }
 
 class _AiResponseBubble extends StatelessWidget {
-  const _AiResponseBubble({Key? key}) : super(key: key);
+  const _AiResponseBubble();
 
   void _copyResponse(BuildContext context) {
     // TODO: Implement copy to clipboard
@@ -344,40 +345,14 @@ class _DisclaimerText extends StatelessWidget {
   }
 }
 
-class _AiDiagnosisList extends StatelessWidget {
-  const _AiDiagnosisList();
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text(
-          '1. Contact Dermatitis: This is a common cause, triggered by contact with an irritant or allergen. It often appears as a red, itchy rash with bumps or blisters.',
-          style: TextStyle(fontSize: 14, color: Color(0xFF2A3A4D)),
-        ),
-        SizedBox(height: 6),
-        Text(
-          '2. Eczema (Atopic Dermatitis): This condition can cause dry, itchy, and inflamed skin. It may appear as patches of red or brownish-gray skin, sometimes with small, raised bumps that can leak fluid when scratched.',
-          style: TextStyle(fontSize: 14, color: Color(0xFF2A3A4D)),
-        ),
-        SizedBox(height: 6),
-        Text(
-          '3. Psoriasis: This is an autoimmune condition that can cause red, scaly patches on the skin. The scales are often silvery-white.',
-          style: TextStyle(fontSize: 14, color: Color(0xFF2A3A4D)),
-        ),
-      ],
-    );
-  }
-}
-
 class AiActionBlock extends StatelessWidget {
   final VoidCallback onBookAppointment;
   final VoidCallback onMoreInfo;
   const AiActionBlock({
-    Key? key,
+    super.key,
     required this.onBookAppointment,
     required this.onMoreInfo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

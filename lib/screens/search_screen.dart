@@ -6,7 +6,7 @@ import '../components/search_filter_modal.dart';
 class SearchScreen extends StatefulWidget {
   final String? initialQuery;
 
-  const SearchScreen({Key? key, this.initialQuery}) : super(key: key);
+  const SearchScreen({super.key, this.initialQuery});
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();

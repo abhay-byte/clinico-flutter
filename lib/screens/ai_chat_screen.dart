@@ -9,7 +9,7 @@ import '../services/media_picker_service.dart';
 import 'appointment_search_page.dart';
 
 class AiChatScreen extends StatefulWidget {
-  const AiChatScreen({Key? key}) : super(key: key);
+  const AiChatScreen({super.key});
 
   @override
   State<AiChatScreen> createState() => _AiChatScreenState();
@@ -231,6 +231,11 @@ class _AiChatScreenState extends State<AiChatScreen> {
           'I am having Suicidal tho...',
           'I am having sever chest...',
         ],
+        onHomeTap: () {
+          Navigator.of(
+            context,
+          ).pushNamedAndRemoveUntil('/home', (route) => false);
+        },
       ),
       body: Stack(
         children: [
@@ -561,10 +566,10 @@ class AiResponseActionBlock extends StatelessWidget {
   final VoidCallback onMoreInfo;
 
   const AiResponseActionBlock({
-    Key? key,
+    super.key,
     required this.onBookAppointment,
     required this.onMoreInfo,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AiFirstChatScreen extends StatefulWidget {
-  const AiFirstChatScreen({Key? key}) : super(key: key);
+  const AiFirstChatScreen({super.key});
 
   @override
   State<AiFirstChatScreen> createState() => _AiFirstChatScreenState();
@@ -11,7 +11,7 @@ class _AiFirstChatScreenState extends State<AiFirstChatScreen> {
   final TextEditingController _controller = TextEditingController();
   bool _isLoading = false;
   String? _userMessage;
-  List<Widget> _attachments = [
+  final List<Widget> _attachments = [
     // Example image and document preview
     ClipRRect(
       borderRadius: BorderRadius.circular(16),

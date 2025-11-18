@@ -3,7 +3,7 @@ import 'package:clinico/screens/onboarding2_screen.dart';
 import '../constants/colors.dart';
 
 class Onboarding1Screen extends StatelessWidget {
-  const Onboarding1Screen({Key? key}) : super(key: key);
+  const Onboarding1Screen({super.key});
 
   @override
   Widget build(BuildContext context) {

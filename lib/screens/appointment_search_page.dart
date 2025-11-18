@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppointmentSearchPage extends StatefulWidget {
-  const AppointmentSearchPage({Key? key}) : super(key: key);
+  const AppointmentSearchPage({super.key});
 
   @override
   State<AppointmentSearchPage> createState() => _AppointmentSearchPageState();
@@ -160,7 +160,7 @@ class _AppointmentSearchPageState extends State<AppointmentSearchPage>
                               ),
                             ),
                           );
-                        }).toList(),
+                        }),
                       ],
                     ),
                   ),

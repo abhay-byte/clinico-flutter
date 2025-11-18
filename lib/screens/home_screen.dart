@@ -6,7 +6,7 @@ import '../screens/search_screen.dart';
 import '../screens/ai_chat_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

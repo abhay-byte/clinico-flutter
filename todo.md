@@ -22,6 +22,16 @@
 
 ---
 
+## 📋 Current Tasks
+
+### 3. Doctor Near Me Screen (In Progress)
+- Location-based doctor search with OpenStreetMap integration
+- Interactive map with user location and doctor markers
+- Floating doctor detail card with appointment options
+- See detailed requirements in `todo_doctor_near_me.md`
+
+---
+
 ## 📋 Next Steps
 
-Await new instructions for further features or screens.
+Await further instructions or proceed with Doctor Near Me Screen implementation.

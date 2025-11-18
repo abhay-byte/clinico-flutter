@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AiChatResponsePage extends StatelessWidget {
-  const AiChatResponsePage({Key? key}) : super(key: key);
+  const AiChatResponsePage({super.key});
 
   @override
   Widget build(BuildContext context) {

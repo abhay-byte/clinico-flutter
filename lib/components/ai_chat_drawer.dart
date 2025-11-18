@@ -5,10 +5,10 @@ class AiChatDrawer extends StatelessWidget {
   final VoidCallback? onHomeTap;
 
   const AiChatDrawer({
-    Key? key,
+    super.key,
     required this.recentConversations,
     this.onHomeTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,10 +8,10 @@ class LocationSelectionModal extends StatefulWidget {
   final VoidCallback? onDismiss;
 
   const LocationSelectionModal({
-    Key? key,
+    super.key,
     this.onLocationSelected,
     this.onDismiss,
-  }) : super(key: key);
+  });
 
   @override
   State<LocationSelectionModal> createState() => _LocationSelectionModalState();

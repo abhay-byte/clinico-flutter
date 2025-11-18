@@ -7,11 +7,11 @@ class AiChatUploadMenu extends StatelessWidget {
   final VoidCallback onDismiss;
 
   const AiChatUploadMenu({
-    Key? key,
+    super.key,
     required this.onUploadDocument,
     required this.onUploadImage,
     required this.onDismiss,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

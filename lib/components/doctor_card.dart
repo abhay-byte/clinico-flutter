@@ -11,7 +11,7 @@ class DoctorCard extends StatelessWidget {
   final bool isMale;
 
   const DoctorCard({
-    Key? key,
+    super.key,
     required this.doctorName,
     required this.specialty,
     required this.credentials,
@@ -19,7 +19,7 @@ class DoctorCard extends StatelessWidget {
     required this.rating,
     required this.distance,
     required this.isMale,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
