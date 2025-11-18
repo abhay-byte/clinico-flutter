@@ -6,6 +6,7 @@ import '../components/ai_chat_drawer.dart';
 import '../components/message_bubble.dart';
 import '../models/chat_message.dart';
 import '../services/media_picker_service.dart';
+import 'appointment_search_page.dart';
 
 class AiChatScreen extends StatefulWidget {
   const AiChatScreen({Key? key}) : super(key: key);
@@ -30,8 +31,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
   // Placeholder user name - will be fetched from database in future
   final String _userName = 'Lorem Ipsum';
 
-  // Processing state for AI response
-  bool _isProcessing = false;
+  // Show AI action block after response
+  bool _showAiActionBlock = false;
 
   @override
   void initState() {
@@ -74,20 +75,16 @@ class _AiChatScreenState extends State<AiChatScreen> {
       _messageController.clear();
       _attachments.clear();
       _isInputEmpty = true;
+      _showAiActionBlock = false;
     });
 
     print('Message sent: $text with \\${_attachments.length} attachments');
-
-    // Show loading indicator as AI is processing
-    setState(() {
-      _isProcessing = true;
-    });
 
     // Simulate AI response after a delay
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
         setState(() {
-          _isProcessing = false;
+          _showAiActionBlock = true;
           // Optionally, add the AI's real response here
         });
       }
@@ -213,6 +210,16 @@ class _AiChatScreenState extends State<AiChatScreen> {
     });
   }
 
+  void _navigateToAppointmentSearch() {
+    Navigator.of(context).pushNamed('/appointment_search/location');
+  }
+
+  void _showMoreInfo() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('More information coming soon!')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -236,44 +243,22 @@ class _AiChatScreenState extends State<AiChatScreen> {
               Expanded(
                 child: _messages.isEmpty
                     ? _buildWelcomeSection()
-                    : Stack(
-                        children: [
-                          ListView.builder(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 20,
-                            ),
-                            itemCount: _messages.length,
-                            itemBuilder: (context, index) {
-                              return MessageBubble(message: _messages[index]);
-                            },
-                          ),
-                          if (_isProcessing)
-                            Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 50,
-                                    height: 50,
-                                    child: Image.asset(
-                                      'assets/ai_chat/loading.png',
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 12),
-                                  const Text(
-                                    'Generating response...',
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.grey,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                        ],
+                    : ListView.builder(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 20,
+                        ),
+                        itemCount:
+                            _messages.length + (_showAiActionBlock ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (_showAiActionBlock && index == _messages.length) {
+                            return AiResponseActionBlock(
+                              onBookAppointment: _navigateToAppointmentSearch,
+                              onMoreInfo: _showMoreInfo,
+                            );
+                          }
+                          return MessageBubble(message: _messages[index]);
+                        },
                       ),
               ),
 
@@ -565,5 +550,127 @@ class _AiChatScreenState extends State<AiChatScreen> {
   String _getFileExtension(String fileName) {
     final parts = fileName.split('.');
     return parts.isNotEmpty ? parts.last : 'file';
+  }
+}
+
+// Updated AiResponseActionBlock widget
+// 1. Render AiResponseActionBlock as a chat message in the ListView
+// 2. Use Expanded for both buttons to prevent overflow
+class AiResponseActionBlock extends StatelessWidget {
+  final VoidCallback onBookAppointment;
+  final VoidCallback onMoreInfo;
+
+  const AiResponseActionBlock({
+    Key? key,
+    required this.onBookAppointment,
+    required this.onMoreInfo,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 12),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Text(
+              'Would you like me to help you find a dermatologist or book an appointment?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF248BEB),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AppointmentSearchPage(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Flexible(
+                            child: Text(
+                              'Book Appointment',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.arrow_forward, size: 18),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF248BEB),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                      onPressed: onMoreInfo,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Flexible(
+                            child: Text(
+                              'More Information',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Icon(Icons.arrow_forward, size: 18),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

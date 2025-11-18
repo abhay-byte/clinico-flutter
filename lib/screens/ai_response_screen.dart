@@ -1,7 +1,26 @@
 import 'package:flutter/material.dart';
 
-class AiResponseScreen extends StatelessWidget {
+class AiResponseScreen extends StatefulWidget {
   const AiResponseScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AiResponseScreen> createState() => _AiResponseScreenState();
+}
+
+class _AiResponseScreenState extends State<AiResponseScreen> {
+  bool _isLoading = false; // Simulate loading state
+  bool _responseLoaded = true; // Set to true to show response and action block
+
+  void _navigateToAppointmentSearch() {
+    Navigator.of(context).pushNamed('/appointment_search');
+  }
+
+  void _showMoreInfo() {
+    // TODO: Implement more info navigation or dialog
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('More information coming soon!')),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -10,17 +29,27 @@ class AiResponseScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Header and Context
             _StatusBarAndHeader(),
             _UserQueryWithAttachments(),
             const SizedBox(height: 12),
-            // 2. AI Response and Analysis
-            _AiResponseBubble(),
-            // 3. Medical Disclaimer and Call-to-Action
-            _DisclaimerAndActionBlock(),
-            // Spacer for input composer
+            if (_isLoading)
+              Column(
+                children: const [
+                  SizedBox(height: 32),
+                  CircularProgressIndicator(),
+                  SizedBox(height: 12),
+                  Text('Generating response...'),
+                ],
+              )
+            else ...[
+              _AiResponseBubble(),
+              if (_responseLoaded)
+                AiActionBlock(
+                  onBookAppointment: _navigateToAppointmentSearch,
+                  onMoreInfo: _showMoreInfo,
+                ),
+            ],
             const Spacer(),
-            // 4. Input Composer
             _InputComposer(),
           ],
         ),
@@ -341,7 +370,15 @@ class _AiDiagnosisList extends StatelessWidget {
   }
 }
 
-class _DisclaimerAndActionBlock extends StatelessWidget {
+class AiActionBlock extends StatelessWidget {
+  final VoidCallback onBookAppointment;
+  final VoidCallback onMoreInfo;
+  const AiActionBlock({
+    Key? key,
+    required this.onBookAppointment,
+    required this.onMoreInfo,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -354,10 +391,11 @@ class _DisclaimerAndActionBlock extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
               'Would you like me to help you find a dermatologist or book an appointment?',
+              textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFF2563EB),
                 fontSize: 15,
@@ -377,7 +415,7 @@ class _DisclaimerAndActionBlock extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    onPressed: () {},
+                    onPressed: onBookAppointment,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
@@ -399,7 +437,7 @@ class _DisclaimerAndActionBlock extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    onPressed: () {},
+                    onPressed: onMoreInfo,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
