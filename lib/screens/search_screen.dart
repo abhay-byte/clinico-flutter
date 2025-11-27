@@ -105,9 +105,10 @@ class _SearchScreenState extends State<SearchScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => SearchFilterModal(
-        onApply: () {
+        onApply: (filterData) {
           // Handle apply filter
-          print('Filters applied');
+          print('Filters applied: ${filterData.specialisation}');
+          Navigator.of(context).pop(); // Close the modal
         },
         onClearAll: () {
           // Handle clear all filters
@@ -141,7 +142,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   itemCount: _filteredDoctorResults.length,
                   itemBuilder: (context, index) {
                     final doctor = _filteredDoctorResults[index];
-                    return DoctorCard(
+                    return TappableDoctorCard(
                       doctorName: doctor['name'],
                       specialty: doctor['specialty'],
                       credentials: doctor['credentials'],

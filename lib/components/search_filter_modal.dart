@@ -2,8 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:blur/blur.dart';
 import '../constants/colors.dart';
 
+// Filter data class to hold all filter values
+class FilterData {
+  final String sortBy;
+  final String specialisation;
+  final String rating;
+  final bool showVolunteers;
+  final List<String> availability;
+
+  FilterData({
+    this.sortBy = 'Distance',
+    this.specialisation = 'Physician',
+    this.rating = 'Any Rating',
+    this.showVolunteers = false,
+    this.availability = const [],
+  });
+
+  // Check if any filter is active
+  bool get hasActiveFilters {
+    return sortBy != 'Distance' ||
+           specialisation != 'Physician' ||
+           rating != 'Any Rating' ||
+           showVolunteers ||
+           availability.isNotEmpty;
+  }
+
+  int get activeFilterCount {
+    int count = 0;
+    if (sortBy != 'Distance') count++;
+    if (specialisation != 'Physician') count++;
+    if (rating != 'Any Rating') count++;
+    if (showVolunteers) count++;
+    if (availability.isNotEmpty) count += availability.length;
+    return count;
+  }
+}
+
 class SearchFilterModal extends StatefulWidget {
-  final VoidCallback? onApply;
+  final void Function(FilterData)? onApply;
   final VoidCallback? onClearAll;
   final VoidCallback? onDismiss;
 
@@ -202,36 +238,63 @@ class _SearchFilterModalState extends State<SearchFilterModal> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // Apply link with filter count
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Apply',
-                style: TextStyle(
-                  color: AppColors.b4,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              if (_activeFilterCount > 0) ...[
-                const SizedBox(width: 4),
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
+          GestureDetector(
+            onTap: () {
+              if (widget.onApply != null) {
+                widget.onApply!(FilterData(
+                  sortBy: _sortBy,
+                  specialisation: _specialisation,
+                  rating: _rating,
+                  showVolunteers: _showVolunteers,
+                  availability: _availability,
+                ));
+              } else {
+                Navigator.of(context).pop(); // Close the modal if no callback
+              }
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Apply',
+                  style: TextStyle(
                     color: AppColors.b4,
-                    borderRadius: BorderRadius.circular(10),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
                   ),
-                  child: Text(
-                    '$_activeFilterCount',
-                    style: TextStyle(
-                      color: AppColors.white,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w600,
+                ),
+                if (FilterData(
+                  sortBy: _sortBy,
+                  specialisation: _specialisation,
+                  rating: _rating,
+                  showVolunteers: _showVolunteers,
+                  availability: _availability,
+                ).activeFilterCount > 0) ...[
+                  const SizedBox(width: 4),
+                  Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.b4,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      '${FilterData(
+                        sortBy: _sortBy,
+                        specialisation: _specialisation,
+                        rating: _rating,
+                        showVolunteers: _showVolunteers,
+                        availability: _availability,
+                      ).activeFilterCount}',
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
+            ),
           ),
           
           // Filters title

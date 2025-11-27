@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'date_time_selection_screen.dart';
+import 'home_screen.dart';
 
 class BookAppointmentScreen extends StatefulWidget {
   final String doctorName;
@@ -8,11 +9,11 @@ class BookAppointmentScreen extends StatefulWidget {
   final String doctorImage;
 
   const BookAppointmentScreen({
-    Key? key,
+    super.key,
     required this.doctorName,
     required this.doctorSpecialization,
     required this.doctorImage,
-  }) : super(key: key);
+  });
 
   @override
   _BookAppointmentScreenState createState() => _BookAppointmentScreenState();
@@ -368,7 +369,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 }
 
 class AppointmentConfirmationScreen extends StatelessWidget {
-  const AppointmentConfirmationScreen({Key? key}) : super(key: key);
+  const AppointmentConfirmationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -416,7 +417,10 @@ class AppointmentConfirmationScreen extends StatelessWidget {
               height: 48,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    (route) => false,
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.b4,

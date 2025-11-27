@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/home_screen.dart';
 
 class AiChatDrawer extends StatelessWidget {
   final List<String> recentConversations;
@@ -21,7 +22,12 @@ class AiChatDrawer extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: GestureDetector(
-                onTap: onHomeTap ?? () => Navigator.of(context).pop(),
+                onTap: onHomeTap ?? () {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    (route) => false,
+                  );
+                },
                 child: Image.asset(
                   'assets/ai_chat/home_outline.png',
                   width: 32,

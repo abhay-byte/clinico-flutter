@@ -5,7 +5,8 @@ import 'book_appointment_screen.dart';
 class DoctorProfileScreen extends StatelessWidget {
   final String doctorName;
   final String specialty;
-  // final String hospital;
+  final String? credentials;
+  final String? hospital;
   final double rating;
   final double distance;
   final bool isMale;
@@ -14,7 +15,8 @@ class DoctorProfileScreen extends StatelessWidget {
     super.key,
     required this.doctorName,
     required this.specialty,
-    // required this.hospital,
+    this.credentials,
+    this.hospital,
     required this.rating,
     required this.distance,
     required this.isMale,
@@ -100,6 +102,28 @@ class DoctorProfileScreen extends StatelessWidget {
                           fontFamily: 'Roboto',
                         ),
                       ),
+                      if (credentials != null && credentials!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          credentials!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppColors.ge3,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                      ],
+                      if (hospital != null && hospital!.isNotEmpty) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          hospital!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppColors.ge3,
+                            fontFamily: 'Roboto',
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -298,7 +322,7 @@ class DoctorProfileScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Dr. $doctorName is a highly experienced $specialty with over 10 years of experience in the field of medicine. Specializing in $specialty and related conditions. Dr. $doctorName completed their MD in $specialty from a prestigious medical college and is board-certified. They are passionate about providing personalized care and staying up-to-date with the latest medical treatments and technologies. Dr. $doctorName has treated over 1000 patients and has received multiple awards for excellence in patient care.',
+                    'Dr. $doctorName is a highly experienced $specialty with over 10 years of experience in the field of medicine. Specializing in $specialty and related conditions. Dr. $doctorName completed their ${credentials ?? 'MD'} in $specialty from a prestigious medical college and is board-certified. They are passionate about providing personalized care and staying up-to-date with the latest medical treatments and technologies. Dr. $doctorName has treated over 1000 patients and has received multiple awards for excellence in patient care.',
                     style: const TextStyle(
                       fontSize: 14,
                       color: AppColors.ge2,

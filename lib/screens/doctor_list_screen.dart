@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:geolocator/geolocator.dart';
 import '../constants/colors.dart';
+import '../components/search_filter_modal.dart';
 import 'doctor_profile_screen.dart';
-
-
-
 
 class DoctorListScreen extends StatefulWidget {
   const DoctorListScreen({super.key});
@@ -18,12 +12,128 @@ class DoctorListScreen extends StatefulWidget {
 
 class _DoctorListScreenState extends State<DoctorListScreen> {
   final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+  
+  // Filter data
+  FilterData _filters = FilterData();
+  
+  // Sample doctor data as per specifications
+  final List<Map<String, dynamic>> _allDoctors = [
+    {
+      'name': 'Dr. Lorem Ipsum',
+      'specialty': 'Dermatologist',
+      'credentials': 'MBBS, MD',
+      'hospital': 'ABC Hospital',
+      'rating': 4.7,
+      'distance': 1.6,
+      'isMale': true,
+    },
+    {
+      'name': 'Dr. Lorem Ipsum',
+      'specialty': 'Dermatologist',
+      'credentials': 'MBBS, MD',
+      'hospital': 'XYZ Hospital',
+      'rating': 4.2,
+      'distance': 2.2,
+      'isMale': false,
+    },
+    {
+      'name': 'Dr. Lorem Ipsum',
+      'specialty': 'Dermatologist',
+      'credentials': 'MBBS, MD',
+      'hospital': 'LMN Hospital',
+      'rating': 3.9,
+      'distance': 5.6,
+      'isMale': false,
+    },
+    {
+      'name': 'Dr. Lorem Ipsum',
+      'specialty': 'Dermatologist',
+      'credentials': 'MBBS, MD',
+      'hospital': 'PQR Hospital',
+      'rating': 3.8,
+      'distance': 7.1,
+      'isMale': true,
+    },
+    {
+      'name': 'Dr. Lorem Ipsum',
+      'specialty': 'Dermatologist',
+      'credentials': 'MBBS, MD',
+      'hospital': 'DEF Hospital',
+      'rating': 4.9,
+      'distance': 3.2,
+      'isMale': true,
+    },
+    {
+      'name': 'Dr. Lorem Ipsum',
+      'specialty': 'Dermatologist',
+      'credentials': 'MBBS, MD',
+      'hospital': 'GHI Hospital',
+      'rating': 4.5,
+      'distance': 4.8,
+      'isMale': false,
+    },
+  ];
+
+  // Get filtered doctor results based on search query and filters
+  List<Map<String, dynamic>> get _filteredDoctors {
+    List<Map<String, dynamic>> filtered = _allDoctors;
+    
+    // Apply search query filter
+    if (_searchQuery.isNotEmpty) {
+      filtered = filtered.where((doctor) {
+        final query = _searchQuery.toLowerCase();
+        return doctor['name'].toLowerCase().contains(query) ||
+            doctor['specialty'].toLowerCase().contains(query) ||
+            doctor['credentials'].toLowerCase().contains(query) ||
+            doctor['hospital'].toLowerCase().contains(query);
+      }).toList();
+    }
+    
+    // Apply specialisation filter
+    if (_filters.specialisation != 'Physician') {
+      filtered = filtered.where((doctor) {
+        return doctor['specialty'].toLowerCase().contains(_filters.specialisation.toLowerCase());
+      }).toList();
+    }
+    
+    // Apply rating filter
+    if (_filters.rating == '> 4 ★') {
+      filtered = filtered.where((doctor) => doctor['rating'] >= 4.0).toList();
+    } else if (_filters.rating == '> 3 ★') {
+      filtered = filtered.where((doctor) => doctor['rating'] >= 3.0).toList();
+    }
+    
+    // Apply volunteers filter (currently no volunteer field in sample data, so skipping)
+    // Apply availability filter (currently no availability data in sample, so skipping)
+    
+    // Apply sorting
+    switch (_filters.sortBy) {
+      case 'Rating':
+        filtered.sort((a, b) => b['rating'].compareTo(a['rating']));
+        break;
+      case 'Distance':
+        filtered.sort((a, b) => a['distance'].compareTo(b['distance']));
+        break;
+      // Note: Other sort options like 'Price' and 'Recommendation' are not applicable to sample data
+      default:
+        // Default sorting by distance
+        filtered.sort((a, b) => a['distance'].compareTo(b['distance']));
+        break;
+    }
+    
+    return filtered;
+  }
 
   @override
   void initState() {
     super.initState();
-    _searchController.text = 'Dermatologist Near me';
-    _requestLocationPermission();
+    // Add listener to update search query on text change
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text;
+      });
+    });
   }
 
   @override
@@ -32,234 +142,60 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
     super.dispose();
   }
 
-  Future<void> _requestLocationPermission() async {
-    LocationPermission permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permission denied
-      await Geolocator.openLocationSettings();
-    } else if (permission == LocationPermission.deniedForever) {
-      // Permission denied forever, show message to user
-      await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Location Permission Required'),
-          content: const Text('This app needs location permission to show doctors near you. Please enable it in settings.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bg1,
+      backgroundColor: const Color(0xFFF5F6F8), // Light gray background as specified
       body: Column(
         children: [
-          // Header and Search Component
-          _buildSearchHeader(),
-
-          // Map Visualization Area
+          // Search Bar (Top Header)
+          _buildSearchBar(),
+          
+          // Doctor List Container with rounded corners
           Expanded(
-            child: Stack(
-              children: [
-                // OpenStreetMap implementation
-                FlutterMap(
-                  mapController: MapController(),
-                  options: MapOptions(
-                    initialCenter: LatLng(
-                      28.6139,
-                      7.2090,
-                    ), // Delhi coordinates as default
-                    initialZoom: 13.0,
-                  ),
-                  children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      subdomains: const ['a', 'b', 'c'],
-                    ),
-                    // User Location Marker
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          width: 30,
-                          height: 30,
-                          point: LatLng(28.6139, 77.2090), // User's location
-                          child: Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.blue.withOpacity(0.5),
-                                  blurRadius: 10,
-                                  spreadRadius: 2,
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              margin: const EdgeInsets.all(4),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
+            child: Container(
+              margin: const EdgeInsets.all(16), // Horizontal padding as specified
+              decoration: BoxDecoration(
+                color: AppColors.white,
+                borderRadius: const BorderRadius.all(Radius.circular(16)), // Rounded corners as specified
+              ),
+              child: ListView.builder(
+                padding: EdgeInsets.zero,
+                itemCount: _filteredDoctors.length,
+                itemBuilder: (context, index) {
+                  final doctor = _filteredDoctors[index];
+                  return Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to doctor profile screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DoctorProfileScreen(
+                                doctorName: doctor['name'],
+                                specialty: doctor['specialty'],
+                                rating: doctor['rating'],
+                                distance: doctor['distance'],
+                                isMale: doctor['isMale'],
                               ),
                             ),
-                          ),
-                        ),
-                        // Doctor Location Markers
-                        Marker(
-                          width: 30,
-                          height: 35,
-                          point: LatLng(28.6159, 77.2110), // Doctor 1 location
-                          child: Container(
-                            width: 24,
-                            height: 30,
-                            decoration: const BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
-                                bottomLeft: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.local_hospital,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                        Marker(
-                          width: 30,
-                          height: 35,
-                          point: LatLng(28.6129, 77.2070), // Doctor 2 location
-                          child: Container(
-                            width: 24,
-                            height: 30,
-                            decoration: const BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                topRight: Radius.circular(12),
-                                bottomLeft: Radius.circular(12),
-                                bottomRight: Radius.circular(12),
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.local_hospital,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-
-                // Interactive Doctor Detail Card
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: _buildDoctorDetailCard(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSearchHeader() {
-    return Container(
-      color: AppColors.bg1,
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 40), // Status bar spacing
-          // Search Bar
-          Container(
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(25),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: TextField(
-              controller: _searchController,
-              readOnly: true, // Since this is a display field
-              decoration: InputDecoration(
-                prefixIcon: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Image.asset(
-                    'assets/home/search.png',
-                    width: 20,
-                    height: 20,
-                    color: AppColors.ge2,
-                  ),
-                ),
-                suffixIcon: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Image.asset(
-                        'assets/home/filter.png',
-                        width: 20,
-                        height: 20,
-                        color: AppColors.ge2,
+                          );
+                        },
+                        child: _buildDoctorListItem(doctor),
                       ),
-                    ),
-                    // Red notification badge
-                    Positioned(
-                      top: 5,
-                      right: 5,
-                      child: Container(
-                        width: 14,
-                        height: 14,
-                        decoration: const BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
+                      // Add divider between items, but not for the last item
+                      if (index < _filteredDoctors.length - 1)
+                        const Divider(
+                          height: 1,
+                          thickness: 0.5,
+                          indent: 70, // Start after the avatar image
+                          endIndent: 16, // End before the right stats
+                          color: Color(0xFFE0E0E0), // Light grey color
                         ),
-                        child: const Center(
-                          child: Text(
-                            '1',
-                            style: TextStyle(
-                              fontSize: 8,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                hintText: 'Dermatologist Near me',
-                hintStyle: const TextStyle(
-                  fontSize: 14,
-                  color: AppColors.ge2,
-                  fontFamily: 'Roboto',
-                ),
-                border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    ],
+                  );
+                },
               ),
             ),
           ),
@@ -268,162 +204,198 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
     );
   }
 
-  Widget _buildDoctorDetailCard() {
+  Widget _buildSearchBar() {
     return Container(
-      margin: const EdgeInsets.all(20),
+      padding: const EdgeInsets.fromLTRB(20, 40, 20, 16), // Top padding for status bar + specified padding
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(50), // Fully rounded corners (stadium shape)
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2), // Soft drop shadow
+            ),
+          ],
+        ),
+        child: TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            prefixIcon: Container(
+              padding: const EdgeInsets.all(12),
+              child: Image.asset(
+                'assets/home/search.png', // Search icon as specified
+                width: 20,
+                height: 20,
+                color: Colors.grey,
+              ),
+            ),
+            hintText: 'Dermatologist Near Me', // Placeholder text as specified
+            hintStyle: const TextStyle(
+              color: Color(0xFF9E9E9E), // Dark grey color
+            ),
+            suffixIcon: GestureDetector(
+              onTap: () {
+                // Show filter options when filter icon is tapped
+                _showFilterOptions();
+              },
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                child: Image.asset(
+                  'assets/home/filter.png', // Filter icon as specified
+                  width: 20,
+                  height: 20,
+                  color: Colors.grey,
+                ),
+              ),
+            ),
+            border: InputBorder.none,
+            contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+          ),
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.black87,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDoctorListItem(Map<String, dynamic> doctor) {
+    return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          // Doctor Info Row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Doctor Image
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: AppColors.b3,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Center(
-                  child: Icon(Icons.person, color: AppColors.b4, size: 30),
-                ),
+          // Left Section: Avatar
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: const Color(0xFFE3F2FD), // Light blue background
+              borderRadius: BorderRadius.circular(25), // Circular shape
+            ),
+            child: Center(
+              child: Image.asset(
+                doctor['isMale'] 
+                  ? 'assets/doctor_profile/doctor_male.png' 
+                  : 'assets/doctor_profile/doctor_female.png',
+                width: 30,
+                height: 30,
+                fit: BoxFit.contain,
               ),
-              const SizedBox(width: 12),
-
-              // Doctor Details
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Doctor Name
-                    const Text(
-                      'Dr. Lorem Ipsum',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.ge1,
-                        fontFamily: 'Roboto',
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    // Specialty and Qualifications
-                    Text(
-                      'Physician | MBBS, MD | ABC Hospital',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.ge2,
-                        fontFamily: 'Roboto',
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    // Distance and Rating Row
-                    Row(
-                      children: [
-                        // Distance with Location Icon
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(
-                              'assets/home/location.png',
-                              width: 14,
-                              height: 14,
-                              fit: BoxFit.contain,
-                            ),
-                            const SizedBox(width: 4),
-                            const Text(
-                              '1.6 Km Away',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.ge2,
-                                fontFamily: 'Roboto',
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(width: 12),
-                        // Rating with Star Icon
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(
-                              'assets/home/star.png',
-                              width: 14,
-                              height: 14,
-                              fit: BoxFit.contain,
-                            ),
-                            const SizedBox(width: 4),
-                            const Text(
-                              '4.7',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: AppColors.ge2,
-                                fontFamily: 'Roboto',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+            ),
+          ),
+          const SizedBox(width: 16), // Spacing between avatar and info
+          
+          // Middle Section: Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Doctor Name
+                Text(
+                  doctor['name'],
+                  style: const TextStyle(
+                    fontSize: 16, // 14px-16px as specified
+                    fontWeight: FontWeight.w600, // Semi-bold
+                    color: Colors.black87,
+                  ),
                 ),
+                const SizedBox(height: 4),
+                // Subtitle: Specialty, Credentials, Hospital
+                Text(
+                  '${doctor['specialty']} | ${doctor['credentials']} | ${doctor['hospital']}',
+                  style: const TextStyle(
+                    fontSize: 12, // Smaller font as specified
+                    color: Color(0xFF9E9E9E), // Grey color as specified
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16), // Spacing between info and stats
+          
+          // Right Section: Stats
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Top Row: Rating
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/home/star.png', // Star icon as specified
+                    width: 14,
+                    height: 14,
+                    color: Colors.black,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    doctor['rating'].toStringAsFixed(1),
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8), // Spacing between rating and distance
+              // Bottom Row: Distance
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/home/location.png', // Location pin as specified
+                    width: 12,
+                    height: 12,
+                    color: const Color(0xFF9E9E9E), // Grey color
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${doctor['distance']} km',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Color(0xFF9E9E9E), // Grey color
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          const SizedBox(height: 16),
-
-          // View Button
-          Container(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                // Navigate to detailed doctor profile page
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DoctorProfileScreen(
-                      doctorName: 'Dr. Lorem Ipsum',
-                      specialty: 'Physician',
-                      rating: 4.7,
-                      distance: 1.6,
-                      isMale: true,
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.b4,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                'View',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.white,
-                  fontFamily: 'Roboto',
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-          ),
         ],
+      ),
+    );
+  }
+
+  void _showFilterOptions() async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => SearchFilterModal(
+        onApply: (filterData) {
+          // Handle apply filter
+          setState(() {
+            _filters = filterData;
+          });
+          Navigator.of(context).pop(); // Close the modal
+        },
+        onClearAll: () {
+          // Handle clear all filters
+          setState(() {
+            _filters = FilterData(); // Reset to default filters
+          });
+          print('All filters cleared');
+        },
+        onDismiss: () {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+        },
       ),
     );
   }

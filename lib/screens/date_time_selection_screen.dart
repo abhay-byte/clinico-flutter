@@ -8,11 +8,11 @@ class DateTimeSelectionScreen extends StatefulWidget {
   final Function(DateTime, String) onDateTimeSelected;
 
   const DateTimeSelectionScreen({
-    Key? key,
+    super.key,
     this.preselectedDate,
     this.preselectedTime,
     required this.onDateTimeSelected,
-  }) : super(key: key);
+  });
 
   @override
   _DateTimeSelectionScreenState createState() => _DateTimeSelectionScreenState();
@@ -70,7 +70,7 @@ class _DateTimeSelectionScreenState extends State<DateTimeSelectionScreen> {
   }
 
   void _setAppointment() {
-    if (_selectedDate != null && _selectedTime != null) {
+    if (_selectedTime != null) {
       widget.onDateTimeSelected(_selectedDate, _selectedTime!);
       Navigator.pop(context);
     }
@@ -160,7 +160,7 @@ class _DateTimeSelectionScreenState extends State<DateTimeSelectionScreen> {
           onPressed: () => _changeMonth(-1),
         ),
         Text(
-          '${DateFormat('MMM yyyy').format(_currentMonth)}',
+          DateFormat('MMM yyyy').format(_currentMonth),
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,

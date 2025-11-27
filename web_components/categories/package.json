@@ -1,0 +1,22 @@
+{
+  "name": "medical-categories-component",
+  "version": "1.0.0",
+  "description": "A responsive medical categories UI component built with React and Tailwind CSS",
+  "main": "Categories.jsx",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx lite-server"
+  },
+ "keywords": ["react", "tailwind", "ui", "medical", "categories", "component"],
+ "author": "Kilo Code",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.1",
+    "@babel/preset-react": "^7.22.3",
+    "lite-server": "^2.6.1"
+  }
+}
