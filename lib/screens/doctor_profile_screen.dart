@@ -132,7 +132,10 @@ class DoctorProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.g1, // Green for verified
                           borderRadius: BorderRadius.circular(16),
@@ -148,7 +151,10 @@ class DoctorProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.b4, // Blue for volunteer
                           borderRadius: BorderRadius.circular(16),
@@ -278,7 +284,8 @@ class DoctorProfileScreen extends StatelessWidget {
                                   const Text(
                                     '15 Years',
                                     style: TextStyle(
-                                      fontSize: 14, // Reduced font size to prevent overflow
+                                      fontSize:
+                                          14, // Reduced font size to prevent overflow
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.ge1,
                                     ),
@@ -362,7 +369,10 @@ class DoctorProfileScreen extends StatelessWidget {
                         const SizedBox(width: 8),
                         _buildWorkingHourChip('8:00pm - 10:00pm', false),
                         const SizedBox(width: 8),
-                        _buildWorkingHourChip('Tomorrow 9:00am - 11:00am', false),
+                        _buildWorkingHourChip(
+                          'Tomorrow 9:00am - 11:00am',
+                          false,
+                        ),
                       ],
                     ),
                   ),
@@ -446,14 +456,18 @@ class DoctorProfileScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: 3,
                       itemBuilder: (context, index) {
-                        List<String> names = ['John Doe', 'Jane Smith', 'Robert Johnson'];
+                        List<String> names = [
+                          'John Doe',
+                          'Jane Smith',
+                          'Robert Johnson',
+                        ];
                         List<String> reviews = [
                           'Great doctor! Very patient and knowledgeable. Explained everything clearly.',
                           'Excellent treatment and follow-up care. Highly recommended!',
-                          'Professional and caring. Made me feel comfortable during the consultation.'
+                          'Professional and caring. Made me feel comfortable during the consultation.',
                         ];
                         List<int> ratings = [5, 4, 5];
-                        
+
                         return Container(
                           width: 280,
                           margin: const EdgeInsets.only(right: 12),
@@ -552,6 +566,8 @@ class DoctorProfileScreen extends StatelessWidget {
                   doctorImage: isMale
                       ? 'assets/doctor_profile/doctor_male.png'
                       : 'assets/doctor_profile/doctor_female.png',
+                  clinicOpenHour: 9, // Start with the earliest shift
+                  clinicCloseHour: 22, // End with the latest shift
                 ),
               ),
             );
@@ -584,9 +600,7 @@ class DoctorProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected ? AppColors.b4 : AppColors.bg1,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isSelected ? AppColors.b4 : AppColors.ge3,
-        ),
+        border: Border.all(color: isSelected ? AppColors.b4 : AppColors.ge3),
       ),
       child: Text(
         time,
@@ -606,9 +620,7 @@ class DoctorProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected ? AppColors.b4 : AppColors.bg1,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isSelected ? AppColors.b4 : AppColors.ge3,
-        ),
+        border: Border.all(color: isSelected ? AppColors.b4 : AppColors.ge3),
       ),
       child: Text(
         language,
