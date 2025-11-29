@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'date_time_selection_screen.dart';
 import 'home_screen.dart';
+import 'main_app_screen.dart';
 
 class BookAppointmentScreen extends StatefulWidget {
   final String doctorName;
@@ -16,7 +17,7 @@ class BookAppointmentScreen extends StatefulWidget {
   });
 
   @override
-  _BookAppointmentScreenState createState() => _BookAppointmentScreenState();
+ _BookAppointmentScreenState createState() => _BookAppointmentScreenState();
 }
 
 class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
@@ -25,7 +26,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 
   // Sample time slots
   final List<String> timeSlots = [
-    '10:0 AM',
+    '10:00 AM',
     '10:30 AM',
     '11:00 AM',
     '11:30 AM',
@@ -365,7 +366,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         ),
       ),
     );
-  }
+ }
 }
 
 class AppointmentConfirmationScreen extends StatelessWidget {
@@ -418,7 +419,7 @@ class AppointmentConfirmationScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    MaterialPageRoute(builder: (context) => MainAppScreen()),
                     (route) => false,
                   );
                 },

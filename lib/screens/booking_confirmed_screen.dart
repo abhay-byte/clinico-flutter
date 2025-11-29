@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/home_screen.dart';
+import '../screens/main_app_screen.dart';
 
 class BookingConfirmedScreen extends StatelessWidget {
   final String doctorName;
@@ -76,7 +77,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                 'Your Booking has been confirmed.',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Colors.grey[600],
+                  color: Colors.grey[60],
                 ),
               ),
             ),
@@ -126,10 +127,10 @@ class BookingConfirmedScreen extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate back to home screen and clear the back stack
+                  // Navigate back to main app screen (which contains bottom navigation) and clear the back stack
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(builder: (context) => MainAppScreen()),
                     (route) => false, // This removes all previous routes
                   );
                 },

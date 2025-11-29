@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'screens/splash_screen.dart';
 import 'screens/audio_call_screen.dart';
 import 'screens/in_audio_call_screen.dart';
+import 'screens/main_app_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
