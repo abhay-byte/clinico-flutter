@@ -18,62 +18,60 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage> {
           children: [
             // Top Section - Header Bar
             Container(
-              height: 100,
               width: double.infinity,
+              height: 120, // Fixed height for the header like in Settings page
               decoration: const BoxDecoration(
-                color: Color(0xFF174880), // b1 - Dark blue
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16.0, top: 16.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Back Button
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    // Title and Subtitle
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Help & Support",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          "We're here to help",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white.withOpacity(0.7),
-                          ),
-                        ),
-                      ],
-                    ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF1E4A7E), // Header gradient start
+                    Color(0xFF2563B4), // Header gradient end
                   ],
                 ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+              child: Row(
+                children: [
+                  // Back Button
+                  IconButton(
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  // Title and Subtitle
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Help & Support",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "We're here to help",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
             
