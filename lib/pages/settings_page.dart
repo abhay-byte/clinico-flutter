@@ -3,6 +3,7 @@ import 'notification_settings_page.dart';
 import 'language_preference_variant_page.dart';
 import 'reset_password_variant_page.dart';
 import 'help_and_support_page.dart';
+import 'privacy_security_page.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -201,6 +202,23 @@ class _SettingsPageState extends State<SettingsPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => HelpAndSupportPage(),
+                              ),
+                            );
+                          },
+                        ),
+                        
+                        _buildSettingsMenuItem(
+                          context,
+                          icon: Icons.shield_outlined,
+                          iconBackgroundColor: Color(0xFFE3F2FD),
+                          title: "Privacy & Security",
+                          subtitle: "Your data, your control",
+                          onTap: () {
+                            // Navigate to privacy & security screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PrivacySecurityPage(),
                               ),
                             );
                           },
