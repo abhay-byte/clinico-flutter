@@ -1,4 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+// Initialize the FlutterLocalNotificationsPlugin
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+// Initialize the notification plugin
+Future<void> _initializeNotifications() async {
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+  
+  const DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings();
+  
+  const LinuxInitializationSettings initializationSettingsLinux =
+      LinuxInitializationSettings(defaultActionName: 'Open notification');
+  
+  const InitializationSettings initializationSettings =
+      InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+    linux: initializationSettingsLinux,
+  );
+  
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+}
 
 class NotificationSettingsPage extends StatefulWidget {
   @override
@@ -9,12 +35,19 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   // State variables for all notification toggles
   bool _allNotifications = true;
   bool _appointmentAlerts = true;
-  bool _incomingCalls = true;
+ bool _incomingCalls = true;
   bool _incomingVideoCalls = true;
   bool _medicalReminders = true;
-  bool _vibrationAlerts = true;
+ bool _vibrationAlerts = true;
 
   @override
+ void initState() {
+    super.initState();
+    // Initialize notifications when the widget is first created
+    _initializeNotifications();
+  }
+
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFEBF1FA), // Light blue-grey background
@@ -524,13 +557,29 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   }
   
   // Method to show test notification
-  void _showTestNotification() {
-    // Show a snackbar to simulate sending a test notification
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Test notification sent!"),
-        backgroundColor: Color(0xFF248BEB), // Bright blue (#248BEB or b4)
-      ),
+  void _showTestNotification() async {
+    // Create Android-specific notification details
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(
+      'clinico_test_channel',
+      'Clinico Test Notifications',
+      channelDescription: 'Test notifications for Clinico app',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'Test notification ticker',
+    );
+
+    // Create notification details for different platforms
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+    );
+
+    // Show the actual notification
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Test Notification',
+      'This is a test notification from your health app',
+      notificationDetails,
     );
   }
 }
