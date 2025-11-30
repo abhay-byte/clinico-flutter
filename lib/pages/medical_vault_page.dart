@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'document_list_view.dart';
+import 'medical_vault/medical_document_upload_page.dart';
 
 class MedicalVaultPage extends StatefulWidget {
   @override
@@ -598,56 +599,12 @@ class _MedicalVaultPageState extends State<MedicalVaultPage> {
   }
   
   void _showUploadOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) => Container(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.camera_alt),
-              title: Text('Take Photo'),
-              onTap: () => _takePhoto(),
-            ),
-            ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text('Choose from Gallery'),
-              onTap: () => _chooseFromGallery(),
-            ),
-            ListTile(
-              leading: Icon(Icons.insert_drive_file),
-              title: Text('Browse Files'),
-              onTap: () => _browseFiles(),
-            ),
-            ListTile(
-              leading: Icon(Icons.document_scanner),
-              title: Text('Scan Document'),
-              onTap: () => _scanDocument(),
-            ),
-          ],
-        ),
+    // Navigate directly to the Medical Document Upload Page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MedicalDocumentUploadPage(),
       ),
     );
-  }
-  
-  void _takePhoto() {
-    // Implementation for taking photo
-    print("Taking photo");
-  }
-  
-  void _chooseFromGallery() {
-    // Implementation for choosing from gallery
-    print("Choosing from gallery");
-  }
-  
-  void _browseFiles() {
-    // Implementation for browsing files
-    print("Browsing files");
-  }
-  
-  void _scanDocument() {
-    // Implementation for scanning document
-    print("Scanning document");
   }
 }
