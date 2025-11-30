@@ -25,50 +25,106 @@ class _DocumentListViewState extends State<DocumentListView> {
   @override
   void initState() {
     super.initState();
-    _documents = _generateSampleDocuments();
+    _documents = _generateSampleDocuments(widget.documentType);
   }
 
-  List<Map<String, dynamic>> _generateSampleDocuments() {
-    // Sample documents data
-    return [
+  List<Map<String, dynamic>> _generateSampleDocuments(String documentType) {
+    // Sample documents data - filtered based on document type
+    List<Map<String, dynamic>> allDocuments = [
       {
         'title': 'Prescription #001',
         'date': '2024-11-25',
         'comments': 'Regular checkup medication',
         'icon': Icons.description,
+        'type': 'Prescriptions',
+      },
+      {
+        'title': 'Prescription #002',
+        'date': '2024-11-20',
+        'comments': 'Antibiotic treatment',
+        'icon': Icons.description,
+        'type': 'Prescriptions',
       },
       {
         'title': 'Lab Report #02',
         'date': '2024-11-20',
         'comments': 'Blood test results',
         'icon': Icons.description,
+        'type': 'Lab Reports',
+      },
+      {
+        'title': 'Lab Report #03',
+        'date': '2024-11-18',
+        'comments': 'Urine analysis',
+        'icon': Icons.description,
+        'type': 'Lab Reports',
       },
       {
         'title': 'Vaccination Record',
         'date': '2024-11-15',
         'comments': 'Annual flu shot',
         'icon': Icons.vaccines,
+        'type': 'Vaccinations',
+      },
+      {
+        'title': 'COVID Vaccine',
+        'date': '2024-11-10',
+        'comments': 'Booster dose',
+        'icon': Icons.vaccines,
+        'type': 'Vaccinations',
       },
       {
         'title': 'Discharge Summary',
         'date': '2024-11-10',
         'comments': 'Post-surgery care instructions',
         'icon': Icons.description,
+        'type': 'Discharge',
+      },
+      {
+        'title': 'Surgery Report',
+        'date': '2024-11-05',
+        'comments': 'Surgical procedure notes',
+        'icon': Icons.description,
+        'type': 'Discharge',
       },
       {
         'title': 'Doctor Notes',
         'date': '2024-11-05',
         'comments': 'Follow-up appointment notes',
         'icon': Icons.note_alt,
+        'type': 'Doctor Notes',
+      },
+      {
+        'title': 'Consultation Notes',
+        'date': '2024-11-01',
+        'comments': 'Initial consultation',
+        'icon': Icons.note_alt,
+        'type': 'Doctor Notes',
       },
       {
         'title': 'X-Ray Report',
         'date': '2024-11-01',
         'comments': 'Chest X-ray findings',
         'icon': Icons.image,
+        'type': 'Radiology',
+      },
+      {
+        'title': 'MRI Scan',
+        'date': '2024-10-28',
+        'comments': 'Brain scan results',
+        'icon': Icons.image,
+        'type': 'Radiology',
       },
     ];
-  }
+
+    // Filter documents based on the requested document type
+    if (documentType == 'Other Documents') {
+      // For "Other Documents", return all types except the specific categories
+      return allDocuments;
+    } else {
+      return allDocuments.where((doc) => doc['type'] == documentType).toList();
+    }
+ }
 
  @override
   Widget build(BuildContext context) {
@@ -168,7 +224,7 @@ class _DocumentListViewState extends State<DocumentListView> {
                               color: Color(0xFF6A7282),
                             ),
                             border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                           ),
                         ),
                       ),
