@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'notification_settings_page.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -125,6 +126,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           subtitle: "Manage all alerts and sounds",
                           onTap: () {
                             // Navigate to notification settings screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NotificationSettingsPage(),
+                              ),
+                            );
                           },
                         ),
                         _buildSettingsMenuItem(
