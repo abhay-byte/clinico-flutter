@@ -18,19 +18,23 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
         body: SafeArea(
           child: Column(
             children: [
-              // Header Bar
+              // Header Bar with curved bottom
               Container(
-                height: 110,
+                height: 130, // Increased height to accommodate curve
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Color(0xFF174880), // Dark blue background
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30), // Curved bottom corners
+                    bottomRight: Radius.circular(30), // Curved bottom corners
+                  ),
                 ),
                 child: Stack(
                   children: [
                     // Back Button
                     Positioned(
                       left: 16,
-                      top: 16,
+                      top: 30, // Adjusted position for increased height
                       child: GestureDetector(
                         onTap: () {
                           Navigator.of(context).pop();
@@ -53,7 +57,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                     // Title and Subtitle
                     Positioned(
                       left: 76, // Account for back button width + padding
-                      top: 20,
+                      top: 34, // Adjusted position for increased height
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -80,7 +84,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                     // Edit Icon
                     Positioned(
                       right: 16,
-                      top: 16,
+                      top: 30, // Adjusted position for increased height
                       child: Container(
                         width: 44,
                         height: 44,
@@ -136,12 +140,12 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                               children: [
                                 // Profile Avatar
                                 Container(
-                                  margin: const EdgeInsets.only(top: 24),
-                                  width: 120,
-                                  height: 120,
+                                  margin: const EdgeInsets.only(top: 30), // Increased margin
+                                  width: 140, // Increased size
+                                  height: 140, // Increased size
                                   decoration: BoxDecoration(
                                     color: const Color(0xFF174880), // Dark blue background
-                                    borderRadius: BorderRadius.circular(16),
+                                    borderRadius: BorderRadius.circular(20), // More rounded
                                   ),
                                   child: Stack(
                                     alignment: Alignment.center,
@@ -149,23 +153,23 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                       const Icon(
                                         Icons.person,
                                         color: Colors.white,
-                                        size: 70,
+                                        size: 80, // Larger icon
                                       ),
                                       // Camera Badge
                                       Positioned(
                                         bottom: 0,
                                         right: 0,
                                         child: Container(
-                                          width: 36,
-                                          height: 36,
+                                          width: 40, // Larger badge
+                                          height: 40, // Larger badge
                                           decoration: BoxDecoration(
                                             color: const Color(0xFF248BEB), // Light blue
-                                            borderRadius: BorderRadius.circular(18),
+                                            borderRadius: BorderRadius.circular(20), // Circular
                                           ),
                                           child: const Icon(
                                             Icons.camera_alt,
                                             color: Colors.white,
-                                            size: 16,
+                                            size: 18, // Larger icon
                                           ),
                                         ),
                                       ),
@@ -174,13 +178,13 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                 ),
                                 // User Name & ID
                                 Container(
-                                  margin: const EdgeInsets.only(top: 12),
+                                  margin: const EdgeInsets.only(top: 16), // Increased margin
                                   child: const Column(
                                     children: [
                                       Text(
                                         "Lorem Ipsum Dolor",
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 20, // Larger font
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xFF101828),
                                         ),
@@ -189,7 +193,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                       Text(
                                         "CLN-10234",
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 16, // Larger font
                                           fontWeight: FontWeight.w400,
                                           color: Color(0xFF248BEB),
                                         ),
@@ -199,7 +203,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                 ),
                                 // Account Type & Member Since
                                 Container(
-                                  margin: const EdgeInsets.only(top: 16),
+                                  margin: const EdgeInsets.only(top: 20), // Increased margin
                                   child: Row(
                                     children: [
                                       Expanded(
@@ -210,7 +214,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                               Text(
                                                 "Account Type",
                                                 style: TextStyle(
-                                                  fontSize: 13,
+                                                  fontSize: 14, // Larger font
                                                   fontWeight: FontWeight.w400,
                                                   color: const Color(0xFF6A7282),
                                                 ),
@@ -219,16 +223,16 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                                 margin: const EdgeInsets.only(top: 4),
                                                 padding: const EdgeInsets.symmetric(
                                                   horizontal: 8,
-                                                  vertical: 2,
+                                                  vertical: 4, // Increased padding
                                                 ),
                                                 decoration: BoxDecoration(
                                                   color: const Color(0xFFE1FFBF), // Light green
-                                                  borderRadius: BorderRadius.circular(6),
+                                                  borderRadius: BorderRadius.circular(8), // More rounded
                                                 ),
                                                 child: const Text(
                                                   "Patient",
                                                   style: TextStyle(
-                                                    fontSize: 12,
+                                                    fontSize: 14, // Larger font
                                                     fontWeight: FontWeight.w500,
                                                     color: Color(0xFF00CC44), // Dark green
                                                   ),
@@ -240,7 +244,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                       ),
                                       Container(
                                         width: 1,
-                                        height: 40,
+                                        height: 45, // Increased height
                                         color: const Color(0xFFE5E5E5), // Light grey
                                       ),
                                       Expanded(
@@ -251,7 +255,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                               Text(
                                                 "Member Since",
                                                 style: TextStyle(
-                                                  fontSize: 13,
+                                                  fontSize: 14, // Larger font
                                                   fontWeight: FontWeight.w400,
                                                   color: const Color(0xFF6A7282),
                                                 ),
@@ -261,7 +265,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                                 child: const Text(
                                                   "Jan 2025",
                                                   style: TextStyle(
-                                                    fontSize: 14,
+                                                    fontSize: 16, // Larger font
                                                     fontWeight: FontWeight.w500,
                                                     color: Color(0xFF101828),
                                                   ),
@@ -270,6 +274,121 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                             ],
                                           ),
                                         ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                // Additional info section
+                                Container(
+                                  margin: const EdgeInsets.symmetric(vertical: 20), // Add vertical space
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      // Gender
+                                      Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFEBF1FA), // Light blue background
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: const Icon(
+                                              Icons.male,
+                                              color: Color(0xFF174880),
+                                              size: 24,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          const Text(
+                                            "Male",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF101828),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      // Age
+                                      Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFEBF1FA), // Light blue background
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: const Icon(
+                                              Icons.cake,
+                                              color: Color(0xFF174880),
+                                              size: 24,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          const Text(
+                                            "30 yrs",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF101828),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      // Blood Group
+                                      Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFEBF1FA), // Light blue background
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Image.asset(
+                                              'assets/user/user_details/blood_icon.png',
+                                              width: 24,
+                                              height: 24,
+                                              color: const Color(0xFF174880),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          const Text(
+                                            "B+",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF101828),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      // Location
+                                      Column(
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFEBF1FA), // Light blue background
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: const Icon(
+                                              Icons.location_on,
+                                              color: Color(0xFF174880),
+                                              size: 24,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          const Text(
+                                            "Chennai",
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color: Color(0xFF101828),
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
@@ -767,7 +886,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                           borderRadius: BorderRadius.circular(22),
                                         ),
                                         child: Image.asset(
-                                          'assets/user_details/heart_icon.png',
+                                          'assets/user/user_details/heart_icon.png',
                                           width: 24,
                                           height: 24,
                                           color: Colors.green,
