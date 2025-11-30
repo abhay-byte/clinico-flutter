@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'profile_details_page.dart';
 import 'medicine_reminders_page.dart';
+import 'settings_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -363,7 +364,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Settings",
                       subtitle: "App preferences & notifications",
                       onTap: () {
-                        // Navigate to Settings page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SettingsPage(),
+                          ),
+                        );
                       },
                     ),
                     _buildMenuItem(

@@ -89,12 +89,16 @@ class _MedicineRemindersPageState extends State<MedicineRemindersPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // Header Bar
+            // Header Bar with rounded bottom edges
             Container(
               height: 110,
               width: double.infinity,
               decoration: const BoxDecoration(
                 color: Color(0xFF174880), // b1 - Dark blue
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                ),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
