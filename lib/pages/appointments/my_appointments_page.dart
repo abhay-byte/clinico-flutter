@@ -534,7 +534,7 @@ class _MyAppointmentsPageState extends State<MyAppointmentsPage> {
             ],
             
             // Empty state if no appointments match filters
-            if (_filteredAppointments.isEmpty)
+            if (_filteredAppointments.isEmpty) ...[
               SliverToBoxAdapter(
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 40),
@@ -606,12 +606,14 @@ class _MyAppointmentsPageState extends State<MyAppointmentsPage> {
                   ),
                 ),
               ),
-          
-          // Bottom padding to prevent content from being cut off by bottom navigation
-          SliverToBoxAdapter(
-            child: SizedBox(height: 80),
-          ),
-        ],
+            ],
+            
+            // Bottom padding to prevent content from being cut off by bottom navigation
+            SliverToBoxAdapter(
+              child: SizedBox(height: 80),
+            ),
+          ],
+        ),
       ),
     );
   }

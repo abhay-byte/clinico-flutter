@@ -7,6 +7,7 @@ import 'privacy_security_page.dart';
 import 'medical_vault_page.dart';
 import 'document_list_view.dart';
 import 'user/wellness_awareness_hub_page.dart';
+import 'appointments/my_appointments_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -284,7 +285,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Appointments",
                       subtitle: "Manage doctor appointments",
                       onTap: () {
-                        // Navigate to Appointments page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyAppointmentsPage(),
+                          ),
+                        );
                       },
                     ),
                     _buildMenuItem(
