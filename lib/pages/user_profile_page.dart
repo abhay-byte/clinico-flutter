@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile_details_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -263,7 +264,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Profile Details",
                       subtitle: "Personal info, contact & preferences",
                       onTap: () {
-                        // Navigate to Profile Details page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileDetailsPage(),
+                          ),
+                        );
                       },
                     ),
                     _buildMenuItem(
