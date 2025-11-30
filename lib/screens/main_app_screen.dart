@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import '../pages/user_profile_page.dart';
+import '../pages/appointments/my_appointments_page.dart';
 
 class MainAppScreen extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
   List<Widget> get _children => [
     HomeScreen(), // Home
     _buildPlaceholderScreen('Messages', Colors.blue), // Messages placeholder - would implement actual messages screen
-    _buildPlaceholderScreen('Appointments', Colors.green), // Appointments placeholder - would implement actual appointments screen
+    MyAppointmentsPage(), // Appointments
     UserProfilePage(), // Profile
   ];
 
