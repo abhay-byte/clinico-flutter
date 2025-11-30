@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'document_view_page.dart';
 
 class DocumentListView extends StatefulWidget {
   final String documentType;
@@ -294,110 +295,121 @@ class _DocumentListViewState extends State<DocumentListView> {
   }
 
   Widget _buildDocumentCard(Map<String, dynamic> document) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
-            blurRadius: 12,
-            offset: Offset(0, 2),
+    return GestureDetector(
+      onTap: () {
+        // Navigate to document view page
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => _buildDocumentViewPage(document),
           ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Left Icon Bubble
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: Color(0xFFE1FBFF), // g3 — Light Cyan
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Icon(
-                document['icon'] ?? widget.documentIcon,
-                color: Color(0xFF248BEB), // b4 — Bright Blue
-                size: 26,
-              ),
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 12,
+              offset: Offset(0, 2),
             ),
-            
-            SizedBox(width: 16),
-            
-            // Document Content
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Document Title
-                  Text(
-                    document['title'],
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600, // SemiBold
-                      color: Color(0xFF101828),
-                    ),
-                  ),
-                  
-                  SizedBox(height: 6),
-                  
-                  // Date Row
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today,
-                        size: 16,
-                        color: Color(0xFF6A7282),
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        document['date'],
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Color(0xFF6A7282),
-                        ),
-                      ),
-                    ],
-                  ),
-                  
-                  SizedBox(height: 12),
-                  
-                  // Comments Box
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Color(0xFFF3F4F6), // ge3 — Light Neutral Gray
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      document['comments'],
+          ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Left Icon Bubble
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: Color(0xFFE1FBFF), // g3 — Light Cyan
+                  borderRadius: BorderRadius.circular(24),
+                ),
+                child: Icon(
+                  document['icon'] ?? widget.documentIcon,
+                  color: Color(0xFF248BEB), // b4 — Bright Blue
+                  size: 26,
+                ),
+              ),
+              
+              SizedBox(width: 16),
+              
+              // Document Content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Document Title
+                    Text(
+                      document['title'],
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600, // SemiBold
                         color: Color(0xFF101828),
                       ),
                     ),
-                  ),
-                ],
+                    
+                    SizedBox(height: 6),
+                    
+                    // Date Row
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today,
+                          size: 16,
+                          color: Color(0xFF6A7282),
+                        ),
+                        SizedBox(width: 4),
+                        Text(
+                          document['date'],
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Color(0xFF6A7282),
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    SizedBox(height: 12),
+                    
+                    // Comments Box
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF3F4F6), // ge3 — Light Neutral Gray
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        document['comments'],
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF101828),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            
-            // More Actions Icon
-            IconButton(
-              icon: Icon(
-                Icons.more_vert,
-                size: 22,
-                color: Color(0xFF6A7282),
+              
+              // More Actions Icon
+              IconButton(
+                icon: Icon(
+                  Icons.more_vert,
+                  size: 22,
+                  color: Color(0xFF6A7282),
+                ),
+                onPressed: (document['icon'] ?? widget.documentIcon) != null ? () {
+                  _showDocumentOptions(document);
+                } : null,
               ),
-              onPressed: () {
-                _showDocumentOptions(document);
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -452,6 +464,22 @@ class _DocumentListViewState extends State<DocumentListView> {
           ),
         );
       },
+    );
+  }
+ 
+  Widget _buildDocumentViewPage(Map<String, dynamic> document) {
+    return DocumentViewPage(
+      documentTitle: "${document['title']} – ${document['date']}",
+      documentType: document['type'] ?? widget.documentType,
+      fileName: "${document['title'].toLowerCase().replaceAll(' ', '_')}_${document['date'].replaceAll('-', '_')}.pdf",
+      uploadDate: document['date'],
+      uploadTime: "10:30 AM", // Default time since we don't have time in the sample data
+      uploadedBy: "Self", // Default value since we don't have this in sample data
+      comments: document['comments'] ?? "",
+      doctor: "", // Default value since we don't have this in sample data
+      linkedTo: "", // Default value since we don't have this in sample data
+      fileType: "pdf", // Default value since we don't have this in sample data
+      enableZoom: true,
     );
   }
 
