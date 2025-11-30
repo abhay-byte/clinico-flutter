@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'notification_settings_page.dart';
+import 'language_preference_variant_page.dart';
+import 'reset_password_variant_page.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -116,6 +118,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           subtitle: "Change your current login",
                           onTap: () {
                             // Navigate to reset password screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ResetPasswordVariantPage(),
+                              ),
+                            );
                           },
                         ),
                         _buildSettingsMenuItem(
@@ -142,6 +150,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           subtitle: "Choose app language",
                           onTap: () {
                             // Navigate to language preferences screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LanguagePreferenceVariantPage(),
+                              ),
+                            );
                           },
                         ),
                         _buildSettingsMenuItem(
