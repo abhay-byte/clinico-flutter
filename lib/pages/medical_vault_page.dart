@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'document_list_view.dart';
 
 class MedicalVaultPage extends StatefulWidget {
   @override
@@ -206,7 +207,16 @@ class _MedicalVaultPageState extends State<MedicalVaultPage> {
                                 description: "All digital or scanned prescriptions",
                                 fileCount: "12 files",
                                 onTap: () {
-                                  // Navigate to Prescriptions list page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DocumentListView(
+                                        documentType: 'Prescriptions',
+                                        pageTitle: 'Prescriptions',
+                                        documentIcon: Icons.description,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                               _buildCategoryCard(
@@ -217,7 +227,16 @@ class _MedicalVaultPageState extends State<MedicalVaultPage> {
                                 description: "CBC, BMP, lipid panel, etc.",
                                 fileCount: "8 files",
                                 onTap: () {
-                                  // Navigate to Lab Reports list page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DocumentListView(
+                                        documentType: 'Lab Reports',
+                                        pageTitle: 'Lab Reports',
+                                        documentIcon: Icons.science,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                               _buildCategoryCard(
@@ -228,7 +247,16 @@ class _MedicalVaultPageState extends State<MedicalVaultPage> {
                                 description: "X-ray, MRI, CT Scan",
                                 fileCount: "5 files",
                                 onTap: () {
-                                  // Navigate to Radiology images page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DocumentListView(
+                                        documentType: 'Radiology',
+                                        pageTitle: 'Radiology',
+                                        documentIcon: Icons.favorite_border,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                               _buildCategoryCard(
@@ -239,7 +267,16 @@ class _MedicalVaultPageState extends State<MedicalVaultPage> {
                                 description: "Hospital admission details",
                                 fileCount: "3 files",
                                 onTap: () {
-                                  // Navigate to Discharge documents page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DocumentListView(
+                                        documentType: 'Discharge',
+                                        pageTitle: 'Discharge',
+                                        documentIcon: Icons.local_hospital,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                               _buildCategoryCard(
@@ -250,7 +287,16 @@ class _MedicalVaultPageState extends State<MedicalVaultPage> {
                                 description: "Immunization proof",
                                 fileCount: "15 files",
                                 onTap: () {
-                                  // Navigate to Vaccination records page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DocumentListView(
+                                        documentType: 'Vaccination',
+                                        pageTitle: 'Vaccinations',
+                                        documentIcon: Icons.vaccines,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                               _buildCategoryCard(
@@ -261,7 +307,16 @@ class _MedicalVaultPageState extends State<MedicalVaultPage> {
                                 description: "Consultation summaries or special",
                                 fileCount: "7 files",
                                 onTap: () {
-                                  // Navigate to Doctor Notes page
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => DocumentListView(
+                                        documentType: 'Doctor Notes',
+                                        pageTitle: 'Doctor Notes',
+                                        documentIcon: Icons.healing,
+                                      ),
+                                    ),
+                                  );
                                 },
                               ),
                             ],
@@ -286,7 +341,16 @@ class _MedicalVaultPageState extends State<MedicalVaultPage> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              // Navigate to Other Documents page
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DocumentListView(
+                                    documentType: 'Other Documents',
+                                    pageTitle: 'Other Documents',
+                                    documentIcon: Icons.folder,
+                                  ),
+                                ),
+                              );
                             },
                             borderRadius: BorderRadius.circular(16),
                             child: Container(
