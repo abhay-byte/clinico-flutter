@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constants/colors.dart';
 import 'home_screen.dart';
+import 'date_time_selection_screen.dart';
 
 class BookAppointmentScreen extends StatefulWidget {
   final String doctorName;
@@ -339,36 +340,39 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
               }).toList(),
             ),
             const SizedBox(height: 24),
+// Date Selection
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    const Text(
+      'Select Date',
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      ),
+    ),
+    TextButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const DateTimeSelectionScreen(),
+          ),
+        );
+      },
+      child: const Text(
+        'View All',
+        style: TextStyle(
+          fontSize: 14,
+          color: AppColors.b4,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+  ],
+),
 
-            // Date Selection
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Select Date',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // For now, we'll just show an alert since we're implementing
-                    // the full date selection in this screen
-                    _showDateSelectionDialog();
-                  },
-                  child: const Text(
-                    'View All',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.b4,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(height: 16),
             SizedBox(
               height: 60,
