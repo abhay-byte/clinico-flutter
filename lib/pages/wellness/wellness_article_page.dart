@@ -151,7 +151,9 @@ class _WellnessArticlePageState extends State<WellnessArticlePage> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.zero, // Full bleed
                             image: DecorationImage(
-                              image: NetworkImage(widget.thumbnailUrl),
+                              image: widget.thumbnailUrl.startsWith('http')
+                                  ? NetworkImage(widget.thumbnailUrl) as ImageProvider
+                                  : AssetImage(widget.thumbnailUrl),
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -988,7 +990,7 @@ class _WellnessArticlePageState extends State<WellnessArticlePage> {
     ];
     
     return SizedBox(
-      height: 250, // Increased height of cards
+      height: 270, // Increased height of cards further
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: relatedContent.length,

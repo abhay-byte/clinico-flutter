@@ -161,7 +161,9 @@ class _WellnessVideoPageState extends State<WellnessVideoPage> {
                                 color: Colors.black, // Black background if image loading
                                 image: widget.thumbnailUrl.isNotEmpty
                                     ? DecorationImage(
-                                        image: NetworkImage(widget.thumbnailUrl),
+                                        image: widget.thumbnailUrl.startsWith('http')
+                                            ? NetworkImage(widget.thumbnailUrl) as ImageProvider
+                                            : AssetImage(widget.thumbnailUrl),
                                         fit: BoxFit.cover,
                                       )
                                     : null,
@@ -624,7 +626,7 @@ class _WellnessVideoPageState extends State<WellnessVideoPage> {
      ];
      
      return SizedBox(
-       height: 250, // Increased height of cards
+       height: 270, // Increased height of cards further
        child: ListView.builder(
          scrollDirection: Axis.horizontal,
          itemCount: relatedContent.length,
