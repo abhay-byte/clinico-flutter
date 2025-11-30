@@ -101,12 +101,12 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
               // Main Content
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(top: 20), // Overlap effect
+                  padding: const EdgeInsets.only(top: 0), // No top padding as overlap is handled by negative margin
                   child: Column(
                     children: [
-                      // Profile Card Section
+                      // Profile Card Section - overlapping with header
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        margin: const EdgeInsets.only(left: 16, right: 16, top: -20), // Negative top margin for overlap
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: const BorderRadius.only(

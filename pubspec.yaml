@@ -81,6 +81,7 @@ flutter:
     - assets/book_appointment/
     - assets/doctor_profile/
     - assets/user/
+    - assets/user/user_details/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
