@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'profile_details_page.dart';
+import 'medicine_reminders_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -293,7 +294,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Medicine Reminders",
                       subtitle: "Set & view medicine alerts",
                       onTap: () {
-                        // Navigate to Medicine Reminders page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MedicineRemindersPage(),
+                          ),
+                        );
                       },
                     ),
                     _buildMenuItem(
