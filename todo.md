@@ -1,58 +1,70 @@
-# Appointment Booking Screen Update
+# Date and Time Selection Screen Todo
 
-## Objective
-Refactor the "Book Appointment" screen to strictly match the design in the appointment.png reference, implementing the "Clean & Modern" version with proper styling, shadows, and layout.
+## Overview
+Build the "Select Date And Time" screen that opens when the user clicks the "View All" link on the Book Appointment screen.
 
-## Tasks
+## Design Requirements
+- Background: Light cool-grey/blue tint (#F6F8FB)
+- Padding: 20px horizontal padding for main content
+- Follow visual design in Select Date And Time.png
 
-### 1. Global Styling & Layout
-- [ ] Update background color to #F6F8FB (light cool-grey/blue tint)
-- [ ] Add horizontal padding (20px) to main content
-- [ ] Implement soft, diffused drop-shadow for all white cards/pills
-- [ ] Ensure consistent spacing throughout the screen
+## Components to Implement
 
-### 2. Header Implementation
-- [ ] Add back arrow icon on the left (dark grey)
-- [ ] Center "Book Appointment" text (dark blue, bold, 18-20px)
-- [ ] Ensure proper alignment of header components
+### 1. Header
+- Back Arrow icon (<) for navigation back to Book Appointment screen
+- Title: "Select Date And Time" (Dark Blue, Bold, approx 20px)
+- Centered or Left-aligned text
 
-### 3. Doctor Profile Card
-- [ ] Create row layout for doctor profile
-- [ ] Add circular doctor avatar with thin light-grey border
-- [ ] Implement details column with:
-  - [ ] Doctor name "Dr. Lorem Ipsum" (black/dark blue, semi-bold, 16px)
-  - [ ] Specialization "Dermatologist | MBBS, MD | AB..." (grey, 12px)
-  - [ ] Languages "Languages - Hindi, English" (grey, 12px)
-- [ ] Add "Volunteer" badge (blue background #2F80ED, white text, 10px, capsule shape)
+### 2. Custom Calendar View
+- Do NOT use native date picker
+- Build custom grid view to match design
 
-### 4. Time Slot Section
-- [ ] Add header row with "Time Slot" (black, bold, 16px) on left and "View all" (grey, 12px) on right
-- [ ] Implement horizontal scroll list of pill-shaped buttons
-- [ ] Create selected style: solid blue background (#2F80ED) with white text
-- [ ] Create unselected style: white background, dark grey text, soft shadow
-- [ ] Implement logic to hide past time slots for "Today"
-- [ ] Show example slots "10:00 AM" (selected) and "4:30 PM" (unselected)
+#### Month/Year Header
+- Row at top of calendar
+- Left Text: "Nov" (Black, Medium)
+- Center/Right Text: "2025" (Blue #2F80ED, Bold)
+- Functionality: Swipe or click to change months
 
-### 5. Date Section
-- [ ] Add header row with "Date" (black, bold, 16px) on left and "View all" (grey, 12px) on right
-- [ ] Implement horizontal scroll list of pill-shaped date buttons
-- [ ] Create selected style: solid blue background (#2F80ED) with white text
-- [ ] Create unselected style: white background, dark grey text, soft shadow
-- [ ] Implement dynamic date labels: "Tomorrow", "17th Nov", "18th Nov"
-- [ ] Start dates from Today/Tomorrow dynamically
+#### Days of Week
+- Row: M T W T F S S
+- Style: Black, Bold, evenly spaced
 
-### 6. Footer Section
-- [ ] Add note text: "Note:- You will get a call from the doctor in app, on your appointment date and specified time." (grey, centered, 12px)
-- [ ] Add 20px padding above the confirm button
-- [ ] Create "Confirm Appointment" button (full width, solid blue #2F80ED, white bold text, 12px radius, 50px height)
+#### Date Grid
+- 7-column grid layout
+- Visual States:
+  - Previous Month Dates: Grey/Muted text
+  - Available Dates: Black text
+  - Selected Date: Solid Blue Circle (#2F80ED) with White Text
+- Logic:
+  - Users can select only one date at a time
+  - Disable interaction for past dates
+  - If "Today" is 16th, days 1-15 non-clickable
 
-### 7. Functional Logic
-- [ ] Implement selection state for time and date pills (clicking updates to selected/deselected)
-- [ ] Add navigation to detailed SelectDateAndTime screen when "View all" is clicked
-- [ ] Implement validation to prevent selecting past dates/times
+### 3. Available Time Slot Section
+- Heading: "Available Time Slot" (Black, Bold, 16px)
+- Display time slots in wrapped row or horizontal list
+- Selected Style: Solid Blue Background (#2F80ED), White Text
+- Unselected Style: White Background, Grey Text, Soft Drop Shadow, Rounded Corners
+- Logic: Update dynamically based on selected date
+  - If user selects "Today", hide passed time slots
 
-### 8. Testing & Validation
-- [ ] Verify UI matches appointment.png reference exactly
-- [ ] Test all interactive elements
-- [ ] Verify responsive design on different screen sizes
-- [ ] Check proper handling of current time/date logic
+### 4. Footer Action
+- Button: "Set Appointment"
+- Style: Full-width, Solid Blue (#2F80ED) background, White Bold text, rounded corners
+- Action: Save selectedDate and selectedTime, navigate to Confirmation Screen
+
+## Functional Requirements
+- State Management:
+  - selectedDate: Defaults to Current Date
+  - selectedTime: Defaults to null or first available slot
+- Navigation Animation: Push animation (slide in from right) when opening
+
+## Implementation Steps
+1. Create custom calendar widget
+2. Implement month navigation functionality
+3. Create time slot selection
+4. Add date/time state management
+5. Connect navigation from Book Appointment screen
+6. Style according to design reference
+7. Test functionality
+8. Verify with design mockup
