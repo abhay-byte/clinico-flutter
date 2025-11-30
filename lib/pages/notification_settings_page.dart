@@ -41,13 +41,13 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
  bool _vibrationAlerts = true;
 
   @override
- void initState() {
+  void initState() {
     super.initState();
     // Initialize notifications when the widget is first created
     _initializeNotifications();
-  }
+ }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFEBF1FA), // Light blue-grey background
@@ -558,28 +558,38 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   
   // Method to show test notification
   void _showTestNotification() async {
-    // Create Android-specific notification details
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-      'clinico_test_channel',
-      'Clinico Test Notifications',
-      channelDescription: 'Test notifications for Clinico app',
-      importance: Importance.max,
-      priority: Priority.high,
-      ticker: 'Test notification ticker',
-    );
+    try {
+      // Create Android-specific notification details
+      const AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails(
+        'clinico_test_channel',
+        'Clinico Test Notifications',
+        channelDescription: 'Test notifications for Clinico app',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'Test notification ticker',
+      );
 
-    // Create notification details for different platforms
-    const NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-    );
+      // Create notification details for different platforms
+      const NotificationDetails notificationDetails = NotificationDetails(
+        android: androidNotificationDetails,
+      );
 
-    // Show the actual notification
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Test Notification',
-      'This is a test notification from your health app',
-      notificationDetails,
-    );
-  }
+      // Show the actual notification
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        'Test Notification',
+        'This is a test notification from your health app',
+        notificationDetails,
+      );
+    } catch (e) {
+      // If there's an error, show a snackbar with the error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to send notification: \${e.toString()}"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+ }
 }
