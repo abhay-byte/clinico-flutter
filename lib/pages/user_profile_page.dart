@@ -6,6 +6,7 @@ import 'help_and_support_page.dart';
 import 'privacy_security_page.dart';
 import 'medical_vault_page.dart';
 import 'document_list_view.dart';
+import 'user/wellness_awareness_hub_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -350,7 +351,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Mental Wellness Hub",
                       subtitle: "Journaling, mood tracker & AI companion",
                       onTap: () {
-                        // Navigate to Mental Wellness Hub page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WellnessAwarenessHubPage(initialTab: 0),
+                          ),
+                        );
                       },
                     ),
                     _buildMenuItem(
@@ -358,7 +364,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Health Awareness Hub",
                       subtitle: "Articles, videos & wellness tips",
                       onTap: () {
-                        // Navigate to Health Awareness Hub page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WellnessAwarenessHubPage(initialTab: 1),
+                          ),
+                        );
                       },
                     ),
                     
