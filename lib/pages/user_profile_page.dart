@@ -3,6 +3,7 @@ import 'profile_details_page.dart';
 import 'medicine_reminders_page.dart';
 import 'settings_page.dart';
 import 'help_and_support_page.dart';
+import 'privacy_security_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -379,6 +380,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       subtitle: "Data protection & permissions",
                       onTap: () {
                         // Navigate to Privacy & Security page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PrivacySecurityPage(),
+                          ),
+                        );
                       },
                     ),
                     _buildMenuItem(
