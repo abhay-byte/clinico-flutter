@@ -4,6 +4,7 @@ import 'medicine_reminders_page.dart';
 import 'settings_page.dart';
 import 'help_and_support_page.dart';
 import 'privacy_security_page.dart';
+import 'medical_vault_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -310,7 +311,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Medical Vault",
                       subtitle: "Secure storage for health reports",
                       onTap: () {
-                        // Navigate to Medical Vault page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MedicalVaultPage(),
+                          ),
+                        );
                       },
                     ),
                     
