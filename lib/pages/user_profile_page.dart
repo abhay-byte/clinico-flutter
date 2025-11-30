@@ -5,6 +5,7 @@ import 'settings_page.dart';
 import 'help_and_support_page.dart';
 import 'privacy_security_page.dart';
 import 'medical_vault_page.dart';
+import 'document_list_view.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -290,7 +291,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Prescription List",
                       subtitle: "All digital prescriptions",
                       onTap: () {
-                        // Navigate to Prescription List page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DocumentListView(
+                              documentType: 'Prescriptions',
+                              pageTitle: 'Prescriptions',
+                              documentIcon: Icons.description,
+                            ),
+                          ),
+                        );
                       },
                     ),
                     _buildMenuItem(
