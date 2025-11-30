@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../wellness/wellness_article_page.dart';
+import '../wellness/wellness_video_page.dart';
 
 class WellnessContent {
   final String id;
@@ -645,8 +647,36 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
                   ),
                   child: TextButton(
                     onPressed: () {
-                      // Navigate to content page
-                      print('Navigate to: ${content.contentUrl}');
+                      if (content.contentType == 'article') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WellnessArticlePage(
+                              contentId: content.id,
+                              title: content.title,
+                              category: content.category,
+                              readTimeMinutes: content.durationMinutes,
+                              thumbnailUrl: content.thumbnailUrl,
+                              tags: content.hashtags,
+                            ),
+                          ),
+                        );
+                      } else if (content.contentType == 'video') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WellnessVideoPage(
+                              contentId: content.id,
+                              title: content.title,
+                              category: content.category,
+                              durationMinutes: content.durationMinutes,
+                              thumbnailUrl: content.thumbnailUrl,
+                              youtubeUrl: content.contentUrl,
+                              tags: content.hashtags,
+                            ),
+                          ),
+                        );
+                      }
                     },
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,

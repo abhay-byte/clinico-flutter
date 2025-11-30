@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:clinico/pages/wellness/wellness_video_page.dart';
 
 class WellnessArticlePage extends StatefulWidget {
   final String contentId;
@@ -26,8 +28,18 @@ class _WellnessArticlePageState extends State<WellnessArticlePage> {
   bool _isBookmarked = false;
  bool _isLiked = false;
 
-  @override
-  Widget build(BuildContext context) {
+  void _shareContent() {
+    final String shareText = "Check out this article: ${widget.title}\n\n${widget.category}\n\nvia Clinico App";
+    final String shareSubject = widget.title;
+    
+    Share.share(
+      shareText,
+      subject: shareSubject,
+    );
+  }
+
+   @override
+   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF5F7FA), // Background color matching settings page
       body: SafeArea(
@@ -116,13 +128,7 @@ class _WellnessArticlePageState extends State<WellnessArticlePage> {
                               size: 24,
                             ),
                             onPressed: () {
-                              // Share functionality would go here
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Share functionality would be implemented here'),
-                                  backgroundColor: Color(0xFF1E4A7E),
-                                ),
-                              );
+                              _shareContent();
                             },
                           ),
                         ],
@@ -134,7 +140,7 @@ class _WellnessArticlePageState extends State<WellnessArticlePage> {
                 // Scrollable Content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, 80), // Add bottom padding to account for bottom action bar
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -369,13 +375,7 @@ class _WellnessArticlePageState extends State<WellnessArticlePage> {
                     // Share Button
                     ElevatedButton.icon(
                       onPressed: () {
-                        // Share functionality would go here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Share functionality would be implemented here'),
-                            backgroundColor: Color(0xFF174880),
-                          ),
-                        );
+                        _shareContent();
                       },
                       icon: Icon(
                         Icons.share,
@@ -961,93 +961,144 @@ class _WellnessArticlePageState extends State<WellnessArticlePage> {
       {
         'title': 'Managing Anxiety: Practical Techniques',
         'duration': '8 min read',
-        'thumbnail': 'https://via.placeholder.com/280x140/1E4A7E/FFFFFF?text=Anxiety',
+        'thumbnail': 'assets/wellness_and_awareness/lady_yoga.png',
+        'contentType': 'article',
+        'id': '1',
+        'category': 'Mental Wellness',
+        'tags': ['#MentalHealth', '#Anxiety'],
       },
       {
         'title': 'Mindfulness for Beginners: A Complete Guide',
         'duration': '10 min read',
-        'thumbnail': 'https://via.placeholder.com/280x140/5A7D2C/FFFFFF?text=Mindfulness',
+        'thumbnail': 'assets/wellness_and_awareness/hands.png',
+        'contentType': 'article',
+        'id': '2',
+        'category': 'Mindfulness',
+        'tags': ['#Mindfulness', '#Meditation'],
       },
       {
         'title': 'Sleep Better Tonight – 10 Simple Tips',
         'duration': '6 min read',
-        'thumbnail': 'https://via.placeholder.com/280x140/174880/FFFFFF?text=Sleep',
+        'thumbnail': 'assets/wellness_and_awareness/person_back.png',
+        'contentType': 'article',
+        'id': '3',
+        'category': 'Sleep',
+        'tags': ['#Sleep', '#Health'],
       },
     ];
     
     return SizedBox(
-      height: 200,
+      height: 250, // Increased height of cards
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: relatedContent.length,
         itemBuilder: (context, index) {
           var content = relatedContent[index];
-          return Container(
-            width: 280,
-            margin: EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.1),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 140,
-                  width: 280,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                    image: DecorationImage(
-                      image: NetworkImage(content['thumbnail']),
-                      fit: BoxFit.cover,
+          return GestureDetector(
+            onTap: () {
+              // Navigate to the corresponding content page
+              if (content['contentType'] == 'article') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WellnessArticlePage(
+                      contentId: content['id'],
+                      title: content['title'],
+                      category: content['category'],
+                      readTimeMinutes: int.tryParse(content['duration'].split(' ')[0]) ?? 5,
+                      thumbnailUrl: content['thumbnail'],
+                      tags: content['tags'],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        content['title'],
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF101828),
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                );
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WellnessVideoPage(
+                      contentId: content['id'],
+                      title: content['title'],
+                      category: content['category'],
+                      durationMinutes: int.tryParse(content['duration'].split(' ')[0]) ?? 5,
+                      thumbnailUrl: content['thumbnail'],
+                      youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Default placeholder
+                      tags: content['tags'],
+                    ),
+                  ),
+                );
+              }
+            },
+            child: Container(
+              width: 280,
+              margin: EdgeInsets.only(right: 12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withValues(alpha: 0.1),
+                    spreadRadius: 1,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min, // Add this to prevent overflow
+                children: [
+                  Container(
+                    height: 180, // Increased height from 140 to 180
+                    width: 280,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                      image: DecorationImage(
+                        image: AssetImage(content['thumbnail']),
+                        fit: BoxFit.cover,
                       ),
-                      SizedBox(height: 6),
-                      Row(
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start, // Add this to align content to top
                         children: [
-                          Icon(
-                            Icons.access_time,
-                            size: 12,
-                            color: Color(0xFF6B7280),
-                          ),
-                          SizedBox(width: 4),
                           Text(
-                            content['duration'],
+                            content['title'],
                             style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF6B7280),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Color(0xFF101828),
                             ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          SizedBox(height: 6),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.access_time,
+                                size: 12,
+                                color: Color(0xFF6B7280),
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                content['duration'],
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xFF6B7280),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

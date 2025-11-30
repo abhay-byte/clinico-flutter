@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:clinico/pages/wellness/wellness_article_page.dart';
 
 class WellnessVideoPage extends StatefulWidget {
   final String contentId;
@@ -27,13 +29,23 @@ class WellnessVideoPage extends StatefulWidget {
 
 class _WellnessVideoPageState extends State<WellnessVideoPage> {
   bool _isBookmarked = false;
-  bool _isLiked = false;
-  bool _showDescription = false;
-  bool _dontShowDialog = false;
-  final String _description = "In this comprehensive guide, we'll explore simple yet effective mindfulness techniques you can practice anywhere, anytime. Learn breathing exercises, body scan meditation, and grounding techniques that help reduce anxiety and increase present-moment awareness. Perfect for beginners and experienced practitioners alike.";
+   bool _isLiked = false;
+   bool _showDescription = false;
+   bool _dontShowDialog = false;
+   final String _description = "In this comprehensive guide, we'll explore simple yet effective mindfulness techniques you can practice anywhere, anytime. Learn breathing exercises, body scan meditation, and grounding techniques that help reduce anxiety and increase present-moment awareness. Perfect for beginners and experienced practitioners alike.";
 
-  @override
- Widget build(BuildContext context) {
+  void _shareContent() {
+    final String shareText = "Check out this video: ${widget.title}\n\n${widget.category}\n\nvia Clinico App";
+    final String shareSubject = widget.title;
+    
+    Share.share(
+      shareText,
+      subject: shareSubject,
+    );
+  }
+
+   @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF5F7FA), // Background color matching settings page
       body: SafeArea(
@@ -122,13 +134,7 @@ class _WellnessVideoPageState extends State<WellnessVideoPage> {
                               size: 24,
                             ),
                             onPressed: () {
-                              // Share functionality would go here
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Share functionality would be implemented here'),
-                                  backgroundColor: Color(0xFF1E4A7E),
-                                ),
-                              );
+                              _shareContent();
                             },
                           ),
                         ],
@@ -140,7 +146,7 @@ class _WellnessVideoPageState extends State<WellnessVideoPage> {
                 // Scrollable Content
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.all(16),
+                    padding: EdgeInsets.fromLTRB(16, 16, 16, 80), // Add bottom padding to account for bottom action bar
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -552,13 +558,7 @@ class _WellnessVideoPageState extends State<WellnessVideoPage> {
                     // Share Button
                     ElevatedButton.icon(
                       onPressed: () {
-                        // Share functionality would go here
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Share functionality would be implemented here'),
-                            backgroundColor: Color(0xFF174880),
-                          ),
-                        );
+                        _shareContent();
                       },
                       icon: Icon(
                         Icons.share,
@@ -591,104 +591,155 @@ class _WellnessVideoPageState extends State<WellnessVideoPage> {
     );
   }
   
-  Widget _buildRelatedContent() {
-    // Sample related content - in a real app this would come from a data source
-    List<Map<String, dynamic>> relatedContent = [
-      {
-        'title': '5-Minute Mindfulness Meditation',
-        'duration': '5:30',
-        'thumbnail': 'https://via.placeholder.com/280x140/1E4A7E/FFFFFF?text=Meditation',
-      },
-      {
-        'title': '10-Minute Yoga for Stress Relief',
-        'duration': '10:15',
-        'thumbnail': 'https://via.placeholder.com/280x140/5A7D2C/FFFFFF?text=Yoga',
-      },
-      {
-        'title': 'Breathing Techniques for Anxiety',
-        'duration': '8:42',
-        'thumbnail': 'https://via.placeholder.com/280x140/174880/FFFFFF?text=Breathing',
-      },
-    ];
-    
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: relatedContent.length,
-        itemBuilder: (context, index) {
-          var content = relatedContent[index];
-          return Container(
-            width: 280,
-            margin: EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withValues(alpha: 0.1),
-                  spreadRadius: 1,
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 140,
-                  width: 280,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                    image: DecorationImage(
-                      image: NetworkImage(content['thumbnail']),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        content['title'],
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF101828),
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.access_time,
-                            size: 12,
-                            color: Color(0xFF6B7280),
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            content['duration'],
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xFF6B7280),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
+   Widget _buildRelatedContent() {
+     // Sample related content - in a real app this would come from a data source
+     List<Map<String, dynamic>> relatedContent = [
+       {
+         'title': '5-Minute Mindfulness Meditation',
+         'duration': '5:30',
+         'thumbnail': 'assets/wellness_and_awareness/lady_yoga.png',
+         'contentType': 'video',
+         'id': '4',
+         'category': 'Mindfulness',
+         'tags': ['#Meditation', '#Mindfulness'],
+       },
+       {
+         'title': '10-Minute Yoga for Stress Relief',
+         'duration': '10:15',
+         'thumbnail': 'assets/wellness_and_awareness/hands.png',
+         'contentType': 'video',
+         'id': '5',
+         'category': 'Exercise',
+         'tags': ['#Yoga', '#StressRelief'],
+       },
+       {
+         'title': 'Breathing Techniques for Anxiety',
+         'duration': '8:42',
+         'thumbnail': 'assets/wellness_and_awareness/person_back.png',
+         'contentType': 'video',
+         'id': '6',
+         'category': 'Mental Wellness',
+         'tags': ['#Breathing', '#Anxiety'],
+       },
+     ];
+     
+     return SizedBox(
+       height: 250, // Increased height of cards
+       child: ListView.builder(
+         scrollDirection: Axis.horizontal,
+         itemCount: relatedContent.length,
+         itemBuilder: (context, index) {
+           var content = relatedContent[index];
+           return GestureDetector(
+             onTap: () {
+               // Navigate to the corresponding content page
+               if (content['contentType'] == 'article') {
+                 Navigator.push(
+                   context,
+                   MaterialPageRoute(
+                     builder: (context) => WellnessArticlePage(
+                       contentId: content['id'],
+                       title: content['title'],
+                       category: content['category'],
+                       readTimeMinutes: int.tryParse(content['duration'].split(':')[0]) ?? 5,
+                       thumbnailUrl: content['thumbnail'],
+                       tags: content['tags'],
+                     ),
+                   ),
+                 );
+               } else {
+                 Navigator.push(
+                   context,
+                   MaterialPageRoute(
+                     builder: (context) => WellnessVideoPage(
+                       contentId: content['id'],
+                       title: content['title'],
+                       category: content['category'],
+                       durationMinutes: int.tryParse(content['duration'].split(':')[0]) ?? 5,
+                       thumbnailUrl: content['thumbnail'],
+                       youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // Default placeholder
+                       tags: content['tags'],
+                     ),
+                   ),
+                 );
+               }
+             },
+             child: Container(
+               width: 280,
+               margin: EdgeInsets.only(right: 12),
+               decoration: BoxDecoration(
+                 color: Colors.white,
+                 borderRadius: BorderRadius.circular(12),
+                 boxShadow: [
+                   BoxShadow(
+                     color: Colors.grey.withValues(alpha: 0.1),
+                     spreadRadius: 1,
+                     blurRadius: 4,
+                     offset: Offset(0, 2),
+                   ),
+                 ],
+               ),
+               child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 mainAxisSize: MainAxisSize.min, // Add this to prevent overflow
+                 children: [
+                   Container(
+                     height: 180, // Increased height from 140 to 180
+                     width: 280,
+                     decoration: BoxDecoration(
+                       borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                       image: DecorationImage(
+                         image: AssetImage(content['thumbnail']),
+                         fit: BoxFit.cover,
+                       ),
+                     ),
+                   ),
+                   Expanded(
+                     child: Padding(
+                       padding: EdgeInsets.all(12),
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         mainAxisAlignment: MainAxisAlignment.start, // Add this to align content to top
+                         children: [
+                           Text(
+                             content['title'],
+                             style: TextStyle(
+                               fontSize: 14,
+                               fontWeight: FontWeight.w600,
+                               color: Color(0xFF101828),
+                             ),
+                             maxLines: 2,
+                             overflow: TextOverflow.ellipsis,
+                           ),
+                           SizedBox(height: 6),
+                           Row(
+                             children: [
+                               Icon(
+                                 Icons.access_time,
+                                 size: 12,
+                                 color: Color(0xFF6B7280),
+                               ),
+                               SizedBox(width: 4),
+                               Text(
+                                 content['duration'],
+                                 style: TextStyle(
+                                   fontSize: 12,
+                                   color: Color(0xFF6B7280),
+                                 ),
+                               ),
+                             ],
+                           ),
+                         ],
+                       ),
+                     ),
+                   ),
+                 ],
+               ),
+             ),
+           );
+         },
+       ),
+     );
   }
   
   Color _getCategoryColor(String category) {
