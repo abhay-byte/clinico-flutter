@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'book_appointment_screen.dart';
+import '../models/working_hours_model.dart';
 
 class DoctorProfileScreen extends StatelessWidget {
   final String doctorName;
@@ -10,6 +11,7 @@ class DoctorProfileScreen extends StatelessWidget {
   final double rating;
   final double distance;
   final bool isMale;
+  final List<WorkingHours> workingHours;
 
   const DoctorProfileScreen({
     super.key,
@@ -20,6 +22,7 @@ class DoctorProfileScreen extends StatelessWidget {
     required this.rating,
     required this.distance,
     required this.isMale,
+    this.workingHours = const [],
   });
 
   @override
@@ -566,8 +569,7 @@ class DoctorProfileScreen extends StatelessWidget {
                   doctorImage: isMale
                       ? 'assets/doctor_profile/doctor_male.png'
                       : 'assets/doctor_profile/doctor_female.png',
-                  clinicOpenHour: 9, // Start with the earliest shift
-                  clinicCloseHour: 22, // End with the latest shift
+                  workingHours: _parseWorkingHours(), // Pass the working hours
                 ),
               ),
             );
@@ -611,6 +613,25 @@ class DoctorProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+  
+  // Helper method to create working hours from string format like "10:30am - 12:30pm"
+  List<WorkingHours> _parseWorkingHours() {
+    // This is a simplified version - in a real app, you would have actual working hours data
+    // For now, we'll create some example working hours based on the chips shown in the UI
+    return [
+      WorkingHours(day: 'monday', startTime: '10:30am', endTime: '12:30pm'),
+      WorkingHours(day: 'monday', startTime: '4:30pm', endTime: '7:30pm'),
+      WorkingHours(day: 'monday', startTime: '8:00pm', endTime: '10:00pm'),
+      WorkingHours(day: 'tuesday', startTime: '9:00am', endTime: '11:00am'),
+      WorkingHours(day: 'tuesday', startTime: '4:30pm', endTime: '7:30pm'),
+      WorkingHours(day: 'wednesday', startTime: '10:30am', endTime: '12:30pm'),
+      WorkingHours(day: 'wednesday', startTime: '4:30pm', endTime: '7:30pm'),
+      WorkingHours(day: 'thursday', startTime: '9:00am', endTime: '11:00am'),
+      WorkingHours(day: 'thursday', startTime: '4:30pm', endTime: '7:30pm'),
+      WorkingHours(day: 'friday', startTime: '10:30am', endTime: '12:30pm'),
+      WorkingHours(day: 'friday', startTime: '4:30pm', endTime: '7:30pm'),
+    ];
   }
 
   // Helper method to create language chips

@@ -3,21 +3,20 @@ import 'package:intl/intl.dart';
 import '../constants/colors.dart';
 import 'home_screen.dart';
 import 'date_time_selection_screen.dart';
+import '../models/working_hours_model.dart';
 
 class BookAppointmentScreen extends StatefulWidget {
   final String doctorName;
   final String doctorSpecialization;
   final String doctorImage;
-  final int clinicOpenHour;
-  final int clinicCloseHour;
+  final List<WorkingHours> workingHours;
 
   const BookAppointmentScreen({
     super.key,
     required this.doctorName,
     required this.doctorSpecialization,
     required this.doctorImage,
-    this.clinicOpenHour = 10, // Default to 10 AM
-    this.clinicCloseHour = 21, // Default to 9 PM
+    this.workingHours = const [],
   });
 
   @override
@@ -30,21 +29,22 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   List<String> timeSlots = [];
   List<String> dates = [];
 
-  // Clinic hours configuration
-  late int clinicOpenHour;
-  late int clinicCloseHour;
-
   @override
   void initState() {
     super.initState();
-    clinicOpenHour = widget.clinicOpenHour;
-    clinicCloseHour = widget.clinicCloseHour;
     _generateDates();
     _generateTimeSlots();
   }
 
+  // Check if two dates are the same day
+  bool _isSameDay(DateTime date1, DateTime date2) {
+    return date1.day == date2.day &&
+        date1.month == date2.month &&
+        date1.year == date2.year;
+  }
+
   // Generate dates for the next 14 days
-  void _generateDates() {
+ void _generateDates() {
     List<String> newDates = [];
     DateTime now = DateTime.now();
     
@@ -67,7 +67,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     });
   }
 
-  // Generate time slots based on clinic hours and 30-minute intervals
+  // Generate time slots based on working hours and 30-minute intervals
   void _generateTimeSlots() {
     List<String> newTimeSlots = [];
     
@@ -75,53 +75,40 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     bool isToday = selectedDate == 'Today';
     DateTime now = DateTime.now();
     
-    int startHour = clinicOpenHour;
-    int endHour = clinicCloseHour;
+    // Determine the date for which we're generating slots
+    DateTime targetDate = _getDateForSelection(selectedDate);
     
-    if (isToday) {
-      // If it's today, start from current time
-      if (now.hour > endHour) {
-        // If current time is past closing time, return empty slots
-        setState(() {
-          timeSlots = [];
-        });
-        return;
-      }
-      
-      startHour = now.hour;
-      
-      // If current time is past the hour but before 30 min, add 30 min slot
-      if (now.minute > 0 && now.minute <= 30) {
-        String timeString = _formatTime(now.hour, 30);
-        if (!_isPastTimeForToday(timeString)) {
-          newTimeSlots.add(timeString);
-        }
-      } else if (now.minute > 30) {
-        // If current time is past 30 min, start from next hour
-        startHour = now.hour + 1;
-      }
-    }
+    // Get working hours for the selected date
+    List<WorkingHours> dayWorkingHours = _getWorkingHoursForDate(targetDate);
     
-    // Generate time slots in 30-minute intervals
-    for (int hour = startHour; hour <= endHour; hour++) {
-      // Add the :00 slot
-      if (hour == endHour) {
-        // At the end hour, only add the :00 slot
-        String timeString = _formatTime(hour, 0);
-        if (!_isPastTimeForToday(timeString)) {
-          newTimeSlots.add(timeString);
-        }
-      } else {
-        String timeString = _formatTime(hour, 0);
-        if (!_isPastTimeForToday(timeString)) {
-          newTimeSlots.add(timeString);
+    for (WorkingHours hours in dayWorkingHours) {
+      int startHour = WorkingHours.parseTimeToHours(hours.startTime);
+      int startMinute = int.tryParse(hours.startTime.split(':')[1].replaceAll(RegExp(r'[aApPmM]'), '')) ?? 0;
+      int endHour = WorkingHours.parseTimeToHours(hours.endTime);
+      int endMinute = int.tryParse(hours.endTime.split(':')[1].replaceAll(RegExp(r'[aApPmM]'), '')) ?? 0;
+      
+      // If it's today and the working hours have already passed, skip
+      if (isToday) {
+        int currentTimeInMinutes = now.hour * 60 + now.minute;
+        int workingStartInMinutes = startHour * 60 + startMinute;
+        int workingEndInMinutes = endHour * 60 + endMinute;
+        
+        // If the working hours have already ended today, skip
+        if (currentTimeInMinutes >= workingEndInMinutes) {
+          continue;
         }
         
-        // Add the :30 slot
-        timeString = _formatTime(hour, 30);
-        if (!_isPastTimeForToday(timeString)) {
-          newTimeSlots.add(timeString);
+        // If the working hours haven't started yet today, start from the working hour
+        if (currentTimeInMinutes < workingStartInMinutes) {
+          // Generate slots from working start time
+          _addTimeSlotsInRange(startHour, startMinute, endHour, endMinute, newTimeSlots, isToday, now);
+        } else {
+          // Generate slots from current time within the working hours
+          _addTimeSlotsFromCurrentTime(startHour, startMinute, endHour, endMinute, newTimeSlots, now);
         }
+      } else {
+        // For future dates, generate all slots within the working hours
+        _addTimeSlotsInRange(startHour, startMinute, endHour, endMinute, newTimeSlots, isToday, now);
       }
     }
     
@@ -212,9 +199,9 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color(0xFFF6F8FB),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF6F8FB),
         elevation: 0,
         leading: IconButton(
           icon: Image.asset(
@@ -231,13 +218,13 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Color(0xFF2F80ED),
           ),
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -245,16 +232,36 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
             Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: const Color(0xFFF5F5F5),
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: widget.doctorImage.isNotEmpty 
-                        ? AssetImage(widget.doctorImage) 
-                        : AssetImage('assets/book_appointment/doctor_logo.png'),
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Colors.grey[300]!,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 29,
+                      backgroundColor: Colors.grey[200],
+                      backgroundImage: widget.doctorImage.isNotEmpty
+                          ? AssetImage(widget.doctorImage)
+                          : AssetImage('assets/book_appointment/doctor_logo.png'),
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -262,19 +269,43 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.doctorName,
+                          'Dr. ${widget.doctorName}',
                           style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                             color: Colors.black,
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          widget.doctorSpecialization,
+                          '${widget.doctorSpecialization} | MBBS, MD | AB...',
                           style: const TextStyle(
-                            fontSize: 14,
+                            fontSize: 12,
                             color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Languages - Hindi, English',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Color(0xFF2F80ED),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: const Text(
+                            'Volunteer',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ],
@@ -285,94 +316,115 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Time Slot Selection
-            const Text(
-              'Select Time Slot',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 12.0,
-              runSpacing: 12.0,
-              children: timeSlots.map((time) {
-                bool isSelected = selectedTime == time;
-                return ChoiceChip(
-                  label: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (isSelected)
-                        Image.asset(
-                          'assets/book_appointment/tick.png',
-                          width: 14,
-                          height: 14,
-                          color: Colors.white,
-                        ),
-                      if (isSelected) const SizedBox(width: 4),
-                      Text(
-                        time,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: isSelected ? Colors.white : Colors.black,
-                        ),
-                      ),
-                    ],
+            // Time Slot Section
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Time Slot',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
-                  selected: isSelected,
-                  selectedColor: AppColors.b4,
-                  onSelected: (selected) {
-                    setState(() {
-                      selectedTime = selected ? time : null;
-                    });
+                ),
+                TextButton(
+                  onPressed: () {
+                    _handleViewAllPressed();
                   },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(
-                      color: isSelected ? AppColors.b4 : const Color(0xFFE0E0E0),
+                  child: const Text(
+                    'View all',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
-                  backgroundColor: const Color(0xFFF5F5F5),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                );
-              }).toList(),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 60,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: timeSlots.length,
+                itemBuilder: (context, index) {
+                  String time = timeSlots[index];
+                  bool isSelected = selectedTime == time;
+                  
+                  return Container(
+                    margin: EdgeInsets.only(right: index == timeSlots.length - 1 ? 0 : 12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isSelected ? const Color(0xFF2F80ED) : Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: !isSelected ? [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ] : null,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          // Check if this is today and the time has already passed
+                          if (selectedDate == 'Today') {
+                            if (_isPastTimeForToday(time)) {
+                              return; // Don't allow selecting past times
+                            }
+                          }
+                          setState(() {
+                            selectedTime = isSelected ? null : time;
+                          });
+                        },
+                        child: Center(
+                          child: Text(
+                            time,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: isSelected ? Colors.white : Colors.black,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 24),
-// Date Selection
-Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    const Text(
-      'Select Date',
-      style: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      ),
-    ),
-    TextButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const DateTimeSelectionScreen(),
-          ),
-        );
-      },
-      child: const Text(
-        'View All',
-        style: TextStyle(
-          fontSize: 14,
-          color: AppColors.b4,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    ),
-  ],
-),
-
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Date',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _handleViewAllPressed();
+                  },
+                  child: const Text(
+                    'View all',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 16),
             SizedBox(
               height: 60,
@@ -382,39 +434,50 @@ Row(
                 itemBuilder: (context, index) {
                   String date = dates[index];
                   bool isSelected = selectedDate == date;
+                  
                   return Container(
                     margin: EdgeInsets.only(right: index == dates.length - 1 ? 0 : 12),
-                    child: ChoiceChip(
-                      label: Text(
-                        date,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: isSelected ? Colors.white : Colors.black,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: isSelected ? const Color(0xFF2F80ED) : Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: !isSelected ? [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 1,
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ] : null,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedDate = isSelected ? null : date;
+                            // Regenerate time slots when date changes
+                            _generateTimeSlots();
+                          });
+                        },
+                        child: Center(
+                          child: Text(
+                            date,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: isSelected ? Colors.white : Colors.black,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w400,
+                            ),
+                          ),
                         ),
                       ),
-                      selected: isSelected,
-                      selectedColor: AppColors.b4,
-                      onSelected: (selected) {
-                        setState(() {
-                          selectedDate = selected ? date : null;
-                          // Regenerate time slots when date changes
-                          _generateTimeSlots();
-                        });
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(
-                          color: isSelected ? AppColors.b4 : const Color(0xFFE0E0E0),
-                        ),
-                      ),
-                      backgroundColor: const Color(0xFFF5F5F5),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     ),
                   );
                 },
               ),
             ),
             const SizedBox(height: 24),
+
+            const SizedBox(height: 20),
 
             // Note Text Block
             Container(
@@ -426,17 +489,17 @@ Row(
               child: Text(
                 'Note:- You will get a call from the doctor in app, on your appointment date and specified time.',
                 style: const TextStyle(
-                  fontSize: 14,
-                  color: Colors.black,
+                  fontSize: 12,
+                  color: Colors.grey,
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
 
             // Confirm Appointment Button
             SizedBox(
               width: double.infinity,
-              height: 56,
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   if (selectedTime == null || selectedDate == null) {
@@ -457,7 +520,7 @@ Row(
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.b4,
+                  backgroundColor: const Color(0xFF2F80ED),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -510,7 +573,7 @@ Row(
                     Navigator.pop(context);
                   },
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(30),
                     side: BorderSide(
                       color: isSelected ? AppColors.b4 : const Color(0xFFE0E0E0),
                     ),
@@ -532,6 +595,188 @@ Row(
         );
       },
     );
+  }
+
+  // Helper method to get the actual date for the selected date string
+  DateTime _getDateForSelection(String? dateSelection) {
+    if (dateSelection == null) return DateTime.now();
+    
+    if (dateSelection == 'Today') {
+      return DateTime.now();
+    } else if (dateSelection == 'Tomorrow') {
+      return DateTime.now().add(Duration(days: 1));
+    } else {
+      // Parse the date string in format like "1st Jan", "2nd Feb", etc.
+      // This is a simplified version - in a real app you'd need more robust parsing
+      DateTime now = DateTime.now();
+      
+      // Try to parse the format "1st Jan", "2nd Feb", etc.
+      try {
+        // Extract day and month from the format "1st Jan"
+        List<String> parts = dateSelection.split(' ');
+        if (parts.length == 2) {
+          String dayWithSuffix = parts[0];
+          String month = parts[1];
+          
+          // Extract numeric day from "1st", "2nd", "3rd", "4th", etc.
+          String dayString = dayWithSuffix.replaceAll(RegExp(r'[^\d]'), '');
+          int day = int.tryParse(dayString) ?? 1;
+          
+          // Find the month number
+          int monthNumber = _getMonthNumber(month);
+          
+          // Create the date in the current year
+          return DateTime(now.year, monthNumber, day);
+        }
+      } catch (e) {
+        // If parsing fails, return a default date
+        return DateTime(now.year, now.month, now.day + 2);
+      }
+      
+      // If parsing fails, return a default date
+      return DateTime(now.year, now.month, now.day + 2);
+    }
+  }
+  
+  // Helper method to get month number from month name
+  int _getMonthNumber(String monthName) {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    
+    for (int i = 0; i < months.length; i++) {
+      if (months[i] == monthName) {
+        return i + 1;
+      }
+    }
+    
+    return 1; // Default to January if month not found
+  }
+
+  // Helper method to get working hours for a specific date
+  List<WorkingHours> _getWorkingHoursForDate(DateTime date) {
+    // Map weekday to string name
+    String dayName = _getDayName(date);
+    return widget.workingHours.where((hour) => hour.day.toLowerCase() == dayName.toLowerCase()).toList();
+  }
+
+  String _getDayName(DateTime date) {
+    switch (date.weekday) {
+      case 1: return 'monday';
+      case 2: return 'tuesday';
+      case 3: return 'wednesday';
+      case 4: return 'thursday';
+      case 5: return 'friday';
+      case 6: return 'saturday';
+      case 7: return 'sunday';
+      default: return '';
+    }
+  }
+
+  // Helper method to handle the View All button press
+ void _handleViewAllPressed() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DateTimeSelectionScreen(
+          workingHours: widget.workingHours,
+        ),
+      ),
+    );
+    
+    if (result != null) {
+      // Update selected date and time based on the result
+      DateTime selectedDateTime = result['date'];
+      String selectedTimeString = result['time'];
+      
+      // Update the selected date in the UI
+      String dateDisplay = '';
+      bool isToday = _isSameDay(selectedDateTime, DateTime.now());
+      bool isTomorrow = _isSameDay(selectedDateTime, DateTime.now().add(const Duration(days: 1)));
+      
+      if (isToday) {
+        dateDisplay = 'Today';
+      } else if (isTomorrow) {
+        dateDisplay = 'Tomorrow';
+      } else {
+        String dayWithSuffix = _getDayWithSuffix(selectedDateTime.day);
+        String month = DateFormat('MMM').format(selectedDateTime);
+        dateDisplay = '$dayWithSuffix $month';
+      }
+      
+      setState(() {
+        selectedDate = dateDisplay;
+        selectedTime = selectedTimeString;
+      });
+      
+      // Regenerate time slots based on the selected date
+      _generateTimeSlots();
+    }
+ }
+
+  // Helper method to add time slots in a specific range
+ void _addTimeSlotsInRange(int startHour, int startMinute, int endHour, int endMinute, List<String> timeSlots, bool isToday, DateTime now) {
+    int currentHour = startHour;
+    int currentMinute = startMinute;
+    
+    while (currentHour < endHour || (currentHour == endHour && currentMinute < endMinute)) {
+      String timeString = _formatTime(currentHour, currentMinute);
+      
+      // If it's today, check if the time has already passed
+      if (!isToday || !_isPastTimeForToday(timeString)) {
+        timeSlots.add(timeString);
+      }
+      
+      // Increment by 30 minutes
+      currentMinute += 30;
+      if (currentMinute >= 60) {
+        currentMinute = 0;
+        currentHour++;
+      }
+    }
+  }
+
+  // Helper method to add time slots from current time within working hours
+  void _addTimeSlotsFromCurrentTime(int startHour, int startMinute, int endHour, int endMinute, List<String> timeSlots, DateTime now) {
+    // Start from current time or working start time, whichever is later
+    int currentHour = now.hour;
+    int currentMinute = now.minute;
+    
+    // If current time is before the working start time, use working start time
+    int workingStartInMinutes = startHour * 60 + startMinute;
+    int currentInMinutes = currentHour * 60 + currentMinute;
+    
+    if (currentInMinutes < workingStartInMinutes) {
+      currentHour = startHour;
+      currentMinute = startMinute;
+    } else {
+      // Round up to the next 30-minute slot if needed
+      if (currentMinute > 0 && currentMinute <= 30) {
+        currentMinute = 30;
+      } else if (currentMinute > 30) {
+        currentMinute = 0;
+        currentHour++;
+      }
+    }
+    
+    int endInMinutes = endHour * 60 + endMinute;
+    
+    while (currentHour < endHour || (currentHour == endHour && currentMinute < endMinute)) {
+      int currentInMinutes = currentHour * 60 + currentMinute;
+      
+      if (currentInMinutes >= workingStartInMinutes && currentInMinutes < endInMinutes) {
+        String timeString = _formatTime(currentHour, currentMinute);
+        timeSlots.add(timeString);
+      }
+      
+      // Increment by 30 minutes
+      currentMinute += 30;
+      if (currentMinute >= 60) {
+        currentMinute = 0;
+        currentHour++;
+      }
+    }
   }
 }
 
