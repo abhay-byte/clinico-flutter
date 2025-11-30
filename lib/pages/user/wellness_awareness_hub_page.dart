@@ -165,8 +165,11 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
   }
 
   void _filterContent() {
+    // Get the current tab based on the tab controller index
+    String currentTab = _tabController.index == 0 ? 'mental_wellness' : 'health_awareness';
+    
     List<WellnessContent> contentToShow = _allContent
-        .where((content) => content.tab == (widget.initialTab == 0 ? 'mental_wellness' : 'health_awareness'))
+        .where((content) => content.tab == currentTab)
         .toList();
 
     if (_searchQuery.isNotEmpty) {
@@ -204,7 +207,7 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
             // App Bar with the same design as Medical Vault
             Container(
               width: double.infinity,
-              height: 156, // 156px height as specified
+              height: 160, // Increased height from default to 160
               decoration: BoxDecoration(
                 color: Color(0xFF174880), // Primary blue
                 borderRadius: BorderRadius.only(
@@ -213,10 +216,10 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
                 ),
               ),
               padding: EdgeInsets.only(
-                top: 44, // 44px top padding for status bar
+                top: 44, // 4px top padding for status bar
                 left: 16,
                 right: 16,
-                bottom: 20, // 20px bottom padding
+                bottom: 16,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,30 +240,32 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
                       ),
                       SizedBox(width: 8),
                       // Title and Subtitle
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Wellness & Awareness Hub",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600, // Semi-bold
-                              color: Colors.white,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Wellness & Awareness Hub",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600, // Semi-bold
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          Text(
-                            "Your health education center",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white.withOpacity(0.7),
+                            Text(
+                              "Your health education center",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white.withOpacity(0.7),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: 8), // Reduced from 12
                   // Search Bar
                   Container(
                     height: 40,
@@ -269,7 +274,6 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
                       borderRadius: BorderRadius.circular(20), // Fully rounded
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 12),
-                    margin: EdgeInsets.only(top: 12), // 12px margin from subtitle
                     child: Row(
                       children: [
                         Icon(
@@ -288,7 +292,7 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
                                 color: Colors.white.withOpacity(0.6), // 60% opacity
                                 fontSize: 14,
                               ),
-                              contentPadding: EdgeInsets.only(top: 10, bottom: 10), // 8px padding from icon
+                              contentPadding: EdgeInsets.only(top: 8, bottom: 8), // Reduced padding
                             ),
                             style: TextStyle(
                               color: Colors.white,
@@ -308,11 +312,12 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
             // Tab Bar
             Container(
               height: 56,
+              padding: EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05), // 5% opacity
+                    color: Colors.black.withOpacity(0.05),
                     offset: Offset(0, 2),
                     blurRadius: 4,
                   ),
@@ -321,39 +326,45 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
               child: TabBar(
                 controller: _tabController,
                 indicator: BoxDecoration(
-                  color: Color(0xFFC8E6A0), // Light green
+                  color: Color(0xFFC8E6A0),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                labelColor: Color(0xFF2F4F1F), // Dark green
-                unselectedLabelColor: Color(0xFF6B7280), // Gray
+                labelColor: Color(0xFF2F4F1F),
+                unselectedLabelColor: Color(0xFF6B7280),
                 labelStyle: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w600, // Semi-bold
+                  fontWeight: FontWeight.w600,
                 ),
                 unselectedLabelStyle: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w500, // Medium
+                  fontWeight: FontWeight.w500,
                 ),
                 tabs: [
-                  Container(
-                    height: 40,
-                    padding: EdgeInsets.symmetric(horizontal: 10), // 10px padding
-                    child: Tab(
-                      text: 'Mental Wellness',
-                      icon: Icon(
-                        Icons.psychology,
-                        size: 18,
+                  Tab(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.psychology, size: 16),
+                          SizedBox(width: 4),
+                          Text('Mental Wellness', style: TextStyle(fontSize: 12)),
+                        ],
                       ),
                     ),
                   ),
-                  Container(
-                    height: 40,
-                    padding: EdgeInsets.symmetric(horizontal: 10), // 10px padding
-                    child: Tab(
-                      text: 'Health Awareness',
-                      icon: Icon(
-                        Icons.health_and_safety,
-                        size: 18,
+                  Tab(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.health_and_safety, size: 16),
+                          SizedBox(width: 4),
+                          Text('Health Awareness', style: TextStyle(fontSize: 12)),
+                        ],
                       ),
                     ),
                   ),
@@ -362,7 +373,9 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
                   setState(() {
                     _selectedCategory = 'All';
                   });
-                  _filterContent();
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    _filterContent();
+                  });
                 },
               ),
             ),
@@ -416,13 +429,8 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
                       if (_filteredContent.isEmpty)
                         _buildEmptyState()
                       else
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: _filteredContent.length,
-                          itemBuilder: (context, index) {
-                            return _buildContentCard(_filteredContent[index]);
-                          },
+                        Column(
+                          children: _filteredContent.map((content) => _buildContentCard(content)).toList(),
                         ),
                       
                       SizedBox(height: 20), // Add bottom padding
@@ -679,8 +687,10 @@ class _WellnessAwarenessHubPageState extends State<WellnessAwarenessHubPage> wit
 
   Widget _buildEmptyState() {
     return Container(
-      margin: EdgeInsets.only(top: 40),
+      margin: EdgeInsets.only(top: 60), // Increased top margin
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
             Icons.search_off,
