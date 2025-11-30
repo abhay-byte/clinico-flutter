@@ -101,12 +101,11 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
               // Main Content
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(top: 0), // No top padding as overlap is handled by negative margin
                   child: Column(
                     children: [
-                      // Profile Card Section - overlapping with header
+                      // Profile Card Section - overlapping with header using negative margin
                       Container(
-                        margin: const EdgeInsets.only(left: 16, right: 16, top: -20), // Negative top margin for overlap
+                        margin: const EdgeInsets.only(left: 16, right: 16, top: -60), // Negative top margin to overlap with header
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: const BorderRadius.only(
@@ -890,13 +889,13 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     );
   }
 
- Widget _buildInfoRow(String label, String value) {
+  Widget _buildInfoRow(String label, String value) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-           color: Color(0xFFE5E5E5), // Light grey divider
+            color: Color(0xFFE5E5E5), // Light grey divider
             width: 1,
           ),
         ),
