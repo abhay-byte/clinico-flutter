@@ -14,95 +14,81 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light, // For light status bar icons
       child: Scaffold(
-        backgroundColor: const Color(0xFFEBF1FA),
+        backgroundColor: const Color(0xFFF5F7FA), // Background color
         body: SafeArea(
           child: Column(
             children: [
-              // Header Bar with curved bottom
+              // Header Section with curved bottom
               Container(
-                height: 130, // Increased height to accommodate curve
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Color(0xFF174880), // Dark blue background
+                height: 120, // Fixed height for the header
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFF1E4A7E), // Header gradient start
+                      Color(0xFF2563B4), // Header gradient end
+                    ],
+                  ),
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30), // Curved bottom corners
-                    bottomRight: Radius.circular(30), // Curved bottom corners
+                    bottomLeft: Radius.circular(25),
+                    bottomRight: Radius.circular(25),
                   ),
                 ),
-                child: Stack(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                child: Row(
                   children: [
                     // Back Button
-                    Positioned(
-                      left: 16,
-                      top: 30, // Adjusted position for increased height
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                        ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 24,
                       ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
                     ),
+                    SizedBox(width: 8),
                     // Title and Subtitle
-                    Positioned(
-                      left: 76, // Account for back button width + padding
-                      top: 34, // Adjusted position for increased height
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Profile Details",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white,
-                            ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Profile Details",
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
-                          const SizedBox(height: 4),
-                          Text(
-                            "Your health profile",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white.withValues(alpha: 0.7),
-                            ),
+                        ),
+                        Text(
+                          "Your health profile",
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white.withValues(alpha: 0.7),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    // Edit Icon
-                    Positioned(
-                      right: 16,
-                      top: 30, // Adjusted position for increased height
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 24,
-                        ),
+                    Spacer(), // Push edit button to the right
+                    // Edit Button
+                    IconButton(
+                      icon: Icon(
+                        Icons.edit,
+                        color: Colors.white,
+                        size: 24,
                       ),
+                      onPressed: () {
+                        // Add edit functionality here
+                      },
                     ),
                   ],
                 ),
               ),
-              // Main Content
+              // Main Content - using Expanded to fill remaining space
               Expanded(
                 child: Stack(
                   children: [
@@ -114,9 +100,9 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                         color: Color(0xFFEBF1FA), // Same background color
                       ),
                     ),
-                    // Scrollable content with padding to account for header
+                    // Scrollable content with reduced padding
                     SingleChildScrollView(
-                      padding: const EdgeInsets.only(top: 60), // Space to account for overlap effect
+                      padding: const EdgeInsets.only(top: 20), // Reduced top padding
                       child: Column(
                         children: [
                           // Profile Card Section - appears to overlap by starting higher
@@ -346,11 +332,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                               color: const Color(0xFFEBF1FA), // Light blue background
                                               borderRadius: BorderRadius.circular(10),
                                             ),
-                                            child: Image.asset(
-                                              'assets/user/user_details/blood_icon.png',
-                                              width: 24,
-                                              height: 24,
+                                            child: Icon(
+                                              Icons.bloodtype,
                                               color: const Color(0xFF174880),
+                                              size: 24,
                                             ),
                                           ),
                                           const SizedBox(height: 4),
@@ -482,11 +467,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                   ),
                                   child: Row(
                                     children: [
-                                      Image.asset(
-                                        'assets/user/user_details/phone_icon.png',
-                                        width: 20,
-                                        height: 20,
+                                      Icon(
+                                        Icons.phone,
                                         color: const Color(0xFF174880),
+                                        size: 20,
                                       ),
                                       const SizedBox(width: 8),
                                       const Text(
@@ -641,7 +625,7 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       const Text(
-                                        "Meet Clinico!",
+                                        "Meet Elphie!",
                                         style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.w700,
@@ -688,11 +672,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                   ),
                                   child: Row(
                                     children: [
-                                      Image.asset(
-                                        'assets/user/user_details/heart_icon.png',
-                                        width: 20,
-                                        height: 20,
+                                      Icon(
+                                        Icons.favorite,
                                         color: const Color(0xFF174880),
+                                        size: 20,
                                       ),
                                       const SizedBox(width: 8),
                                       const Text(
@@ -723,11 +706,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                           color: const Color(0xFFFFE5E5), // Light red background
                                           borderRadius: BorderRadius.circular(22),
                                         ),
-                                        child: Image.asset(
-                                          'assets/user/user_details/allergie_icon.png',
-                                          width: 24,
-                                          height: 24,
+                                        child: Icon(
+                                          Icons.warning,
                                           color: Colors.red,
+                                          size: 24,
                                         ),
                                       ),
                                       const SizedBox(width: 16),
@@ -777,11 +759,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                           color: const Color(0xFFFFF9E5), // Light yellow background
                                           borderRadius: BorderRadius.circular(22),
                                         ),
-                                        child: Image.asset(
-                                          'assets/user/user_details/chronic_condition_icon.png',
-                                          width: 24,
-                                          height: 24,
+                                        child: Icon(
+                                          Icons.medical_services,
                                           color: Colors.orange,
+                                          size: 24,
                                         ),
                                       ),
                                       const SizedBox(width: 16),
@@ -831,11 +812,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                           color: const Color(0xFFE5F3FF), // Light blue background
                                           borderRadius: BorderRadius.circular(22),
                                         ),
-                                        child: Image.asset(
-                                          'assets/user/user_details/medicine_icon.png',
-                                          width: 24,
-                                          height: 24,
+                                        child: Icon(
+                                          Icons.medication,
                                           color: const Color(0xFF248BEB),
+                                          size: 24,
                                         ),
                                       ),
                                       const SizedBox(width: 16),
@@ -885,11 +865,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                                           color: const Color(0xFFE8FFE5), // Light green background
                                           borderRadius: BorderRadius.circular(22),
                                         ),
-                                        child: Image.asset(
-                                          'assets/user/user_details/heart_icon.png',
-                                          width: 24,
-                                          height: 24,
+                                        child: Icon(
+                                          Icons.favorite,
                                           color: Colors.green,
+                                          size: 24,
                                         ),
                                       ),
                                       const SizedBox(width: 16),
@@ -936,11 +915,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
                             ),
                             child: Row(
                               children: [
-                                Image.asset(
-                                  'assets/user/user_details/data_secure_icon.png',
-                                  width: 24,
-                                  height: 24,
+                                Icon(
+                                  Icons.shield,
                                   color: const Color(0xFF6A7282),
+                                  size: 24,
                                 ),
                                 const SizedBox(width: 16),
                                 Expanded(
@@ -1082,10 +1060,10 @@ class _ProfileDetailsPageState extends State<ProfileDetailsPage> {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/user/user_details/blood_icon.png',
-                width: 16,
-                height: 16,
+              Icon(
+                Icons.bloodtype,
+                color: const Color(0xFF174880),
+                size: 16,
               ),
               const SizedBox(width: 4),
               const Text(
