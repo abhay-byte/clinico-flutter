@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'profile_details_page.dart';
 import 'medicine_reminders_page.dart';
 import 'settings_page.dart';
+import 'help_and_support_page.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -386,6 +387,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       subtitle: "FAQs & contact support",
                       onTap: () {
                         // Navigate to Help & Support page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HelpAndSupportPage(),
+                          ),
+                        );
                       },
                     ),
                     

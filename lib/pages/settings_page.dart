@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'notification_settings_page.dart';
 import 'language_preference_variant_page.dart';
 import 'reset_password_variant_page.dart';
+import 'help_and_support_page.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -196,6 +197,12 @@ class _SettingsPageState extends State<SettingsPage> {
                           subtitle: "FAQs, guides, and tutorials",
                           onTap: () {
                             // Navigate to help center screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => HelpAndSupportPage(),
+                              ),
+                            );
                           },
                         ),
                         
