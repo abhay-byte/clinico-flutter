@@ -38,6 +38,10 @@ class PrivacySecurityPage extends StatelessWidget {
               height: 110, // Fixed height for the header
               decoration: BoxDecoration(
                 color: Color(0xFF174880), // Dark blue background
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25),
+                ),
               ),
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
               child: Row(
