@@ -8,15 +8,16 @@ import 'medical_vault_page.dart';
 import 'document_list_view.dart';
 import 'user/wellness_awareness_hub_page.dart';
 import 'appointments/my_appointments_page.dart';
+import '../screens/main_app_screen.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
-  _UserProfilePageState createState() => _UserProfilePageState();
+ _UserProfilePageState createState() => _UserProfilePageState();
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFEBF1FA), // bg1
       body: SafeArea(
@@ -36,7 +37,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF174880), // b1
+                      color: Color(0xFF17480), // b1
                     ),
                   ),
                   // Logo/Avatar - Using brand_logo.png as requested
@@ -285,10 +286,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       title: "Appointments",
                       subtitle: "Manage doctor appointments",
                       onTap: () {
-                        Navigator.push(
-                          context,
+                        // Go back to the main app screen and set the index to appointments (index 2)
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => MyAppointmentsPage(),
+                            builder: (context) => MainAppScreen(initialIndex: 2),
                           ),
                         );
                       },

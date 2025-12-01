@@ -2,14 +2,24 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import '../pages/user_profile_page.dart';
 import '../pages/appointments/my_appointments_page.dart';
-
 class MainAppScreen extends StatefulWidget {
+  final int initialIndex;
+  
+  const MainAppScreen({Key? key, this.initialIndex = 0}) : super(key: key);
+  
   @override
   _MainAppScreenState createState() => _MainAppScreenState();
 }
 
 class _MainAppScreenState extends State<MainAppScreen> {
-  int _currentIndex = 0;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
+
   List<Widget> get _children => [
     HomeScreen(), // Home
     _buildPlaceholderScreen('Messages', Colors.blue), // Messages placeholder - would implement actual messages screen
