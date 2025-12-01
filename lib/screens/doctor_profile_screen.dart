@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'book_appointment_screen.dart';
+import '../models/working_hours_model.dart';
 
 class DoctorProfileScreen extends StatelessWidget {
   final String doctorName;
@@ -10,6 +11,7 @@ class DoctorProfileScreen extends StatelessWidget {
   final double rating;
   final double distance;
   final bool isMale;
+  final List<WorkingHours> workingHours;
 
   const DoctorProfileScreen({
     super.key,
@@ -20,6 +22,7 @@ class DoctorProfileScreen extends StatelessWidget {
     required this.rating,
     required this.distance,
     required this.isMale,
+    this.workingHours = const [],
   });
 
   @override
@@ -132,7 +135,10 @@ class DoctorProfileScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.g1, // Green for verified
                           borderRadius: BorderRadius.circular(16),
@@ -148,7 +154,10 @@ class DoctorProfileScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.b4, // Blue for volunteer
                           borderRadius: BorderRadius.circular(16),
@@ -278,7 +287,8 @@ class DoctorProfileScreen extends StatelessWidget {
                                   const Text(
                                     '15 Years',
                                     style: TextStyle(
-                                      fontSize: 14, // Reduced font size to prevent overflow
+                                      fontSize:
+                                          14, // Reduced font size to prevent overflow
                                       fontWeight: FontWeight.w600,
                                       color: AppColors.ge1,
                                     ),
@@ -362,7 +372,10 @@ class DoctorProfileScreen extends StatelessWidget {
                         const SizedBox(width: 8),
                         _buildWorkingHourChip('8:00pm - 10:00pm', false),
                         const SizedBox(width: 8),
-                        _buildWorkingHourChip('Tomorrow 9:00am - 11:00am', false),
+                        _buildWorkingHourChip(
+                          'Tomorrow 9:00am - 11:00am',
+                          false,
+                        ),
                       ],
                     ),
                   ),
@@ -446,14 +459,18 @@ class DoctorProfileScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: 3,
                       itemBuilder: (context, index) {
-                        List<String> names = ['John Doe', 'Jane Smith', 'Robert Johnson'];
+                        List<String> names = [
+                          'John Doe',
+                          'Jane Smith',
+                          'Robert Johnson',
+                        ];
                         List<String> reviews = [
                           'Great doctor! Very patient and knowledgeable. Explained everything clearly.',
                           'Excellent treatment and follow-up care. Highly recommended!',
-                          'Professional and caring. Made me feel comfortable during the consultation.'
+                          'Professional and caring. Made me feel comfortable during the consultation.',
                         ];
                         List<int> ratings = [5, 4, 5];
-                        
+
                         return Container(
                           width: 280,
                           margin: const EdgeInsets.only(right: 12),
@@ -552,6 +569,7 @@ class DoctorProfileScreen extends StatelessWidget {
                   doctorImage: isMale
                       ? 'assets/doctor_profile/doctor_male.png'
                       : 'assets/doctor_profile/doctor_female.png',
+                  workingHours: _parseWorkingHours(), // Pass the working hours
                 ),
               ),
             );
@@ -584,9 +602,7 @@ class DoctorProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected ? AppColors.b4 : AppColors.bg1,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isSelected ? AppColors.b4 : AppColors.ge3,
-        ),
+        border: Border.all(color: isSelected ? AppColors.b4 : AppColors.ge3),
       ),
       child: Text(
         time,
@@ -598,6 +614,25 @@ class DoctorProfileScreen extends StatelessWidget {
       ),
     );
   }
+  
+  // Helper method to create working hours from string format like "10:30am - 12:30pm"
+  List<WorkingHours> _parseWorkingHours() {
+    // This is a simplified version - in a real app, you would have actual working hours data
+    // For now, we'll create some example working hours based on the chips shown in the UI
+    return [
+      WorkingHours(day: 'monday', startTime: '10:30am', endTime: '12:30pm'),
+      WorkingHours(day: 'monday', startTime: '4:30pm', endTime: '7:30pm'),
+      WorkingHours(day: 'monday', startTime: '8:00pm', endTime: '10:00pm'),
+      WorkingHours(day: 'tuesday', startTime: '9:00am', endTime: '11:00am'),
+      WorkingHours(day: 'tuesday', startTime: '4:30pm', endTime: '7:30pm'),
+      WorkingHours(day: 'wednesday', startTime: '10:30am', endTime: '12:30pm'),
+      WorkingHours(day: 'wednesday', startTime: '4:30pm', endTime: '7:30pm'),
+      WorkingHours(day: 'thursday', startTime: '9:00am', endTime: '11:00am'),
+      WorkingHours(day: 'thursday', startTime: '4:30pm', endTime: '7:30pm'),
+      WorkingHours(day: 'friday', startTime: '10:30am', endTime: '12:30pm'),
+      WorkingHours(day: 'friday', startTime: '4:30pm', endTime: '7:30pm'),
+    ];
+  }
 
   // Helper method to create language chips
   Widget _buildLanguageChip(String language, bool isSelected) {
@@ -606,9 +641,7 @@ class DoctorProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected ? AppColors.b4 : AppColors.bg1,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: isSelected ? AppColors.b4 : AppColors.ge3,
-        ),
+        border: Border.all(color: isSelected ? AppColors.b4 : AppColors.ge3),
       ),
       child: Text(
         language,
