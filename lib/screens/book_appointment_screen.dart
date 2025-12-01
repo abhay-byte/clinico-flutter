@@ -21,7 +21,7 @@ class BookAppointmentScreen extends StatefulWidget {
   });
 
   @override
- _BookAppointmentScreenState createState() => _BookAppointmentScreenState();
+  _BookAppointmentScreenState createState() => _BookAppointmentScreenState();
 }
 
 class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
@@ -29,22 +29,23 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   String? selectedDate;
   List<String> timeSlots = [];
   List<String> dates = [];
-
-  // Sample time slots
-  final List<String> timeSlots = [
-    '10:00 AM',
-    '10:30 AM',
-    '11:00 AM',
-    '11:30 AM',
-    '12:00 PM',
-    '12:30 PM',
-    '2:00 PM',
-    '2:30 PM',
-    '3:00 PM',
-    '3:30 PM',
-    '4:00 PM',
-    '4:30 PM',
-  ];
+ 
+  void _initializeTimeSlots() {
+    timeSlots = [
+      '10:00 AM',
+      '10:30 AM',
+      '11:00 AM',
+      '11:30 AM',
+      '12:00 PM',
+      '12:30 PM',
+      '2:00 PM',
+      '2:30 PM',
+      '3:00 PM',
+      '3:30 PM',
+      '4:00 PM',
+      '4:30 PM',
+    ];
+  }
 
   // Check if two dates are the same day
   bool _isSameDay(DateTime date1, DateTime date2) {
@@ -54,7 +55,14 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   }
 
   // Generate dates for the next 14 days
- void _generateDates() {
+  @override
+  void initState() {
+    super.initState();
+    _initializeTimeSlots();
+    _generateDates();
+  }
+
+  void _generateDates() {
     List<String> newDates = [];
     DateTime now = DateTime.now();
     
@@ -204,9 +212,9 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
       default:
         return '${day}th';
     }
-  }
+ }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8FB),
@@ -549,9 +557,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         ),
       ),
     );
- }
   }
-
+ 
   void _showDateSelectionDialog() {
     showDialog(
       context: context,
@@ -608,7 +615,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     );
   }
 
-  // Helper method to get the actual date for the selected date string
+ // Helper method to get the actual date for the selected date string
   DateTime _getDateForSelection(String? dateSelection) {
     if (dateSelection == null) return DateTime.now();
     
@@ -672,7 +679,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     return widget.workingHours.where((hour) => hour.day.toLowerCase() == dayName.toLowerCase()).toList();
   }
 
-  String _getDayName(DateTime date) {
+ String _getDayName(DateTime date) {
     switch (date.weekday) {
       case 1: return 'monday';
       case 2: return 'tuesday';
@@ -725,8 +732,8 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
       _generateTimeSlots();
     }
  }
-
-  // Helper method to add time slots in a specific range
+ 
+ // Helper method to add time slots in a specific range
  void _addTimeSlotsInRange(int startHour, int startMinute, int endHour, int endMinute, List<String> timeSlots, bool isToday, DateTime now) {
     int currentHour = startHour;
     int currentMinute = startMinute;
@@ -746,7 +753,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         currentHour++;
       }
     }
-  }
+ }
 
   // Helper method to add time slots from current time within working hours
   void _addTimeSlotsFromCurrentTime(int startHour, int startMinute, int endHour, int endMinute, List<String> timeSlots, DateTime now) {
@@ -788,14 +795,14 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         currentHour++;
       }
     }
-  }
+ }
 }
 
 class AppointmentConfirmationScreen extends StatelessWidget {
   const AppointmentConfirmationScreen({super.key});
 
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
