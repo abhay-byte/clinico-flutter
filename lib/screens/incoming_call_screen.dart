@@ -119,30 +119,52 @@ class _IncomingCallScreenState extends State<IncomingCallScreen>
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // Left: 'Decline' text
-                        const Expanded(
+                        Expanded(
                           child: Center(
-                            child: Text(
-                              'Decline',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.call_end,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Decline',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                         // Spacer in the middle (as requested in HStack with Spacer)
                         const Spacer(),
                         // Right: 'Accept' text
-                        const Expanded(
+                        Expanded(
                           child: Center(
-                            child: Text(
-                              'Accept',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                              ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.phone,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Accept',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -238,6 +260,23 @@ class _DraggableCallButtonState extends State<DraggableCallButton>
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
+        // Change the button color based on drag position
+        Color buttonColor = Colors.white;
+        IconData buttonIcon = Icons.phone;
+        Color iconColor = const Color(0xFF22C55E); // Green for accept
+
+        if (_xDragOffset < -50) {
+          // When dragging left, change to decline color/icon
+          buttonColor = const Color(0xFFEF4444); // Red for decline
+          buttonIcon = Icons.call_end;
+          iconColor = Colors.white;
+        } else if (_xDragOffset > 50) {
+          // When dragging right, keep accept color/icon but make it more prominent
+          buttonColor = const Color(0xFF22C55E); // Green for accept
+          buttonIcon = Icons.phone;
+          iconColor = Colors.white;
+        }
+
         return Transform.translate(
           offset: Offset(
             _xDragOffset,
@@ -278,7 +317,7 @@ class _DraggableCallButtonState extends State<DraggableCallButton>
               width: widget.size,
               height: widget.size,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: buttonColor,
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
@@ -289,11 +328,7 @@ class _DraggableCallButtonState extends State<DraggableCallButton>
                 ],
               ),
               child: Center(
-                child: Icon(
-                  Icons.phone,
-                  color: const Color(0xFF22C55E), // Green color
-                  size: 35,
-                ),
+                child: Icon(buttonIcon, color: iconColor, size: 35),
               ),
             ),
           ),

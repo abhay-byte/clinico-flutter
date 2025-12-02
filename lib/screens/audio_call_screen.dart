@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'in_audio_call_screen.dart';
 
+enum CallStatus { incoming, active, ended }
+
 class AudioCallScreen extends StatefulWidget {
   final String doctorName;
   final String doctorSpecialization;
@@ -30,6 +32,8 @@ class AudioCallScreen extends StatefulWidget {
 }
 
 class _AudioCallScreenState extends State<AudioCallScreen> {
+  CallStatus callStatus = CallStatus.incoming;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,26 +50,34 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
               ],
             ),
           ),
-          child: Column(
-            children: [
-              // Header with app logo
-              _buildHeader(),
-
-              // Spacer
-              const SizedBox(height: 40),
-
-              // Doctor identification section
-              _buildDoctorInfo(),
-
-              // Spacer
-              const SizedBox(height: 60),
-
-              // Call controls section
-              _buildCallControls(),
-            ],
-          ),
+          child: callStatus == CallStatus.incoming
+              ? _buildIncomingCallView()
+              : callStatus == CallStatus.active
+              ? _buildActiveCallView()
+              : _buildEndedCallView(),
         ),
       ),
+    );
+  }
+
+  Widget _buildIncomingCallView() {
+    return Column(
+      children: [
+        // Header with app logo - fixed size 120x120 without shadow
+        _buildHeader(),
+
+        // Spacer
+        const SizedBox(height: 40),
+
+        // Doctor identification section
+        _buildDoctorInfo(),
+
+        // Spacer
+        const SizedBox(height: 60),
+
+        // Call controls section with floating button
+        _buildFloatingCallControls(),
+      ],
     );
   }
 
@@ -74,13 +86,16 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
       padding: const EdgeInsets.all(20),
       child: Center(
         child: Container(
+          width: 120,
+          height: 120,
           decoration: BoxDecoration(
             color: Colors.white, // White background of exact logo size
+            shape: BoxShape.circle,
           ),
           child: Image.asset(
             'assets/calls/clinico_logo.png',
-            width: 80,
-            height: 80,
+            width: 120,
+            height: 120,
             fit: BoxFit.contain,
           ),
         ),
@@ -168,109 +183,120 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     );
   }
 
-  Widget _buildCallControls() {
+  Widget _buildFloatingCallControls() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-      child: Column(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
         children: [
-          // Large central call button as the main focal point
-          GestureDetector(
-            onTap: () {
-              _acceptCall();
-            },
-            child: Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.g1, // Olive green as per design
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black38,
-                    blurRadius: 15,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Center(
-                child: Image.asset(
-                  'assets/calls/call_icon.png',
-                  width: 50,
-                  height: 50,
-                  color: Colors.white,
+          // Blue capsule container
+          Container(
+            height: 80,
+            margin: const EdgeInsets.only(
+              bottom: 20,
+            ), // Space for floating button
+            decoration: BoxDecoration(
+              color: AppColors.b4, // Blue color
+              borderRadius: BorderRadius.circular(40),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black38,
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
                 ),
-              ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // Left: 'Decline' text
+                Expanded(
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.call_end, color: Colors.white, size: 20),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Decline',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                // Spacer in the middle
+                const Spacer(),
+                // Right: 'Accept' text
+                Expanded(
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.phone, color: Colors.white, size: 20),
+                        const SizedBox(width: 8),
+                        const Text(
+                          'Accept',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-
-          const SizedBox(height: 30),
-
-          // Accept and Decline buttons row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // Decline button
-              _buildControlButton(
-                icon: Icons.call_end,
-                label: 'Decline',
-                color: AppColors.r1, // Red color
-                onPressed: () {
-                  // Handle call decline
-                  _declineCall();
-                },
-              ),
-
-              // Accept button
-              _buildControlButton(
-                icon: Icons.call,
-                label: 'Accept',
-                color: AppColors.g1, // Green color
-                onPressed: () {
-                  // Handle call acceptance
-                  _acceptCall();
-                },
-              ),
-            ],
+          // Floating white circular button with drag functionality
+          Transform.translate(
+            offset: const Offset(0, -30), // Float above the blue capsule
+            child: _buildDraggableCallButton(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildControlButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
-    return GestureDetector(
-      onTap: onPressed,
+  Widget _buildDraggableCallButton() {
+    return DraggableCallButton(
+      onAccept: _acceptCall,
+      onDecline: _declineCall,
+      size: 100, // Frame 100x100 as requested
+    );
+  }
+
+  Widget _buildActiveCallView() {
+    return InAudioCallScreen(
+      doctorName: widget.doctorName,
+      doctorSpecialization: widget.doctorSpecialization,
+    );
+  }
+
+  Widget _buildEndedCallView() {
+    return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 70,
-            height: 70,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: Icon(icon, size: 30, color: color),
+          const Icon(Icons.call_end, color: Colors.white, size: 80),
+          const SizedBox(height: 20),
+          const Text(
+            'Call Ended',
+            style: TextStyle(fontSize: 24, color: Colors.white),
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.b4),
+            child: const Text('Back to App'),
           ),
         ],
       ),
@@ -278,40 +304,162 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   }
 
   void _acceptCall() {
-    // Handle call acceptance logic
-    // This would typically connect to the audio call service
-
-    // Navigate to in-call screen
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => InAudioCallScreen(
-          doctorName: widget.doctorName,
-          doctorSpecialization: widget.doctorSpecialization,
-        ),
-      ),
-    );
+    print("Call Accepted");
+    setState(() {
+      callStatus = CallStatus.active;
+    });
   }
 
   void _declineCall() {
-    // Handle call decline logic
+    print("Call Declined");
+    setState(() {
+      callStatus = CallStatus.ended;
+    });
+  }
+}
 
-    // Show a snackbar to confirm the action
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Call declined'),
-        backgroundColor: AppColors.r1,
-        action: SnackBarAction(
-          label: 'OK',
-          onPressed: () {
-            // Do nothing
-          },
-        ),
-      ),
+// Separate widget for the draggable call button
+class DraggableCallButton extends StatefulWidget {
+  final VoidCallback onAccept;
+  final VoidCallback onDecline;
+  final double size;
+
+  const DraggableCallButton({
+    Key? key,
+    required this.onAccept,
+    required this.onDecline,
+    this.size = 100, // Default to 10 as requested
+  }) : super(key: key);
+
+  @override
+  _DraggableCallButtonState createState() => _DraggableCallButtonState();
+}
+
+class _DraggableCallButtonState extends State<DraggableCallButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  double _xDragOffset = 0.0;
+  bool _isDragging = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        // Change the button color based on drag position
+        Color buttonColor = Colors.white;
+        IconData buttonIcon = Icons.phone;
+        Color iconColor = AppColors.g1; // Green for accept
+
+        if (_xDragOffset < -50) {
+          // When dragging left, change to decline color/icon
+          buttonColor = const Color(0xFFEF4444); // Red for decline
+          buttonIcon = Icons.call_end;
+          iconColor = Colors.white;
+        } else if (_xDragOffset > 50) {
+          // When dragging right, keep accept color/icon but make it more prominent
+          buttonColor = AppColors.g1; // Green for accept
+          buttonIcon = Icons.phone;
+          iconColor = Colors.white;
+        }
+
+        return Transform.translate(
+          offset: Offset(_xDragOffset, -30), // Float above the blue capsule
+          child: GestureDetector(
+            onPanStart: (details) {
+              setState(() {
+                _isDragging = true;
+              });
+            },
+            onPanUpdate: (details) {
+              setState(() {
+                _xDragOffset += details.delta.dx;
+                // Limit the drag to prevent going off-screen
+                if (_xDragOffset < -150) _xDragOffset = -150;
+                if (_xDragOffset > 150) _xDragOffset = 150;
+              });
+            },
+            onPanEnd: (details) {
+              if (_xDragOffset > 100) {
+                // Dragged sufficiently to the right - accept call
+                widget.onAccept();
+                _resetButton();
+              } else if (_xDragOffset < -100) {
+                // Dragged sufficiently to the left - decline call
+                widget.onDecline();
+                _resetButton();
+              } else {
+                // Not dragged far enough - animate back to center
+                _animateToCenter();
+              }
+              setState(() {
+                _isDragging = false;
+              });
+            },
+            child: Container(
+              width: widget.size,
+              height: widget.size,
+              decoration: BoxDecoration(
+                color: buttonColor,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Icon(buttonIcon, color: iconColor, size: 35),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _animateToCenter() {
+    _controller.reset();
+    _controller.duration = const Duration(milliseconds: 300);
+    _controller.forward();
+
+    final curvedAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
     );
 
-    // Return to previous screen after a delay
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      Navigator.of(context).pop(); // Return to previous screen
+    final animation = Tween<double>(
+      begin: _xDragOffset,
+      end: 0.0,
+    ).animate(curvedAnimation);
+
+    animation.addListener(() {
+      setState(() {
+        _xDragOffset = animation.value;
+      });
+    });
+  }
+
+  void _resetButton() {
+    setState(() {
+      _xDragOffset = 0.0;
     });
   }
 }

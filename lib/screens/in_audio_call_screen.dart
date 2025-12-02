@@ -4,6 +4,7 @@
 /// the incoming appointment call. It displays call controls like mute, speaker,
 /// and end call, along with the call duration timer and doctor information.
 library;
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../constants/colors.dart';
@@ -20,7 +21,7 @@ class InAudioCallScreen extends StatefulWidget {
   });
 
   @override
- _InAudioCallScreenState createState() => _InAudioCallScreenState();
+  _InAudioCallScreenState createState() => _InAudioCallScreenState();
 }
 
 class _InAudioCallScreenState extends State<InAudioCallScreen> {
@@ -37,32 +38,32 @@ class _InAudioCallScreenState extends State<InAudioCallScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Subscribe to audio call service streams
     _muteSubscription = _audioCallService.muteStream.listen((muted) {
       setState(() {
         isMuted = muted;
       });
     });
-    
+
     _speakerSubscription = _audioCallService.speakerStream.listen((speakerOn) {
       setState(() {
         isSpeakerOn = speakerOn;
       });
     });
-    
+
     _durationSubscription = _audioCallService.durationStream.listen((duration) {
       setState(() {
         callDuration = duration;
       });
     });
-    
+
     _stateSubscription = _audioCallService.stateStream.listen((state) {
       setState(() {
         callState = state;
       });
     });
-    
+
     // Start the call
     _audioCallService.connectCall();
   }
@@ -73,7 +74,7 @@ class _InAudioCallScreenState extends State<InAudioCallScreen> {
     return '${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}';
   }
 
- @override
+  @override
   void dispose() {
     _muteSubscription.cancel();
     _speakerSubscription.cancel();
@@ -81,254 +82,225 @@ class _InAudioCallScreenState extends State<InAudioCallScreen> {
     _stateSubscription.cancel();
     _audioCallService.disconnectCall();
     super.dispose();
- }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.b1,
+      backgroundColor: const Color(
+        0xFFF0F4F8,
+      ), // Use very light blue/grey background as requested
       body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.b1,
-                AppColors.b5,
-              ],
+        child: Column(
+          children: [
+            // Top Logo: clinic_logo with 120x120 frame, no shadow
+            Container(
+              padding: const EdgeInsets.all(20),
+              child: Center(
+                child: Container(
+                  width: 120,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.white, // White background of exact logo size
+                    shape: BoxShape.circle,
+                  ),
+                  child: Image.asset(
+                    'assets/calls/clinico_logo.png',
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
             ),
-          ),
-          child: Column(
-            children: [
-              // Top status bar with call duration
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.call_received,
-                      color: AppColors.g1,
-                      size: 18,
+
+            const SizedBox(height: 40),
+
+            // Doctor info section - same as incoming screen
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Doctor profile image - large circular, no shadow
+                  Container(
+                    width: 160,
+                    height: 160,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 3),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      _formatDuration(callDuration),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                    child: CircleAvatar(
+                      radius: 77,
+                      backgroundImage: AssetImage(
+                        'assets/calls/doctor_female.png',
                       ),
+                      backgroundColor: Colors.white,
                     ),
-                  ],
-                ),
-              ),
-              
-              // Doctor info section
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Doctor profile image
-                    Container(
-                      width: 140,
-                      height: 140,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.white.withOpacity(0.3),
-                          width: 3,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black38,
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        radius: 67,
-                        backgroundImage: AssetImage('assets/calls/doctor_female.png'),
-                        backgroundColor: Colors.white,
-                      ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // Doctor name - Title, Bold
+                  Text(
+                    widget.doctorName,
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
                     ),
-                    
-                    const SizedBox(height: 30),
-                    
-                    // Doctor name
-                    Text(
-                      widget.doctorName,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // Specialization
+                  Text(
+                    widget.doctorSpecialization,
+                    style: const TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+
+                  const SizedBox(height: 25),
+
+                  // Text: 'Voice Call' with timer '0:00'
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
                     ),
-                    
-                    const SizedBox(height: 10),
-                    
-                    // Specialization
-                    Text(
-                      widget.doctorSpecialization,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
+                    decoration: BoxDecoration(
+                      color: AppColors.b4.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    
-                    const SizedBox(height: 20),
-                    
-                    // Status indicator
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: _getStatusColor().withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _getStatusColor(),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _getStatusText(),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              
-              // Call controls
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-                child: Column(
-                  children: [
-                    // Control buttons row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        // Mute button
-                        _buildControlButton(
-                          icon: isMuted ? Icons.mic_off : Icons.mic,
-                          label: isMuted ? 'Unmute' : 'Mute',
-                          color: isMuted ? AppColors.r1 : AppColors.white,
-                          onPressed: () {
-                            _audioCallService.toggleMute();
-                          },
+                        const Text(
+                          'Voice Call',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        
-                        // Speaker button
-                        _buildControlButton(
-                          icon: isSpeakerOn ? Icons.volume_up : Icons.volume_off,
-                          label: isSpeakerOn ? 'Speaker' : 'Silent',
-                          color: isSpeakerOn ? AppColors.b4 : AppColors.white,
-                          onPressed: () {
-                            _audioCallService.toggleSpeaker();
-                          },
+                        const SizedBox(width: 8),
+                        Text(
+                          _formatDuration(callDuration),
+                          style: const TextStyle(
+                            fontSize: 20,
+                            color: Colors.black87,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ],
                     ),
-                    
-                    const SizedBox(height: 30),
-                    
-                    // End call button
-                    GestureDetector(
-                      onTap: () {
-                        // Disconnect the call using the service
-                        _audioCallService.disconnectCall();
-                        // Return to previous screen
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.r1, // Red for end call
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black38,
-                              blurRadius: 15,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(
-                          Icons.call_end,
-                          size: 35,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+
+            // Bottom Controls: White Rounded Rectangle container (like a bottom sheet)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              margin: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 10,
+                    offset: const Offset(0, -5),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // Speaker: White circle, black icon, text 'Speaker' below
+                  _buildBottomControlButton(
+                    icon: isSpeakerOn ? Icons.volume_up : Icons.volume_off,
+                    text: 'Speaker',
+                    color: Colors.black,
+                    backgroundColor: Colors.white,
+                    onPressed: () {
+                      _audioCallService.toggleSpeaker();
+                    },
+                  ),
+
+                  // Mute: White circle, black icon, text 'Mute' below
+                  _buildBottomControlButton(
+                    icon: isMuted ? Icons.mic_off : Icons.mic,
+                    text: 'Mute',
+                    color: Colors.black,
+                    backgroundColor: Colors.white,
+                    onPressed: () {
+                      _audioCallService.toggleMute();
+                    },
+                  ),
+
+                  // Leave: Red circle, white phone hang-up icon, text 'Leave' below
+                  _buildBottomControlButton(
+                    icon: Icons.call_end,
+                    text: 'Leave',
+                    color: Colors.white,
+                    backgroundColor: AppColors.r1,
+                    onPressed: () {
+                      // Disconnect the call using the service
+                      _audioCallService.disconnectCall();
+                      // Return to previous screen
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
- }
+  }
 
-  Widget _buildControlButton({
+  Widget _buildBottomControlButton({
     required IconData icon,
-    required String label,
+    required String text,
     required Color color,
+    required Color backgroundColor,
     required VoidCallback onPressed,
   }) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Column(
-        children: [
-          Container(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: onPressed,
+          child: Container(
             width: 70,
             height: 70,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.b5, // Darker blue background
+              color: backgroundColor,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black26,
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
+                  blurRadius: 5,
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
-            child: Icon(
-              icon,
-              size: 30,
-              color: color,
-            ),
+            child: Icon(icon, size: 30, color: color),
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-            ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.black87,
+            fontWeight: FontWeight.w500,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
-  
+
   Color _getStatusColor() {
     switch (callState) {
       case CallState.connecting:
@@ -343,7 +315,7 @@ class _InAudioCallScreenState extends State<InAudioCallScreen> {
         return AppColors.g1; // Default to green
     }
   }
-  
+
   String _getStatusText() {
     switch (callState) {
       case CallState.connecting:
