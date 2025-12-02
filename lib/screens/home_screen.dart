@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onLocationSelected: () async {
           // Handle location selection by navigating to search location screen
           Navigator.of(context).pop(); // Close the modal first
-          
+
           await Navigator.push(
             context,
             MaterialPageRoute(
@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   setState(() {
                     currentLocation = locationName;
                   });
-                  
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text('Location updated to: $locationName'),
@@ -123,9 +123,11 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildServicesSection(),
 
           const SizedBox(height: 30),
-          
+
           // Bottom padding to prevent content from being cut off by bottom navigation
-          const SizedBox(height: 80), // Added to account for bottom navigation bar
+          const SizedBox(
+            height: 80,
+          ), // Added to account for bottom navigation bar
         ],
       ),
     );
@@ -235,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
- // Upcoming Appointments Section
+  // Upcoming Appointments Section
   Widget _buildUpcomingAppointmentsSection() {
     return Container(
       color: AppColors.bg1,
@@ -292,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Looking For Specialist Card
- Widget _buildSpecialistCard() {
+  Widget _buildSpecialistCard() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -331,7 +333,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const DoctorListScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => const DoctorListScreen(),
+                        ),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -464,216 +468,223 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-   // Categories Section
- Widget _buildCategoriesSection() {
-     final categories = [
-       ("assets/home/Psychiatrist.png", 'Psychiatrist'),
-       ("assets/home/Hepatologist.png", 'Hepatologist'),
-       ("assets/home/Cardiologist.png", 'Cardiologist'),
-       ("assets/home/Dental.png", 'Dental'),
-       ("assets/home/Nephrologist.png", 'Nephrologist'),
-       ("assets/home/Pulmonologist.png", 'Pulmonologist'),
-       ("assets/home/Dermatologist.png", 'Dermatologist'),
-       ("assets/home/Gastroenterologist.png", 'Gastroenterologist'),
-     ];
- 
-     return Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
-       children: [
-         Padding(
-           padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-           child: const Text(
-             'Categories',
-             style: TextStyle(
-               fontSize: 18,
-               fontWeight: FontWeight.w600,
-               color: AppColors.b1,
-               fontFamily: 'Roboto',
-             ),
-           ),
-         ),
-         Padding(
-           padding: const EdgeInsets.symmetric(horizontal: 20),
-           child: GridView.builder(
-             shrinkWrap: true,
-             physics: const NeverScrollableScrollPhysics(),
-             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-               crossAxisCount: 4,
-               mainAxisSpacing: 12,
-               crossAxisSpacing: 12,
-               childAspectRatio: 1, // Square aspect ratio
-             ),
-             itemCount: categories.length,
-             itemBuilder: (context, index) {
-               final (icon, label) = categories[index];
-               return GestureDetector(
-                 onTap: () {
-                   // Handle category selection
-                   print('Selected category: $label');
-                 },
-                 child: Container(
-                   decoration: BoxDecoration(
-                     color: AppColors.white,
-                     borderRadius: BorderRadius.circular(24), // Squircle shape
-                     border: Border.all(
-                       color: Color(0xFFE5E7EB), // light-gray border
-                       width: 1,
-                     ),
-                   ),
-                   child: Column(
-                     mainAxisAlignment: MainAxisAlignment.center,
-                     children: [
-                       Container(
-                         width: 40,
-                         height: 40,
-                         margin: const EdgeInsets.only(top: 10, bottom: 6),
-                         child: Image.asset(
-                           icon,
-                           fit: BoxFit.contain,
-                         ),
-                       ),
-                       Flexible(
-                         child: Text(
-                           label.length > 12 ? '${label.substring(0, 10)}...' : label, // Truncate long names
-                           textAlign: TextAlign.center,
-                           style: const TextStyle(
-                             fontSize: 10,
-                             color: Color(0xFF6B7280), // muted gray
-                             fontFamily: 'Roboto',
-                             fontWeight: FontWeight.w500,
-                           ),
-                           maxLines: 2,
-                           overflow: TextOverflow.ellipsis,
-                         ),
-                       ),
-                     ],
-                   ),
-                 ),
-               );
-             },
-           ),
-         ),
-       ],
-     );
-   }
+  // Categories Section
+  Widget _buildCategoriesSection() {
+    final categories = [
+      ("assets/home/Psychiatrist.png", 'Psychiatrist'),
+      ("assets/home/Hepatologist.png", 'Hepatologist'),
+      ("assets/home/Cardiologist.png", 'Cardiologist'),
+      ("assets/home/Dental.png", 'Dentist'),
+      ("assets/home/Nephrologist.png", 'Nephrologist'),
+      ("assets/home/Pulmonologist.png", 'Pulmonologist'),
+      ("assets/home/Dermatologist.png", 'Dermatologist'),
+      ("assets/home/Gastroenterologist.png", 'Gastroenterologist'),
+    ];
 
-   // Top Doctors Section
-   Widget _buildTopDoctorsSection() {
-     return Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
-       children: [
-         Padding(
-           padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
-           child: Row(
-             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-             children: [
-               const Text(
-                 'Top Doctors',
-                 style: TextStyle(
-                   fontSize: 18,
-                   fontWeight: FontWeight.w600,
-                   color: AppColors.b1,
-                   fontFamily: 'Roboto',
-                 ),
-               ),
-               GestureDetector(
-                 onTap: () {
-                   Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (context) => const DoctorListScreen()),
-                   );
-                 },
-                 child: const Text(
-                   'See All',
-                   style: TextStyle(
-                     fontSize: 13,
-                     color: AppColors.b4,
-                     fontFamily: 'Roboto',
-                     fontWeight: FontWeight.w500,
-                   ),
-                 ),
-               ),
-             ],
-           ),
-         ),
-         SizedBox(
-           height: 170, // Adjusted height to match the new card design
-           child: ListView.builder(
-             scrollDirection: Axis.horizontal,
-             padding: const EdgeInsets.symmetric(horizontal: 20),
-             itemCount: 4,
-             itemBuilder: (context, index) {
-               // Sample data for demonstration
-               final List<Map<String, dynamic>> doctorData = [
-                 {
-                   'name': 'Dr. Lorem Ipsum',
-                   'specialty': 'Physician',
-                   'credentials': 'MBBS, MD',
-                   'hospital': 'ABC Hospital',
-                   'rating': 4.7,
-                   'distance': 1.6,
-                   'isMale': true,
-                 },
-                 {
-                   'name': 'Dr. Jane Smith',
-                   'specialty': 'Cardiologist',
-                   'credentials': 'MBBS, MD, DM',
-                   'hospital': 'City Heart Center',
-                   'rating': 4.9,
-                   'distance': 2.3,
-                   'isMale': false,
-                 },
-                 {
-                   'name': 'Dr. John Doe',
-                   'specialty': 'Neurologist',
-                   'credentials': 'MBBS, MD, DM',
-                   'hospital': 'Brain Care Institute',
-                   'rating': 4.8,
-                   'distance': 0.8,
-                   'isMale': true,
-                 },
-                 {
-                   'name': 'Dr. Sarah Johnson',
-                   'specialty': 'Pediatrician',
-                   'credentials': 'MBBS, DCH',
-                   'hospital': 'Children Care Hospital',
-                   'rating': 4.6,
-                   'distance': 1.2,
-                   'isMale': false,
-                 },
-               ];
-               
-               final doctor = doctorData[index];
-               
-               return TopDoctorsCard(
-                 doctorName: doctor['name'] as String,
-                 specialty: doctor['specialty'] as String,
-                 credentials: doctor['credentials'] as String,
-                 hospital: doctor['hospital'] as String,
-                 rating: doctor['rating'] as double,
-                 distance: doctor['distance'] as double,
-                 isMale: doctor['isMale'] as bool,
-                 onViewPressed: () {
-                   Navigator.push(
-                     context,
-                     MaterialPageRoute(
-                       builder: (context) => DoctorProfileScreen(
-                         doctorName: doctor['name'] as String,
-                         specialty: doctor['specialty'] as String,
-                         rating: doctor['rating'] as double,
-                         distance: doctor['distance'] as double,
-                         isMale: doctor['isMale'] as bool,
-                       ),
-                     ),
-                   );
-                 },
-               );
-             },
-           ),
-         ),
-       ],
-     );
-   }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+          child: const Text(
+            'Categories',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: AppColors.b1,
+              fontFamily: 'Roboto',
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 1, // Square aspect ratio
+            ),
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              final (icon, label) = categories[index];
+              return GestureDetector(
+                onTap: () {
+                  // Navigate to DoctorListScreen with category name
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          DoctorListScreen(categoryName: label),
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.circular(24), // Squircle shape
+                    border: Border.all(
+                      color: Color(0xFFE5E7EB), // light-gray border
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        margin: const EdgeInsets.only(top: 10, bottom: 6),
+                        child: Image.asset(icon, fit: BoxFit.contain),
+                      ),
+                      Flexible(
+                        child: Text(
+                          label.length > 12
+                              ? '${label.substring(0, 10)}...'
+                              : label, // Truncate long names
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Color(0xFF6B7280), // muted gray
+                            fontFamily: 'Roboto',
+                            fontWeight: FontWeight.w500,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Top Doctors Section
+  Widget _buildTopDoctorsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Top Doctors',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.b1,
+                  fontFamily: 'Roboto',
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DoctorListScreen(),
+                    ),
+                  );
+                },
+                child: const Text(
+                  'See All',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppColors.b4,
+                    fontFamily: 'Roboto',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 170, // Adjusted height to match the new card design
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              // Sample data for demonstration
+              final List<Map<String, dynamic>> doctorData = [
+                {
+                  'name': 'Dr. Lorem Ipsum',
+                  'specialty': 'Physician',
+                  'credentials': 'MBBS, MD',
+                  'hospital': 'ABC Hospital',
+                  'rating': 4.7,
+                  'distance': 1.6,
+                  'isMale': true,
+                },
+                {
+                  'name': 'Dr. Jane Smith',
+                  'specialty': 'Cardiologist',
+                  'credentials': 'MBBS, MD, DM',
+                  'hospital': 'City Heart Center',
+                  'rating': 4.9,
+                  'distance': 2.3,
+                  'isMale': false,
+                },
+                {
+                  'name': 'Dr. John Doe',
+                  'specialty': 'Neurologist',
+                  'credentials': 'MBBS, MD, DM',
+                  'hospital': 'Brain Care Institute',
+                  'rating': 4.8,
+                  'distance': 0.8,
+                  'isMale': true,
+                },
+                {
+                  'name': 'Dr. Sarah Johnson',
+                  'specialty': 'Pediatrician',
+                  'credentials': 'MBBS, DCH',
+                  'hospital': 'Children Care Hospital',
+                  'rating': 4.6,
+                  'distance': 1.2,
+                  'isMale': false,
+                },
+              ];
+
+              final doctor = doctorData[index];
+
+              return TopDoctorsCard(
+                doctorName: doctor['name'] as String,
+                specialty: doctor['specialty'] as String,
+                credentials: doctor['credentials'] as String,
+                hospital: doctor['hospital'] as String,
+                rating: doctor['rating'] as double,
+                distance: doctor['distance'] as double,
+                isMale: doctor['isMale'] as bool,
+                onViewPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DoctorProfileScreen(
+                        doctorName: doctor['name'] as String,
+                        specialty: doctor['specialty'] as String,
+                        rating: doctor['rating'] as double,
+                        distance: doctor['distance'] as double,
+                        isMale: doctor['isMale'] as bool,
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
 
   // Services Section
   Widget _buildServicesSection() {

@@ -4,7 +4,9 @@ import '../components/search_filter_modal.dart';
 import 'doctor_profile_screen.dart';
 
 class DoctorListScreen extends StatefulWidget {
-  const DoctorListScreen({super.key});
+  final String? categoryName;
+
+  const DoctorListScreen({super.key, this.categoryName});
 
   @override
   State<DoctorListScreen> createState() => _DoctorListScreenState();
@@ -13,14 +15,14 @@ class DoctorListScreen extends StatefulWidget {
 class _DoctorListScreenState extends State<DoctorListScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
-  
+
   // Filter data
   FilterData _filters = FilterData();
-  
+
   // Sample doctor data as per specifications
   final List<Map<String, dynamic>> _allDoctors = [
     {
-      'name': 'Dr. Lorem Ipsum',
+      'name': 'Dr. John Smith',
       'specialty': 'Dermatologist',
       'credentials': 'MBBS, MD',
       'hospital': 'ABC Hospital',
@@ -29,48 +31,66 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
       'isMale': true,
     },
     {
-      'name': 'Dr. Lorem Ipsum',
-      'specialty': 'Dermatologist',
-      'credentials': 'MBBS, MD',
-      'hospital': 'XYZ Hospital',
+      'name': 'Dr. Sarah Johnson',
+      'specialty': 'Dentist',
+      'credentials': 'BDS, MDS',
+      'hospital': 'XYZ Dental Clinic',
       'rating': 4.2,
       'distance': 2.2,
       'isMale': false,
     },
     {
-      'name': 'Dr. Lorem Ipsum',
-      'specialty': 'Dermatologist',
-      'credentials': 'MBBS, MD',
-      'hospital': 'LMN Hospital',
+      'name': 'Dr. Michael Brown',
+      'specialty': 'Cardiologist',
+      'credentials': 'MBBS, MD, DM',
+      'hospital': 'LMN Heart Center',
       'rating': 3.9,
       'distance': 5.6,
-      'isMale': false,
-    },
-    {
-      'name': 'Dr. Lorem Ipsum',
-      'specialty': 'Dermatologist',
-      'credentials': 'MBBS, MD',
-      'hospital': 'PQR Hospital',
-      'rating': 3.8,
-      'distance': 7.1,
       'isMale': true,
     },
     {
-      'name': 'Dr. Lorem Ipsum',
-      'specialty': 'Dermatologist',
+      'name': 'Dr. Emily Davis',
+      'specialty': 'Psychiatrist',
       'credentials': 'MBBS, MD',
-      'hospital': 'DEF Hospital',
+      'hospital': 'PQR Mental Health',
+      'rating': 3.8,
+      'distance': 7.1,
+      'isMale': false,
+    },
+    {
+      'name': 'Dr. Robert Wilson',
+      'specialty': 'Gastroenterologist',
+      'credentials': 'MBBS, MD, DM',
+      'hospital': 'DEF GI Clinic',
       'rating': 4.9,
       'distance': 3.2,
       'isMale': true,
     },
     {
-      'name': 'Dr. Lorem Ipsum',
-      'specialty': 'Dermatologist',
-      'credentials': 'MBBS, MD',
-      'hospital': 'GHI Hospital',
+      'name': 'Dr. Jennifer Lee',
+      'specialty': 'Hepatologist',
+      'credentials': 'MBBS, MD, DM',
+      'hospital': 'GHI Liver Center',
       'rating': 4.5,
       'distance': 4.8,
+      'isMale': false,
+    },
+    {
+      'name': 'Dr. David Miller',
+      'specialty': 'Nephrologist',
+      'credentials': 'MBBS, MD, DM',
+      'hospital': 'JKL Kidney Clinic',
+      'rating': 4.3,
+      'distance': 2.5,
+      'isMale': true,
+    },
+    {
+      'name': 'Dr. Lisa Anderson',
+      'specialty': 'Pulmonologist',
+      'credentials': 'MBBS, MD, DM',
+      'hospital': 'MNO Lung Center',
+      'rating': 4.6,
+      'distance': 3.7,
       'isMale': false,
     },
   ];
@@ -78,7 +98,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
   // Get filtered doctor results based on search query and filters
   List<Map<String, dynamic>> get _filteredDoctors {
     List<Map<String, dynamic>> filtered = _allDoctors;
-    
+
     // Apply search query filter
     if (_searchQuery.isNotEmpty) {
       filtered = filtered.where((doctor) {
@@ -89,24 +109,35 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
             doctor['hospital'].toLowerCase().contains(query);
       }).toList();
     }
-    
-    // Apply specialisation filter
-    if (_filters.specialisation != 'Physician') {
+
+    // Apply category filter if a category name is provided
+    if (widget.categoryName != null && widget.categoryName!.isNotEmpty) {
       filtered = filtered.where((doctor) {
-        return doctor['specialty'].toLowerCase().contains(_filters.specialisation.toLowerCase());
+        return doctor['specialty'].toLowerCase().contains(
+          widget.categoryName!.toLowerCase(),
+        );
       }).toList();
+    } else {
+      // Apply specialisation filter if no category is provided
+      if (_filters.specialisation != 'Physician') {
+        filtered = filtered.where((doctor) {
+          return doctor['specialty'].toLowerCase().contains(
+            _filters.specialisation.toLowerCase(),
+          );
+        }).toList();
+      }
     }
-    
+
     // Apply rating filter
     if (_filters.rating == '> 4 ★') {
       filtered = filtered.where((doctor) => doctor['rating'] >= 4.0).toList();
     } else if (_filters.rating == '> 3 ★') {
       filtered = filtered.where((doctor) => doctor['rating'] >= 3.0).toList();
     }
-    
+
     // Apply volunteers filter (currently no volunteer field in sample data, so skipping)
     // Apply availability filter (currently no availability data in sample, so skipping)
-    
+
     // Apply sorting
     switch (_filters.sortBy) {
       case 'Rating':
@@ -121,7 +152,7 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
         filtered.sort((a, b) => a['distance'].compareTo(b['distance']));
         break;
     }
-    
+
     return filtered;
   }
 
@@ -145,19 +176,25 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F6F8), // Light gray background as specified
+      backgroundColor: const Color(
+        0xFFF5F6F8,
+      ), // Light gray background as specified
       body: Column(
         children: [
           // Search Bar (Top Header)
           _buildSearchBar(),
-          
+
           // Doctor List Container with rounded corners
           Expanded(
             child: Container(
-              margin: const EdgeInsets.all(16), // Horizontal padding as specified
+              margin: const EdgeInsets.all(
+                16,
+              ), // Horizontal padding as specified
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(16)), // Rounded corners as specified
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(16),
+                ), // Rounded corners as specified
               ),
               child: ListView.builder(
                 padding: EdgeInsets.zero,
@@ -206,11 +243,18 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
 
   Widget _buildSearchBar() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 40, 20, 16), // Top padding for status bar + specified padding
+      padding: const EdgeInsets.fromLTRB(
+        20,
+        40,
+        20,
+        16,
+      ), // Top padding for status bar + specified padding
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(50), // Fully rounded corners (stadium shape)
+          borderRadius: BorderRadius.circular(
+            50,
+          ), // Fully rounded corners (stadium shape)
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -231,7 +275,8 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
                 color: Colors.grey,
               ),
             ),
-            hintText: 'Dermatologist Near Me', // Placeholder text as specified
+            hintText:
+                '${widget.categoryName ?? 'Dermatologist'} Near Me', // Placeholder text as specified
             hintStyle: const TextStyle(
               color: Color(0xFF9E9E9E), // Dark grey color
             ),
@@ -251,12 +296,12 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
               ),
             ),
             border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 14,
+              horizontal: 12,
+            ),
           ),
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.black87,
-          ),
+          style: const TextStyle(fontSize: 14, color: Colors.black87),
         ),
       ),
     );
@@ -277,9 +322,9 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
             ),
             child: Center(
               child: Image.asset(
-                doctor['isMale'] 
-                  ? 'assets/doctor_profile/doctor_male.png' 
-                  : 'assets/doctor_profile/doctor_female.png',
+                doctor['isMale']
+                    ? 'assets/doctor_profile/doctor_male.png'
+                    : 'assets/doctor_profile/doctor_female.png',
                 width: 30,
                 height: 30,
                 fit: BoxFit.contain,
@@ -287,7 +332,6 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
             ),
           ),
           const SizedBox(width: 16), // Spacing between avatar and info
-          
           // Middle Section: Info
           Expanded(
             child: Column(
@@ -318,7 +362,6 @@ class _DoctorListScreenState extends State<DoctorListScreen> {
             ),
           ),
           const SizedBox(width: 16), // Spacing between info and stats
-          
           // Right Section: Stats
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
