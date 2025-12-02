@@ -44,13 +44,13 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   }
 
   // Generate dates for the next 14 days
- void _generateDates() {
+  void _generateDates() {
     List<String> newDates = [];
     DateTime now = DateTime.now();
-    
+
     for (int i = 0; i < 14; i++) {
       DateTime date = DateTime(now.year, now.month, now.day + i);
-      
+
       if (i == 0) {
         newDates.add('Today');
       } else if (i == 1) {
@@ -61,7 +61,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         newDates.add('$dayWithSuffix $month');
       }
     }
-    
+
     setState(() {
       dates = newDates;
     });
@@ -70,48 +70,79 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   // Generate time slots based on working hours and 30-minute intervals
   void _generateTimeSlots() {
     List<String> newTimeSlots = [];
-    
+
     // Check if today is selected to filter out past time slots
     bool isToday = selectedDate == 'Today';
     DateTime now = DateTime.now();
-    
+
     // Determine the date for which we're generating slots
     DateTime targetDate = _getDateForSelection(selectedDate);
-    
+
     // Get working hours for the selected date
     List<WorkingHours> dayWorkingHours = _getWorkingHoursForDate(targetDate);
-    
+
     for (WorkingHours hours in dayWorkingHours) {
       int startHour = WorkingHours.parseTimeToHours(hours.startTime);
-      int startMinute = int.tryParse(hours.startTime.split(':')[1].replaceAll(RegExp(r'[aApPmM]'), '')) ?? 0;
+      int startMinute =
+          int.tryParse(
+            hours.startTime.split(':')[1].replaceAll(RegExp(r'[aApPmM]'), ''),
+          ) ??
+          0;
       int endHour = WorkingHours.parseTimeToHours(hours.endTime);
-      int endMinute = int.tryParse(hours.endTime.split(':')[1].replaceAll(RegExp(r'[aApPmM]'), '')) ?? 0;
-      
+      int endMinute =
+          int.tryParse(
+            hours.endTime.split(':')[1].replaceAll(RegExp(r'[aApPmM]'), ''),
+          ) ??
+          0;
+
       // If it's today and the working hours have already passed, skip
       if (isToday) {
         int currentTimeInMinutes = now.hour * 60 + now.minute;
         int workingStartInMinutes = startHour * 60 + startMinute;
         int workingEndInMinutes = endHour * 60 + endMinute;
-        
+
         // If the working hours have already ended today, skip
         if (currentTimeInMinutes >= workingEndInMinutes) {
           continue;
         }
-        
+
         // If the working hours haven't started yet today, start from the working hour
         if (currentTimeInMinutes < workingStartInMinutes) {
           // Generate slots from working start time
-          _addTimeSlotsInRange(startHour, startMinute, endHour, endMinute, newTimeSlots, isToday, now);
+          _addTimeSlotsInRange(
+            startHour,
+            startMinute,
+            endHour,
+            endMinute,
+            newTimeSlots,
+            isToday,
+            now,
+          );
         } else {
           // Generate slots from current time within the working hours
-          _addTimeSlotsFromCurrentTime(startHour, startMinute, endHour, endMinute, newTimeSlots, now);
+          _addTimeSlotsFromCurrentTime(
+            startHour,
+            startMinute,
+            endHour,
+            endMinute,
+            newTimeSlots,
+            now,
+          );
         }
       } else {
         // For future dates, generate all slots within the working hours
-        _addTimeSlotsInRange(startHour, startMinute, endHour, endMinute, newTimeSlots, isToday, now);
+        _addTimeSlotsInRange(
+          startHour,
+          startMinute,
+          endHour,
+          endMinute,
+          newTimeSlots,
+          isToday,
+          now,
+        );
       }
     }
-    
+
     setState(() {
       timeSlots = newTimeSlots;
       // If selected time is no longer available, clear it
@@ -124,27 +155,27 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   // Check if a time slot is in the past when today is selected
   bool _isPastTimeForToday(String timeString) {
     if (selectedDate != 'Today') return false;
-    
+
     DateTime now = DateTime.now();
     List<String> timeParts = timeString.split(' ');
     if (timeParts.length != 2) return false;
-    
+
     String time = timeParts[0];
     String period = timeParts[1];
-    
+
     List<String> hourMinute = time.split(':');
     if (hourMinute.length != 2) return false;
-    
+
     int hour = int.tryParse(hourMinute[0]) ?? 0;
     int minute = int.tryParse(hourMinute[1]) ?? 0;
-    
+
     // Convert to 24-hour format for comparison
     if (period == 'PM' && hour != 12) {
       hour += 12;
     } else if (period == 'AM' && hour == 12) {
       hour = 0;
     }
-    
+
     // Compare hours first
     if (hour < now.hour) {
       return true;
@@ -152,7 +183,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
       // If same hour, compare minutes
       return minute <= now.minute;
     }
-    
+
     return false;
   }
 
@@ -160,7 +191,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   String _formatTime(int hour, int minute) {
     String period = 'AM';
     int displayHour = hour;
-    
+
     if (hour >= 12) {
       period = 'PM';
       if (hour > 12) {
@@ -172,10 +203,10 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     } else if (hour == 0) {
       displayHour = 12;
     }
-    
+
     String hourString = displayHour.toString().padLeft(2, '0');
     String minuteString = minute.toString().padLeft(2, '0');
-    
+
     return '$hourString:$minuteString $period';
   }
 
@@ -196,7 +227,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     }
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8FB),
@@ -250,17 +281,16 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                     height: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.grey[300]!,
-                        width: 1.0,
-                      ),
+                      border: Border.all(color: Colors.grey[300]!, width: 1.0),
                     ),
                     child: CircleAvatar(
                       radius: 29,
                       backgroundColor: Colors.grey[200],
                       backgroundImage: widget.doctorImage.isNotEmpty
                           ? AssetImage(widget.doctorImage)
-                          : AssetImage('assets/book_appointment/doctor_logo.png'),
+                          : AssetImage(
+                              'assets/book_appointment/doctor_logo.png',
+                            ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -294,7 +324,10 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                         ),
                         const SizedBox(height: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: Color(0xFF2F80ED),
                             borderRadius: BorderRadius.circular(20),
@@ -352,22 +385,31 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                 itemBuilder: (context, index) {
                   String time = timeSlots[index];
                   bool isSelected = selectedTime == time;
-                  
+
                   return Container(
-                    margin: EdgeInsets.only(right: index == timeSlots.length - 1 ? 0 : 12),
+                    margin: EdgeInsets.only(
+                      right: index == timeSlots.length - 1 ? 0 : 12,
+                    ),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF2F80ED) : Colors.white,
+                        color: isSelected
+                            ? const Color(0xFF2F80ED)
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(30),
-                        boxShadow: !isSelected ? [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ] : null,
+                        boxShadow: !isSelected
+                            ? [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ]
+                            : null,
                       ),
                       child: GestureDetector(
                         onTap: () {
@@ -387,7 +429,9 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               color: isSelected ? Colors.white : Colors.black,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w400,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w400,
                             ),
                           ),
                         ),
@@ -434,22 +478,31 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                 itemBuilder: (context, index) {
                   String date = dates[index];
                   bool isSelected = selectedDate == date;
-                  
+
                   return Container(
-                    margin: EdgeInsets.only(right: index == dates.length - 1 ? 0 : 12),
+                    margin: EdgeInsets.only(
+                      right: index == dates.length - 1 ? 0 : 12,
+                    ),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF2F80ED) : Colors.white,
+                        color: isSelected
+                            ? const Color(0xFF2F80ED)
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(30),
-                        boxShadow: !isSelected ? [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ] : null,
+                        boxShadow: !isSelected
+                            ? [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ]
+                            : null,
                       ),
                       child: GestureDetector(
                         onTap: () {
@@ -465,7 +518,9 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               color: isSelected ? Colors.white : Colors.black,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w400,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w400,
                             ),
                           ),
                         ),
@@ -488,10 +543,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
               ),
               child: Text(
                 'Note:- You will get a call from the doctor in app, on your appointment date and specified time.',
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
               ),
             ),
             const SizedBox(height: 20),
@@ -514,7 +566,11 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const AppointmentConfirmationScreen(),
+                        builder: (context) => AppointmentConfirmationScreen(
+                          doctorName: widget.doctorName,
+                          appointmentDate: selectedDate!,
+                          appointmentTime: selectedTime!,
+                        ),
                       ),
                     );
                   }
@@ -575,11 +631,16 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                     side: BorderSide(
-                      color: isSelected ? AppColors.b4 : const Color(0xFFE0E0E0),
+                      color: isSelected
+                          ? AppColors.b4
+                          : const Color(0xFFE0E0E0),
                     ),
                   ),
                   backgroundColor: const Color(0xFFF5F5F5),
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
                 );
               }).toList(),
             ),
@@ -600,7 +661,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   // Helper method to get the actual date for the selected date string
   DateTime _getDateForSelection(String? dateSelection) {
     if (dateSelection == null) return DateTime.now();
-    
+
     if (dateSelection == 'Today') {
       return DateTime.now();
     } else if (dateSelection == 'Tomorrow') {
@@ -609,7 +670,7 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
       // Parse the date string in format like "1st Jan", "2nd Feb", etc.
       // This is a simplified version - in a real app you'd need more robust parsing
       DateTime now = DateTime.now();
-      
+
       // Try to parse the format "1st Jan", "2nd Feb", etc.
       try {
         // Extract day and month from the format "1st Jan"
@@ -617,14 +678,14 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         if (parts.length == 2) {
           String dayWithSuffix = parts[0];
           String month = parts[1];
-          
+
           // Extract numeric day from "1st", "2nd", "3rd", "4th", etc.
           String dayString = dayWithSuffix.replaceAll(RegExp(r'[^\d]'), '');
           int day = int.tryParse(dayString) ?? 1;
-          
+
           // Find the month number
           int monthNumber = _getMonthNumber(month);
-          
+
           // Create the date in the current year
           return DateTime(now.year, monthNumber, day);
         }
@@ -632,25 +693,35 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         // If parsing fails, return a default date
         return DateTime(now.year, now.month, now.day + 2);
       }
-      
+
       // If parsing fails, return a default date
       return DateTime(now.year, now.month, now.day + 2);
     }
   }
-  
+
   // Helper method to get month number from month name
   int _getMonthNumber(String monthName) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
-    
+
     for (int i = 0; i < months.length; i++) {
       if (months[i] == monthName) {
         return i + 1;
       }
     }
-    
+
     return 1; // Default to January if month not found
   }
 
@@ -658,76 +729,104 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   List<WorkingHours> _getWorkingHoursForDate(DateTime date) {
     // Map weekday to string name
     String dayName = _getDayName(date);
-    return widget.workingHours.where((hour) => hour.day.toLowerCase() == dayName.toLowerCase()).toList();
+    return widget.workingHours
+        .where((hour) => hour.day.toLowerCase() == dayName.toLowerCase())
+        .toList();
   }
 
   String _getDayName(DateTime date) {
     switch (date.weekday) {
-      case 1: return 'monday';
-      case 2: return 'tuesday';
-      case 3: return 'wednesday';
-      case 4: return 'thursday';
-      case 5: return 'friday';
-      case 6: return 'saturday';
-      case 7: return 'sunday';
-      default: return '';
+      case 1:
+        return 'monday';
+      case 2:
+        return 'tuesday';
+      case 3:
+        return 'wednesday';
+      case 4:
+        return 'thursday';
+      case 5:
+        return 'friday';
+      case 6:
+        return 'saturday';
+      case 7:
+        return 'sunday';
+      default:
+        return '';
     }
   }
 
   // Helper method to handle the View All button press
- void _handleViewAllPressed() async {
+  void _handleViewAllPressed() async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DateTimeSelectionScreen(
-          workingHours: widget.workingHours,
-        ),
+        builder: (context) =>
+            DateTimeSelectionScreen(workingHours: widget.workingHours),
+        settings: RouteSettings(arguments: widget.doctorName),
       ),
     );
-    
+
     if (result != null) {
-      // Update selected date and time based on the result
-      DateTime selectedDateTime = result['date'];
-      String selectedTimeString = result['time'];
-      
-      // Update the selected date in the UI
-      String dateDisplay = '';
-      bool isToday = _isSameDay(selectedDateTime, DateTime.now());
-      bool isTomorrow = _isSameDay(selectedDateTime, DateTime.now().add(const Duration(days: 1)));
-      
-      if (isToday) {
-        dateDisplay = 'Today';
-      } else if (isTomorrow) {
-        dateDisplay = 'Tomorrow';
-      } else {
-        String dayWithSuffix = _getDayWithSuffix(selectedDateTime.day);
-        String month = DateFormat('MMM').format(selectedDateTime);
-        dateDisplay = '$dayWithSuffix $month';
+      // Check if the result contains date and time (user returned from calendar view)
+      if (result is Map &&
+          result.containsKey('date') &&
+          result.containsKey('time')) {
+        DateTime selectedDateTime = result['date'];
+        String selectedTimeString = result['time'];
+
+        // Update the selected date in the UI
+        String dateDisplay = '';
+        bool isToday = _isSameDay(selectedDateTime, DateTime.now());
+        bool isTomorrow = _isSameDay(
+          selectedDateTime,
+          DateTime.now().add(const Duration(days: 1)),
+        );
+
+        if (isToday) {
+          dateDisplay = 'Today';
+        } else if (isTomorrow) {
+          dateDisplay = 'Tomorrow';
+        } else {
+          String dayWithSuffix = _getDayWithSuffix(selectedDateTime.day);
+          String month = DateFormat('MMM').format(selectedDateTime);
+          dateDisplay = '$dayWithSuffix $month';
+        }
+
+        setState(() {
+          selectedDate = dateDisplay;
+          selectedTime = selectedTimeString;
+        });
+
+        // Regenerate time slots based on the selected date
+        _generateTimeSlots();
       }
-      
-      setState(() {
-        selectedDate = dateDisplay;
-        selectedTime = selectedTimeString;
-      });
-      
-      // Regenerate time slots based on the selected date
-      _generateTimeSlots();
+      // If result is not a Map, it means the user navigated to confirmation screen directly
+      // In this case, we don't need to update the UI since the user is already on the confirmation screen
     }
- }
+  }
 
   // Helper method to add time slots in a specific range
- void _addTimeSlotsInRange(int startHour, int startMinute, int endHour, int endMinute, List<String> timeSlots, bool isToday, DateTime now) {
+  void _addTimeSlotsInRange(
+    int startHour,
+    int startMinute,
+    int endHour,
+    int endMinute,
+    List<String> timeSlots,
+    bool isToday,
+    DateTime now,
+  ) {
     int currentHour = startHour;
     int currentMinute = startMinute;
-    
-    while (currentHour < endHour || (currentHour == endHour && currentMinute < endMinute)) {
+
+    while (currentHour < endHour ||
+        (currentHour == endHour && currentMinute < endMinute)) {
       String timeString = _formatTime(currentHour, currentMinute);
-      
+
       // If it's today, check if the time has already passed
       if (!isToday || !_isPastTimeForToday(timeString)) {
         timeSlots.add(timeString);
       }
-      
+
       // Increment by 30 minutes
       currentMinute += 30;
       if (currentMinute >= 60) {
@@ -738,15 +837,22 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   }
 
   // Helper method to add time slots from current time within working hours
-  void _addTimeSlotsFromCurrentTime(int startHour, int startMinute, int endHour, int endMinute, List<String> timeSlots, DateTime now) {
+  void _addTimeSlotsFromCurrentTime(
+    int startHour,
+    int startMinute,
+    int endHour,
+    int endMinute,
+    List<String> timeSlots,
+    DateTime now,
+  ) {
     // Start from current time or working start time, whichever is later
     int currentHour = now.hour;
     int currentMinute = now.minute;
-    
+
     // If current time is before the working start time, use working start time
     int workingStartInMinutes = startHour * 60 + startMinute;
     int currentInMinutes = currentHour * 60 + currentMinute;
-    
+
     if (currentInMinutes < workingStartInMinutes) {
       currentHour = startHour;
       currentMinute = startMinute;
@@ -759,17 +865,19 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         currentHour++;
       }
     }
-    
+
     int endInMinutes = endHour * 60 + endMinute;
-    
-    while (currentHour < endHour || (currentHour == endHour && currentMinute < endMinute)) {
+
+    while (currentHour < endHour ||
+        (currentHour == endHour && currentMinute < endMinute)) {
       int currentInMinutes = currentHour * 60 + currentMinute;
-      
-      if (currentInMinutes >= workingStartInMinutes && currentInMinutes < endInMinutes) {
+
+      if (currentInMinutes >= workingStartInMinutes &&
+          currentInMinutes < endInMinutes) {
         String timeString = _formatTime(currentHour, currentMinute);
         timeSlots.add(timeString);
       }
-      
+
       // Increment by 30 minutes
       currentMinute += 30;
       if (currentMinute >= 60) {
@@ -781,72 +889,174 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
 }
 
 class AppointmentConfirmationScreen extends StatelessWidget {
-  const AppointmentConfirmationScreen({super.key});
+  final String doctorName;
+  final String appointmentDate;
+  final String appointmentTime;
+
+  const AppointmentConfirmationScreen({
+    super.key,
+    required this.doctorName,
+    required this.appointmentDate,
+    required this.appointmentTime,
+  });
 
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Center(
+      backgroundColor: const Color(0xFFF6F8FB), // Light cool-grey background
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/book_appointment/holding_hands.png',
-              width: 100,
-              height: 100,
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'Appointment Confirmed!',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+            // Status Bar (Time, Signal, WiFi, Battery) - removed back arrow
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '9:41',
+                    style: TextStyle(fontSize: 14, color: Colors.black),
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.signal_cellular_alt, color: Colors.black),
+                      SizedBox(width: 4),
+                      Icon(Icons.wifi, color: Colors.black),
+                      SizedBox(width: 4),
+                      Icon(Icons.battery_full, color: Colors.black),
+                    ],
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-            const Text(
-              'Your appointment has been booked successfully',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
+
+            // Success Icon (centered at the top)
+            Padding(
+              padding: EdgeInsets.only(top: 40.0),
+              child: Image.asset(
+                'assets/book_appointment/tick.png',
+                width: 120,
+                height: 120,
               ),
             ),
-            const SizedBox(height: 24),
-            SizedBox(
-              width: 200,
-              height: 48,
+
+            // Main Heading
+            Padding(
+              padding: EdgeInsets.only(top: 32.0),
+              child: Text(
+                'Booking Confirmed',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E3A8A), // Dark blue color
+                ),
+              ),
+            ),
+
+            // Sub-heading
+            Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Text(
+                'Your Booking has been confirmed.',
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+            ),
+
+            // Dynamic Appointment Text (center of screen)
+            Padding(
+              padding: EdgeInsets.only(top: 40.0),
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    height: 1.5,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'You Have an appointment with ',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                    TextSpan(
+                      text: doctorName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '\non ',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                    TextSpan(
+                      text: appointmentDate,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' at ',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                    TextSpan(
+                      text: appointmentTime,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '.',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            Spacer(), // Pushes the button to the bottom
+            // Action Button (pinned to bottom)
+            Padding(
+              padding: EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    (route) => false,
+                  // Navigate back to home screen and clear the back stack
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    (route) => false, // This removes all previous routes
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.b4,
+                  backgroundColor: Color(0xFF3B82F6), // Primary blue
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
+                  minimumSize: Size(double.infinity, 50),
                 ),
-                child: const Text(
-                  'Go to Home',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                child: Text(
+                  'Back to home',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+
+            // Home Indicator
+            Container(
+              padding: EdgeInsets.only(bottom: 16.0),
+              child: Container(
+                width: 134,
+                height: 5,
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(100),
                 ),
               ),
             ),
