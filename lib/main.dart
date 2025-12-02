@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'screens/splash_screen.dart';
 import 'screens/audio_call_screen.dart';
 import 'screens/in_audio_call_screen.dart';
+import 'screens/main_app_screen.dart';
 
 void main() {
- runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Color(0xFF4A85DD), // Set status bar color to match our theme
+      statusBarIconBrightness: Brightness.dark, // For light status bar icons
+      statusBarBrightness: Brightness.light, // For light status bar on Android
+    ),
+  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

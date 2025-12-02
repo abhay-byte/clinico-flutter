@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/home_screen.dart';
+import '../screens/main_app_screen.dart';
 
 class BookingConfirmedScreen extends StatelessWidget {
   final String doctorName;
@@ -110,7 +111,7 @@ class BookingConfirmedScreen extends StatelessWidget {
                     // Navigate back to home screen and clear the back stack
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => MainAppScreen()),
                       (route) => false, // This removes all previous routes
                     );
                   },

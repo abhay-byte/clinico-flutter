@@ -8,6 +8,7 @@ import '../screens/ai_chat_screen.dart';
 import '../screens/doctor_list_screen.dart';
 import '../screens/doctor_profile_screen.dart';
 import '../screens/search_location_screen.dart';
+import '../pages/user_profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentBottomNavIndex = 0;
   String currentLocation = 'New Delhi, India';
 
   void _showLocationSelectionModal() async {
@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.bg1,
       body: _buildBody(),
-      bottomNavigationBar: _buildBottomNavBar(),
+      // bottomNavigationBar: _buildBottomNavBar(), // Removed as it's handled by MainAppScreen
     );
   }
 
@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Upcoming Appointments Section
+ // Upcoming Appointments Section
   Widget _buildUpcomingAppointmentsSection() {
     return Container(
       color: AppColors.bg1,
@@ -259,8 +259,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               children: [
                 Container(
-                  width: 100,
-                  height: 100,
+                  width: 120,
+                  height: 120,
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(12),
@@ -292,7 +292,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Looking For Specialist Card
-  Widget _buildSpecialistCard() {
+ Widget _buildSpecialistCard() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -465,16 +465,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
    // Categories Section
-  Widget _buildCategoriesSection() {
+ Widget _buildCategoriesSection() {
      final categories = [
-       ('assets/home/Psychiatrist.png', 'Psychiatrist'),
-       ('assets/home/Hepatologist.png', 'Hepatologist'),
-       ('assets/home/Cardiologist.png', 'Cardiologist'),
-       ('assets/home/Dental.png', 'Dental'),
-       ('assets/home/Nephrologist.png', 'Nephrologist'),
-       ('assets/home/Pulmonologist.png', 'Pulmonologist'),
-       ('assets/home/Dermatologist.png', 'Dermatologist'),
-       ('assets/home/Gastroenterologist.png', 'Gastroenterologist'),
+       ("assets/home/Psychiatrist.png", 'Psychiatrist'),
+       ("assets/home/Hepatologist.png", 'Hepatologist'),
+       ("assets/home/Cardiologist.png", 'Cardiologist'),
+       ("assets/home/Dental.png", 'Dental'),
+       ("assets/home/Nephrologist.png", 'Nephrologist'),
+       ("assets/home/Pulmonologist.png", 'Pulmonologist'),
+       ("assets/home/Dermatologist.png", 'Dermatologist'),
+       ("assets/home/Gastroenterologist.png", 'Gastroenterologist'),
      ];
  
      return Column(
@@ -678,10 +678,10 @@ class _HomeScreenState extends State<HomeScreen> {
   // Services Section
   Widget _buildServicesSection() {
     final services = [
-      ('assets/home/clinic_visit.png', 'Clinic Visit'),
-      ('assets/home/video_call.png', 'Video Call'),
-      ('assets/home/call.png', 'Call'),
-      ('assets/home/chat.png', 'Chat'),
+      ("assets/home/clinic_visit.png", 'Clinic Visit'),
+      ("assets/home/video_call.png", 'Video Call'),
+      ("assets/home/call.png", 'Call'),
+      ("assets/home/chat.png", 'Chat'),
     ];
 
     return Column(
@@ -757,82 +757,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  // Bottom Navigation Bar
-  Widget _buildBottomNavBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.bg2,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: BottomNavigationBar(
-        currentIndex: _currentBottomNavIndex,
-        onTap: (index) {
-          setState(() {
-            _currentBottomNavIndex = index;
-          });
-        },
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: AppColors.bg2,
-        selectedItemColor: AppColors.ge1,
-        unselectedItemColor: AppColors.ge2,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/home/home_filled.png',
-              width: 24,
-              height: 24,
-              color: _currentBottomNavIndex == 0
-                  ? AppColors.ge1
-                  : AppColors.ge2,
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/home/messages.png',
-              width: 24,
-              height: 24,
-              color: _currentBottomNavIndex == 1
-                  ? AppColors.ge1
-                  : AppColors.ge2,
-            ),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/home/calender.png',
-              width: 24,
-              height: 24,
-              color: _currentBottomNavIndex == 2
-                  ? AppColors.ge1
-                  : AppColors.ge2,
-            ),
-            label: 'Appointments',
-          ),
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              'assets/home/profile.png',
-              width: 24,
-              height: 24,
-              color: _currentBottomNavIndex == 3
-                  ? AppColors.ge1
-                  : AppColors.ge2,
-            ),
-            label: 'Profile',
-          ),
-        ],
-      ),
     );
   }
 }

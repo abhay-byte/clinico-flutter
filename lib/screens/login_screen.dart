@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:clinico/screens/home_screen.dart';
+import 'package:clinico/screens/main_app_screen.dart';
 import '../constants/colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool rememberMe = false;
   bool showPassword = false;
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+ final passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -351,10 +352,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Navigate to HomeScreen
+                          // Navigate to MainAppScreen (which includes bottom navigation)
                           Navigator.of(context).pushReplacement(
                             MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
+                              builder: (context) => MainAppScreen(),
                             ),
                           );
                         },

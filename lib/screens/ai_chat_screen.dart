@@ -234,7 +234,9 @@ class _AiChatScreenState extends State<AiChatScreen> {
           'I am having sever chest...',
         ],
         onHomeTap: () {
-          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+          Navigator.of(context).pop(); // Close the drawer
+          // Go back to the previous screen (HomeScreen inside MainAppScreen)
+          Navigator.of(context).pop();
         },
       ),
       body: Stack(
@@ -364,7 +366,8 @@ class _AiChatScreenState extends State<AiChatScreen> {
             // Home Icon (Navigation)
             GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                // Go back to the previous screen (HomeScreen inside MainAppScreen)
+                Navigator.of(context).pop();
               },
               child: Image.asset(
                 'assets/ai_chat/home_outline.png',

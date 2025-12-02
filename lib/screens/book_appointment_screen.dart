@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../constants/colors.dart';
 import 'home_screen.dart';
+import 'main_app_screen.dart';
 import 'date_time_selection_screen.dart';
 import '../models/working_hours_model.dart';
 
@@ -29,11 +30,21 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
   List<String> timeSlots = [];
   List<String> dates = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _generateDates();
-    _generateTimeSlots();
+  void _initializeTimeSlots() {
+    timeSlots = [
+      '10:00 AM',
+      '10:30 AM',
+      '11:00 AM',
+      '11:30 AM',
+      '12:00 PM',
+      '12:30 PM',
+      '2:00 PM',
+      '2:30 PM',
+      '3:00 PM',
+      '3:30 PM',
+      '4:00 PM',
+      '4:30 PM',
+    ];
   }
 
   // Check if two dates are the same day
@@ -43,7 +54,13 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
         date1.year == date2.year;
   }
 
-  // Generate dates for the next 14 days
+  @override
+  void initState() {
+    super.initState();
+    _initializeTimeSlots();
+    _generateDates();
+  }
+
   void _generateDates() {
     List<String> newDates = [];
     DateTime now = DateTime.now();
@@ -1025,11 +1042,9 @@ class AppointmentConfirmationScreen extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigate back to home screen and clear the back stack
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                    (route) => false, // This removes all previous routes
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => MainAppScreen()),
+                    (route) => false,
                   );
                 },
                 style: ElevatedButton.styleFrom(
