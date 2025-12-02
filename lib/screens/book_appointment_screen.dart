@@ -298,11 +298,15 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
                     height: 60,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.grey[300]!, width: 1.0),
+                      border: Border.all(
+                        color: Colors.transparent,
+                        width: 0,
+                      ), // Remove the border
                     ),
                     child: CircleAvatar(
                       radius: 29,
-                      backgroundColor: Colors.grey[200],
+                      backgroundColor: Colors
+                          .transparent, // Changed from grey to transparent to avoid border
                       backgroundImage: widget.doctorImage.isNotEmpty
                           ? AssetImage(widget.doctorImage)
                           : AssetImage(

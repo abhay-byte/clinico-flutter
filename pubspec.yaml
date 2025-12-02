@@ -92,6 +92,8 @@ flutter:
     - assets/user/
     - assets/user/user_details/
     - assets/wellness_and_awareness/
+    - assets/incoming_call/
+    - assets/calls/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -8,6 +8,7 @@
 /// identify the medical professional, and provide immediate, large controls to either
 /// accept or decline the consultation.
 library;
+
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import 'in_audio_call_screen.dart';
@@ -49,16 +50,16 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
             children: [
               // Header with app logo
               _buildHeader(),
-              
+
               // Spacer
               const SizedBox(height: 40),
-              
+
               // Doctor identification section
               _buildDoctorInfo(),
-              
+
               // Spacer
               const SizedBox(height: 60),
-              
+
               // Call controls section
               _buildCallControls(),
             ],
@@ -72,11 +73,16 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     return Container(
       padding: const EdgeInsets.all(20),
       child: Center(
-        child: Image.asset(
-          'assets/calls/clinico_logo.png',
-          width: 80,
-          height: 80,
-          fit: BoxFit.contain,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white, // White background of exact logo size
+          ),
+          child: Image.asset(
+            'assets/calls/clinico_logo.png',
+            width: 80,
+            height: 80,
+            fit: BoxFit.contain,
+          ),
         ),
       ),
     );
@@ -109,20 +115,18 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
               radius: 77,
               backgroundImage: AssetImage('assets/calls/doctor_female.png'),
               backgroundColor: Colors.white,
-              child: Container( // Add a subtle border effect
+              child: Container(
+                // Add a subtle border effect
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.white,
-                    width: 5,
-                  ),
+                  border: Border.all(color: AppColors.white, width: 5),
                 ),
               ),
             ),
           ),
-          
+
           const SizedBox(height: 30),
-          
+
           // Doctor name with enhanced styling
           Text(
             widget.doctorName,
@@ -132,20 +136,17 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
               color: Colors.white,
             ),
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Specialization
           Text(
             widget.doctorSpecialization,
-            style: const TextStyle(
-              fontSize: 18,
-              color: Colors.white70,
-            ),
+            style: const TextStyle(fontSize: 18, color: Colors.white70),
           ),
-          
+
           const SizedBox(height: 25),
-          
+
           // Appointment time/status message with enhanced styling
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -201,9 +202,9 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 30),
-          
+
           // Accept and Decline buttons row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -218,7 +219,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                   _declineCall();
                 },
               ),
-              
+
               // Accept button
               _buildControlButton(
                 icon: Icons.call,
@@ -260,11 +261,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                 ),
               ],
             ),
-            child: Icon(
-              icon,
-              size: 30,
-              color: color,
-            ),
+            child: Icon(icon, size: 30, color: color),
           ),
           const SizedBox(height: 8),
           Text(
@@ -280,41 +277,41 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     );
   }
 
-   void _acceptCall() {
-     // Handle call acceptance logic
-     // This would typically connect to the audio call service
-     
-     // Navigate to in-call screen
-     Navigator.of(context).push(
-       MaterialPageRoute(
-         builder: (context) => InAudioCallScreen(
-           doctorName: widget.doctorName,
-           doctorSpecialization: widget.doctorSpecialization,
-         ),
-       ),
-     );
-   }
- 
-   void _declineCall() {
-     // Handle call decline logic
-     
-     // Show a snackbar to confirm the action
-     ScaffoldMessenger.of(context).showSnackBar(
-       SnackBar(
-         content: const Text('Call declined'),
-         backgroundColor: AppColors.r1,
-         action: SnackBarAction(
-           label: 'OK',
-           onPressed: () {
-             // Do nothing
-           },
-         ),
-       ),
-     );
-     
-     // Return to previous screen after a delay
-     Future.delayed(const Duration(milliseconds: 1500), () {
-       Navigator.of(context).pop(); // Return to previous screen
-     });
-   }
+  void _acceptCall() {
+    // Handle call acceptance logic
+    // This would typically connect to the audio call service
+
+    // Navigate to in-call screen
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => InAudioCallScreen(
+          doctorName: widget.doctorName,
+          doctorSpecialization: widget.doctorSpecialization,
+        ),
+      ),
+    );
+  }
+
+  void _declineCall() {
+    // Handle call decline logic
+
+    // Show a snackbar to confirm the action
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Call declined'),
+        backgroundColor: AppColors.r1,
+        action: SnackBarAction(
+          label: 'OK',
+          onPressed: () {
+            // Do nothing
+          },
+        ),
+      ),
+    );
+
+    // Return to previous screen after a delay
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      Navigator.of(context).pop(); // Return to previous screen
+    });
+  }
 }

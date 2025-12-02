@@ -15,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool rememberMe = false;
   bool showPassword = false;
   final emailController = TextEditingController();
- final passwordController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   void dispose() {
@@ -48,11 +48,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        'assets/authentication/logo.png',
-                        width: 45,
-                        height: 45,
-                        fit: BoxFit.contain,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors
+                              .white, // White background of exact logo size
+                        ),
+                        child: Image.asset(
+                          'assets/authentication/logo.png',
+                          width: 45,
+                          height: 45,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                       Image.asset(
                         'assets/authentication/elphie.png',
@@ -62,9 +68,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 8),
-                  
+
                   // Title and subtitle
                   const Text(
                     'Welcome Back',
@@ -121,7 +127,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                                 decoration: BoxDecoration(
                                   color: isLoginTab
                                       ? AppColors.white
@@ -154,7 +162,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 });
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                                 decoration: BoxDecoration(
                                   color: !isLoginTab
                                       ? AppColors.white
@@ -208,21 +218,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: AppColors.ge3,
-                          ),
+                          borderSide: const BorderSide(color: AppColors.ge3),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: AppColors.ge3,
-                          ),
+                          borderSide: const BorderSide(color: AppColors.ge3),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: AppColors.b4,
-                          ),
+                          borderSide: const BorderSide(color: AppColors.b4),
                         ),
                         filled: true,
                         fillColor: AppColors.white,
@@ -256,21 +260,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: AppColors.ge3,
-                          ),
+                          borderSide: const BorderSide(color: AppColors.ge3),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: AppColors.ge3,
-                          ),
+                          borderSide: const BorderSide(color: AppColors.ge3),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: AppColors.b4,
-                          ),
+                          borderSide: const BorderSide(color: AppColors.b4),
                         ),
                         filled: true,
                         fillColor: AppColors.white,
@@ -383,10 +381,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: Container(
-                            height: 1,
-                            color: AppColors.ge3,
-                          ),
+                          child: Container(height: 1, color: AppColors.ge3),
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12),
@@ -399,10 +394,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         Expanded(
-                          child: Container(
-                            height: 1,
-                            color: AppColors.ge3,
-                          ),
+                          child: Container(height: 1, color: AppColors.ge3),
                         ),
                       ],
                     ),
@@ -418,9 +410,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Handle Google login
                         },
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                            color: AppColors.ge3,
-                          ),
+                          side: const BorderSide(color: AppColors.ge3),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -459,9 +449,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // Handle Apple login
                         },
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(
-                            color: AppColors.ge3,
-                          ),
+                          side: const BorderSide(color: AppColors.ge3),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),

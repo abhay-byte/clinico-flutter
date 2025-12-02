@@ -9,6 +9,7 @@ import '../screens/doctor_list_screen.dart';
 import '../screens/doctor_profile_screen.dart';
 import '../screens/search_location_screen.dart';
 import '../pages/user_profile_page.dart';
+import '../screens/incoming_call_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -90,6 +91,16 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.bg1,
       body: _buildBody(),
       // bottomNavigationBar: _buildBottomNavBar(), // Removed as it's handled by MainAppScreen
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const IncomingCallScreen()),
+          );
+        },
+        backgroundColor: Colors.red, // Red color for testing purposes
+        child: const Icon(Icons.phone, color: Colors.white),
+      ),
     );
   }
 

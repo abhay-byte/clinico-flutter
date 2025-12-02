@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/working_hours_model.dart';
 import 'book_appointment_screen.dart';
+import 'booking_confirmed_screen.dart';
 
 class DateTimeSelectionScreen extends StatefulWidget {
   final List<WorkingHours> workingHours;
@@ -667,16 +668,14 @@ class _DateTimeSelectionScreenState extends State<DateTimeSelectionScreen> {
                               // Navigate directly to Appointment Confirmation Screen
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      AppointmentConfirmationScreen(
-                                        doctorName:
-                                            _getDoctorName() ??
-                                            'Unknown Doctor',
-                                        appointmentDate: _getFormattedDate(
-                                          selectedDate,
-                                        ),
-                                        appointmentTime: selectedTime!,
-                                      ),
+                                  builder: (context) => BookingConfirmedScreen(
+                                    doctorName:
+                                        _getDoctorName() ?? 'Unknown Doctor',
+                                    appointmentDate: _getFormattedDate(
+                                      selectedDate,
+                                    ),
+                                    appointmentTime: selectedTime!,
+                                  ),
                                 ),
                               );
                             } else {

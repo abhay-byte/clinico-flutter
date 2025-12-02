@@ -1,32 +1,65 @@
-# TODO List
+# Incoming Call Page Todo
 
-## Navigation Implementation from Home Screen to Doctor List
+## Description
+Create an incoming call page with the following components:
+- Clean, light-colored background (#F8F9FD)
+- Vertically centered content
+- Caller information in the middle
+- Action buttons at the bottom
 
-### Task: Make doctors type on home page navigable to doctor list
+## Components (Top to Bottom)
+1. App Brand Logo
+   - Widget: Image.asset
+   - Asset Path: assets/incoming_call/clinico_logo.png
+   - Placement: Top center of SafeArea
+   - Size: 40-50 pixels height
+   - Padding: Moderate top padding
 
-#### Description:
-I need to implement navigation from my Home Screen categories to the Doctor List screen.
+2. Doctor's Profile Image
+   - Widget: CircleAvatar or circular Container with image
+   - Asset Path: assets/incoming_call/doctor_logo.png
+   - Placement: Centered horizontally, below brand logo
+   - Size: Radius 80-100 pixels
+   - Shape: Perfect circle
+   - Effect: Subtle shadow or border
 
-Current State:
-- I have a HomeScreen with a grid of categories (Psychiatrist, Dentist, Cardiologist, etc.).
-- I have a DoctorListScreen that currently lists all doctors (Dr. Lorem Ipsum).
+3. Doctor's Name
+   - Widget: Text
+   - Content: "Dr. Lorem Ipsum"
+   - Placement: Centered below profile image
+   - Font Size: 24-28 sp
+   - Font Weight: Bold
+   - Color: #1E293B
+   - Padding: Top padding to separate from image
 
-Requirement: When a user taps on a specific category icon in the HomeScreen (e.g., 'Dentist'), the app should navigate to the DoctorListScreen.
+4. Call Status Subtitle
+   - Widget: Text
+   - Content: "Incoming Video Call..." or "Incoming Audio Call..."
+   - Placement: Centered below doctor's name
+   - Font Size: 16-18 sp
+   - Font Weight: Normal
+   - Color: #64748B
+   - Padding: Small top padding
 
-#### Key Functionality Required:
-1. Update the DoctorListScreen to accept a categoryName parameter (String) in its constructor.
-2. Use this categoryName to filter the list of doctors shown or update the page title (e.g., 'Dentist Near Me').
-3. On the HomeScreen, add an onTap or InkWell to each category item. When tapped, push the DoctorListScreen and pass the corresponding category name (e.g., if I click 'Dental', pass 'Dental' or 'Dentist').
-4. Generate the code for the updated DoctorListScreen and the navigation logic for the HomeScreen category widgets.
+5. Call Action Buttons (Bottom Section)
+   - Widget: Row with two buttons
+   - A. Decline Button:
+     * Widget: FloatingActionButton or custom circular button
+     * Icon: Icons.call_end
+     * Color: #EF4444 (red) with white icon
+     * Size: 64x64 pixels
+     * Placement: Left side of row
+   - B. Accept Button:
+     * Widget: FloatingActionButton or custom circular button
+     * Icon: Icons.call or Icons.videocam
+     * Color: #22C55E (green) with white icon
+     * Size: 64x64 pixels
+     * Placement: Right side of row
+   - Optional: Pulsing or ripple animation on accept button
 
-#### Files to Modify:
-- lib/screens/doctor_list_screen.dart
-- lib/screens/home_screen.dart
-
-#### Acceptance Criteria:
-- [ ] DoctorListScreen accepts categoryName parameter
-- [ ] DoctorListScreen filters doctors based on category
-- [ ] HomeScreen category items are tappable
-- [ ] Navigation works from HomeScreen to DoctorListScreen with category parameter
-- [ ] Category-specific doctor lists display correctly
-- [ ] UI matches design requirements
+## Additional Notes
+- Match Figma design precisely
+- Use assets from designated folder only
+- Handle loading and error states
+- Follow Clean Architecture principles
+- Use proper state management

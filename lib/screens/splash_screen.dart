@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:clinico/screens/language_screen.dart';
 import '../constants/colors.dart';
@@ -17,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateToLanguageScreen();
   }
 
- void _navigateToLanguageScreen() {
+  void _navigateToLanguageScreen() {
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) {
         Navigator.of(context).pushReplacement(
@@ -67,6 +66,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: 85,
                   height: 85,
                   decoration: BoxDecoration(
+                    color: Colors.white, // White background of exact logo size
                     image: DecorationImage(
                       image: AssetImage("assets/splash_screen/logo.png"),
                       fit: BoxFit.contain,

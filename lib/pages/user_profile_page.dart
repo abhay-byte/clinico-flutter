@@ -12,7 +12,7 @@ import '../screens/main_app_screen.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
- _UserProfilePageState createState() => _UserProfilePageState();
+  _UserProfilePageState createState() => _UserProfilePageState();
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
@@ -41,16 +41,22 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ),
                   ),
                   // Logo/Avatar - Using brand_logo.png as requested
-                  Image.asset(
-                    'assets/user/brand_logo.png',
-                    width: 48,
-                    height: 48,
-                    fit: BoxFit.contain,
+                  Container(
+                    decoration: BoxDecoration(
+                      color:
+                          Colors.white, // White background of exact logo size
+                    ),
+                    child: Image.asset(
+                      'assets/user/brand_logo.png',
+                      width: 48,
+                      height: 48,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ],
               ),
             ),
-            
+
             // Profile Card
             Container(
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -105,9 +111,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       ),
                     ],
                   ),
-                  
+
                   SizedBox(width: 16),
-                  
+
                   // User Info
                   Expanded(
                     child: Column(
@@ -136,9 +142,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             ),
                           ],
                         ),
-                        
+
                         SizedBox(height: 4),
-                        
+
                         Text(
                           "Patient ID: CLN-10234",
                           style: TextStyle(
@@ -146,12 +152,15 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             color: Color(0xFF6A7282), // ge3
                           ),
                         ),
-                        
+
                         SizedBox(height: 8),
-                        
+
                         // Verified Badge
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: Color(0xFFE1FFBF), // Light green
                             borderRadius: BorderRadius.circular(6),
@@ -182,7 +191,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ],
               ),
             ),
-            
+
             // Membership Info
             Container(
               margin: EdgeInsets.symmetric(horizontal: 16),
@@ -245,9 +254,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 ],
               ),
             ),
-            
+
             SizedBox(height: 16),
-            
+
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -255,7 +264,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     // Account & Health Section Header
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                       color: Color(0xFFEBF1FA), // bg1
                       child: Text(
                         "Account & Health",
@@ -266,7 +278,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         ),
                       ),
                     ),
-                    
+
                     // Account & Health Menu Items
                     _buildMenuItem(
                       iconPath: 'assets/user/profile_details_icon.png',
@@ -287,10 +299,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                       subtitle: "Manage doctor appointments",
                       onTap: () {
                         // Go back to the main app screen and set the index to appointments (index 2)
-                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        Navigator.of(
+                          context,
+                        ).popUntil((route) => route.isFirst);
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => MainAppScreen(initialIndex: 2),
+                            builder: (context) =>
+                                MainAppScreen(initialIndex: 2),
                           ),
                         );
                       },
@@ -338,11 +353,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         );
                       },
                     ),
-                    
+
                     // Wellness & Learning Section Header
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                       color: Color(0xFFEBF1FA), // bg1
                       child: Text(
                         "Wellness & Learning",
@@ -353,7 +371,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         ),
                       ),
                     ),
-                    
+
                     _buildMenuItem(
                       iconPath: 'assets/user/mental_wellness_icon.png',
                       title: "Mental Wellness Hub",
@@ -362,7 +380,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WellnessAwarenessHubPage(initialTab: 0),
+                            builder: (context) =>
+                                WellnessAwarenessHubPage(initialTab: 0),
                           ),
                         );
                       },
@@ -375,16 +394,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => WellnessAwarenessHubPage(initialTab: 1),
+                            builder: (context) =>
+                                WellnessAwarenessHubPage(initialTab: 1),
                           ),
                         );
                       },
                     ),
-                    
+
                     // Settings & Support Section Header
                     Container(
                       width: double.infinity,
-                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 16,
+                      ),
                       color: Color(0xFFEBF1FA), // bg1
                       child: Text(
                         "Settings & Support",
@@ -395,9 +418,10 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         ),
                       ),
                     ),
-                    
+
                     _buildMenuItem(
-                      iconPath: 'assets/user/settings.png', // Using settings.png as per available asset
+                      iconPath:
+                          'assets/user/settings.png', // Using settings.png as per available asset
                       title: "Settings",
                       subtitle: "App preferences & notifications",
                       onTap: () {
@@ -437,10 +461,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
                         );
                       },
                     ),
-                    
+
                     // Logout Button
                     Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      margin: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
@@ -489,7 +516,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
     );
   }
-  
+
   IconData _getIconForPath(String iconPath) {
     if (iconPath.contains('profile_details')) return Icons.person_outline;
     if (iconPath.contains('appointments')) return Icons.calendar_today;
@@ -503,7 +530,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (iconPath.contains('help')) return Icons.help_outline;
     return Icons.circle; // Default fallback
   }
-  
+
   Widget _buildMenuItem({
     required String iconPath,
     required String title,
@@ -565,7 +592,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
       ),
     );
   }
-  
+
   void _showLogoutDialog() {
     showDialog(
       context: context,
@@ -592,5 +619,4 @@ class _UserProfilePageState extends State<UserProfilePage> {
       },
     );
   }
-  
 }
