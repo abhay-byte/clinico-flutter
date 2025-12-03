@@ -7,6 +7,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:ui';
 import '../constants/colors.dart';
 import '../services/audio_call_service.dart';
 
@@ -34,6 +35,7 @@ class _InAudioCallScreenState extends State<InAudioCallScreen> {
   bool isSpeakerOn = false;
   int callDuration = 0;
   CallState callState = CallState.idle;
+  bool showVideoPermission = false;
 
   @override
   void initState() {
@@ -91,104 +93,180 @@ class _InAudioCallScreenState extends State<InAudioCallScreen> {
         0xFFF0F4F8,
       ), // Use very light blue/grey background as requested
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            // Top Logo: clinic_logo with 120x120 frame, no shadow
-            Container(
-              padding: const EdgeInsets.all(20),
-              child: Center(
-                child: Container(
-                  width: 120,
-                  height: 120,
-                  decoration: BoxDecoration(
-                    color: Colors.white, // White background of exact logo size
-                    shape: BoxShape.circle,
-                  ),
-                  child: Image.asset(
-                    'assets/calls/clinico_logo.png',
-                    width: 120,
-                    height: 120,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 40),
-
-            // Doctor info section - same as incoming screen
-            Expanded(
+            // Layer 1 (Bottom): The main call screen with heavy blur when showVideoPermission is true
+            BackdropFilter(
+              filter: showVideoPermission
+                  ? ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0)
+                  : ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Doctor profile image - large circular, no shadow
+                  // Top Logo: clinic_logo with 120x120 frame, no shadow
                   Container(
-                    width: 160,
-                    height: 160,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 3),
-                    ),
-                    child: CircleAvatar(
-                      radius: 77,
-                      backgroundImage: AssetImage(
-                        'assets/calls/doctor_female.png',
+                    padding: const EdgeInsets.all(20),
+                    child: Center(
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: Colors
+                              .white, // White background of exact logo size
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset(
+                          'assets/calls/clinico_logo.png',
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.contain,
+                        ),
                       ),
-                      backgroundColor: Colors.white,
                     ),
                   ),
 
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 40),
 
-                  // Doctor name - Title, Bold
-                  Text(
-                    widget.doctorName,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                  // Doctor info section - same as incoming screen
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Doctor profile image - large circular, no shadow
+                        Container(
+                          width: 160,
+                          height: 160,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 3),
+                          ),
+                          child: CircleAvatar(
+                            radius: 77,
+                            backgroundImage: AssetImage(
+                              'assets/calls/doctor_female.png',
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Doctor name - Title, Bold
+                        Text(
+                          widget.doctorName,
+                          style: const TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // Specialization
+                        Text(
+                          widget.doctorSpecialization,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey,
+                          ),
+                        ),
+
+                        const SizedBox(height: 25),
+
+                        // Text: 'Voice Call' with timer '0:00'
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.b4.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                'Voice Call',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                _formatDuration(callDuration),
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
 
-                  const SizedBox(height: 12),
-
-                  // Specialization
-                  Text(
-                    widget.doctorSpecialization,
-                    style: const TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-
-                  const SizedBox(height: 25),
-
-                  // Text: 'Voice Call' with timer '0:00'
+                  // Bottom Controls: White Rounded Rectangle container (like a bottom sheet)
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
-                      vertical: 8,
+                      vertical: 20,
                     ),
+                    margin: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: AppColors.b4.withOpacity(0.2),
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 10,
+                          offset: const Offset(0, -5),
+                        ),
+                      ],
                     ),
                     child: Row(
-                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const Text(
-                          'Voice Call',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        // Speaker: White circle, black icon, text 'Speaker' below
+                        _buildBottomControlButton(
+                          icon: isSpeakerOn
+                              ? Icons.volume_up
+                              : Icons.volume_off,
+                          text: 'Speaker',
+                          color: Colors.black,
+                          backgroundColor: Colors.white,
+                          onPressed: () {
+                            _audioCallService.toggleSpeaker();
+                          },
                         ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _formatDuration(callDuration),
-                          style: const TextStyle(
-                            fontSize: 20,
-                            color: Colors.black87,
-                            fontWeight: FontWeight.w500,
-                          ),
+
+                        // Mute: White circle, black icon, text 'Mute' below
+                        _buildBottomControlButton(
+                          icon: isMuted ? Icons.mic_off : Icons.mic,
+                          text: 'Mute',
+                          color: Colors.black,
+                          backgroundColor: Colors.white,
+                          onPressed: () {
+                            _audioCallService.toggleMute();
+                          },
+                        ),
+
+                        // Leave: Red circle, white phone hang-up icon, text 'Leave' below
+                        _buildBottomControlButton(
+                          icon: Icons.call_end,
+                          text: 'Leave',
+                          color: Colors.white,
+                          backgroundColor: AppColors.r1,
+                          onPressed: () {
+                            // Disconnect the call using the service
+                            _audioCallService.disconnectCall();
+                            // Return to previous screen
+                            Navigator.of(context).pop();
+                          },
                         ),
                       ],
                     ),
@@ -196,61 +274,109 @@ class _InAudioCallScreenState extends State<InAudioCallScreen> {
                 ],
               ),
             ),
-
-            // Bottom Controls: White Rounded Rectangle container (like a bottom sheet)
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              margin: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 10,
-                    offset: const Offset(0, -5),
+            // Layer 2 (Middle): Very light semi-transparent black background when showVideoPermission is true
+            if (showVideoPermission)
+              Container(
+                decoration: BoxDecoration(color: Color.fromRGBO(0, 0, 0, 0.1)),
+                child: Center(
+                  child: Container(
+                    width: 300,
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Video camera icon in dark blue using asset
+                        Container(
+                          width: 80,
+                          height: 80,
+                          child: Image.asset(
+                            'assets/incoming_call/vid_call_icon.png',
+                            color: Color(0xFF0E2C66), // Dark blue color
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        // Title: 'Start to Video Call?'
+                        Text(
+                          'Start to Video Call?',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0E2C66),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        // Subtitle
+                        Text(
+                          'Give Permission for camera and start video call.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
+                        ),
+                        SizedBox(height: 30),
+                        // Continue button - wide blue button
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              print('Permission Granted');
+                              setState(() {
+                                showVideoPermission = false;
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFF2F80ED),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            child: Text(
+                              'Continue',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Speaker: White circle, black icon, text 'Speaker' below
-                  _buildBottomControlButton(
-                    icon: isSpeakerOn ? Icons.volume_up : Icons.volume_off,
-                    text: 'Speaker',
-                    color: Colors.black,
-                    backgroundColor: Colors.white,
-                    onPressed: () {
-                      _audioCallService.toggleSpeaker();
-                    },
+            // Layer 4 (Very Top): Debug button at top-right
+            Positioned(
+              top: 20,
+              right: 20,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    showVideoPermission = true;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-
-                  // Mute: White circle, black icon, text 'Mute' below
-                  _buildBottomControlButton(
-                    icon: isMuted ? Icons.mic_off : Icons.mic,
-                    text: 'Mute',
-                    color: Colors.black,
-                    backgroundColor: Colors.white,
-                    onPressed: () {
-                      _audioCallService.toggleMute();
-                    },
-                  ),
-
-                  // Leave: Red circle, white phone hang-up icon, text 'Leave' below
-                  _buildBottomControlButton(
-                    icon: Icons.call_end,
-                    text: 'Leave',
-                    color: Colors.white,
-                    backgroundColor: AppColors.r1,
-                    onPressed: () {
-                      // Disconnect the call using the service
-                      _audioCallService.disconnectCall();
-                      // Return to previous screen
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
+                ),
+                child: Text(
+                  'TEST POPUP',
+                  style: TextStyle(fontSize: 10, color: Colors.white),
+                ),
               ),
             ),
           ],
